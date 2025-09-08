@@ -1,0 +1,22 @@
+name: Local Agent
+version: 1.0.0
+schema: v1
+models:
+  - name: starcoder2:3b
+    provider: ollama
+    model: starcoder2:3b
+    roles:
+      - autocomplete
+  - name: Qwen2.5-Coder-1.5B 
+    provider: ollama
+    model: qwen2.5-coder:1.5b
+    roles:
+      - chat
+      - edit
+      - apply
+  - name: Nomic Embed
+    provider: ollama
+    model: nomic-embed-text
+    roles:
+      - embed
+      - rerank
