@@ -1,0 +1,75 @@
+/* Bolton & Menk Slidev Theme CSS */
+@import url(https://www.bolton-menk.com/wp-content/themes/boltonmenk/fonts/DIN/DINOT.ttf?ver=1.0.0);
+@import url(https://www.bolton-menk.com/wp-content/themes/boltonmenk/fonts/DIN/DINOT-CondBold.ttf?ver=1.0.0);
+@import url(https://www.bolton-menk.com/wp-content/themes/boltonmenk/fonts/DIN/DINOT-Medium.ttf?ver=1.0.0);
+@import url(https://www.bolton-menk.com/wp-content/themes/boltonmenk/fonts/DIN/DINOT-Medium.ttf?ver=1.0.0);
+
+:root {
+  --slidev-theme-primary: #4B843A;
+  --slidev-theme-secondary: #0071BC;
+  --slidev-theme-accent: #F4B731;
+  --slidev-theme-info: #8DBA4C;
+  --slidev-theme-warning: #F4B731;
+  --slidev-theme-error: #BE1E2D;
+  --slidev-theme-success: #8DBA4C;
+  --slidev-theme-neutral: #B1B3B6;
+  --slidev-theme-background: #181A1B;
+  --slidev-theme-surface: #23272A;
+  --slidev-theme-text: #FFFFFF;
+  --slidev-theme-text-secondary: #E1E1E6;
+  --slidev-theme-font-family: 'DIN OT', Calibri, sans-serif;
+}
+
+html.light {
+  --slidev-theme-background: #FFFFFF;
+  --slidev-theme-surface: #F5F5F5;
+  --slidev-theme-text: #181A1B;
+  --slidev-theme-text-secondary: #4B843A;
+}
+
+.slidev-layout {
+  font-family: var(--slidev-theme-font-family);
+  background: var(--slidev-theme-background);
+  color: var(--slidev-theme-text);
+}
+
+.slidev-title {
+  color: var(--slidev-theme-primary);
+}
+
+.slidev-accent {
+  color: var(--slidev-theme-accent);
+}
+
+.slidev-secondary {
+  color: var(--slidev-theme-secondary);
+}
+
+.slidev-neutral {
+  color: var(--slidev-theme-neutral);
+}
+
+
+.slidev-layout.cover,
+.slidev-layout.intro {
+  @apply h-full grid;
+
+  h1 {
+    @apply text-6xl leading-20;
+    color: var(--slidev-theme-primary);
+  }
+
+  h1 + p {
+    @apply -mt-2 opacity-50 mb-4;
+  }
+
+  p + h2,
+  ul + h2,
+  table + h2 {
+    @apply mt-10;
+  }
+
+  a {
+    color: var(--slidev-theme-accent);
+  }
+}
