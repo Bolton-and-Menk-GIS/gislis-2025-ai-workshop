@@ -32,14 +32,14 @@ Caleb Mackey & Phil Nagel
 
 [caleb.mackey@bolton-menk.com](mailto:caleb.mackey@bolton-menk.com)
 
-[Phil.Nagel@bolton-menk.com](mailto:Phil.Nagel@bolton-menk.com)
+[phil.nagel@bolton-menk.com](mailto:phil.nagel@bolton-menk.com)
 
 ---
 src: ./pages/large_language_models.md
 ---
 
-<Toc text-sm minDepth="1" maxDepth="2" />
+---
+src: ./pages/local_ai.md
+---
 
----
-src: ./example.md
----
+<Toc text-sm minDepth="1" maxDepth="2" />
