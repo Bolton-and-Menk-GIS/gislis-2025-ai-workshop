@@ -35,11 +35,15 @@ Caleb Mackey & Phil Nagel
 [phil.nagel@bolton-menk.com](mailto:phil.nagel@bolton-menk.com)
 
 ---
-src: ./pages/large_language_models.md
+src: ./pages/lecture/large_language_models.md
 ---
 
 ---
-src: ./pages/local_ai.md
+src: ./pages/lecture/local_ai.md
+---
+
+---
+src: ./pages/demo/local_setup.md
 ---
 
 <Toc text-sm minDepth="1" maxDepth="2" />
