@@ -1,0 +1,89 @@
+# GitLab CI/CD pipeline for Slidev presentation deployment to GitLab Pages
+
+stages:
+  - build
+  - deploy
+
+variables:
+  NODE_VERSION: "18"
+
+# Cache node_modules for faster builds
+cache:
+  paths:
+    - presentation/node_modules/
+  key:
+    files:
+      - presentation/package-lock.json
+
+# Build the Slidev presentation
+build:
+  stage: build
+  image: node:${NODE_VERSION}
+  before_script:
+    - cd presentation
+    - npm ci
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - presentation/dist/
+    expire_in: 1 hour
+  only:
+    - main
+    - merge_requests
+
+# Deploy to GitLab Pages (only on main branch)
+pages:
+  stage: deploy
+  image: alpine:latest
+  script:
+    # Create public directory for GitLab Pages
+    - mkdir public
+    # Copy built presentation to public directory
+    - cp -r presentation/dist/* public/
+    # Create index.html redirect if needed
+    - |
+      if [ ! -f public/index.html ]; then
+        echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=./index.html"></head><body>Redirecting...</body></html>' > public/index.html
+      fi
+  artifacts:
+    paths:
+      - public
+  dependencies:
+    - build
+  only:
+    - main
+
+# Optional: Preview builds for merge requests
+preview:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - mkdir preview
+    - cp -r presentation/dist/* preview/
+    - echo "Preview available at: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME"
+  artifacts:
+    paths:
+      - preview
+    expire_in: 1 week
+  dependencies:
+    - build
+  only:
+    - merge_requests
+  environment:
+    name: preview/$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+    url: $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+    on_stop: cleanup_preview
+
+# Cleanup preview environments
+cleanup_preview:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - echo "Cleaning up preview for $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME"
+  when: manual
+  environment:
+    name: preview/$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME
+    action: stop
+  only:
+    - merge_requests
