@@ -1,0 +1,682 @@
+[
+  {
+    "type": "animal_boarding",
+    "description": "A facility where you, paying a fee, can bring your animal for a limited period of time (e.g. for holidays)",
+    "icon": null
+  },
+  {
+    "type": "animal_breeding",
+    "description": "A facility where animals are bred, usually to sell them",
+    "icon": null
+  },
+  {
+    "type": "animal_shelter",
+    "description": "A shelter that recovers animals in trouble",
+    "icon": null
+  },
+  {
+    "type": "animal_training",
+    "description": "A facility used for non-competitive animal training",
+    "icon": null
+  },
+  {
+    "type": "arts_centre",
+    "description": "A venue where a variety of arts are performed or conducted",
+    "icon": "Arts_centre.svg"
+  },
+  {
+    "type": "atm",
+    "description": "Automated teller machine (ATM) or cashpoint: a device that provides the clients of a financial institution with access to financial transactions.",
+    "icon": "Atm-14.svg"
+  },
+  {
+    "type": "baby_hatch",
+    "description": "A place where a baby can be, out of necessity, anonymously left to be safely cared for and perhaps adopted.",
+    "icon": null
+  },
+  {
+    "type": "baking_oven",
+    "description": "An oven used for baking bread and similar, for example inside a building=bakehouse.",
+    "icon": null
+  },
+  {
+    "type": "bank",
+    "description": "Bank or credit union: a financial establishment where customers can deposit and withdraw money, take loans, make investments and transfer funds.",
+    "icon": "Bank-16.svg"
+  },
+  {
+    "type": "bar",
+    "description": "Bar is a purpose-built commercial establishment that sells alcoholic drinks to be consumed on the premises. They are characterised by a noisy and vibrant atmosphere, similar to a party and usually don't sell food. See also the description of the tags amenity=pub;bar;restaurant for a distinction between these.",
+    "icon": "Bar-16.svg"
+  },
+  {
+    "type": "bbq",
+    "description": "BBQ or Barbecue is a permanently built grill for cooking food, which is most typically used outdoors by the public. For example these may be found in city parks or at beaches. Use the tag fuel=* to specify the source of heating, such as fuel=wood;electric;charcoal. For mapping nearby table and chairs, see also the tag tourism=picnic_site. For mapping campfires and firepits, instead use the tag leisure=firepit.",
+    "icon": "Bbq-14.svg"
+  },
+  {
+    "type": "bench",
+    "description": "A bench to sit down and relax a bit",
+    "icon": "Bench-16.svg"
+  },
+  {
+    "type": "bicycle_parking",
+    "description": "Parking for bicycles",
+    "icon": "Parking-bicycle-16.svg"
+  },
+  {
+    "type": "bicycle_rental",
+    "description": "Rent a bicycle",
+    "icon": "Rental-bicycle-16.svg"
+  },
+  {
+    "type": "bicycle_repair_station",
+    "description": "General tools for self-service bicycle repairs, usually on the roadside; no service",
+    "icon": "Bicycle_repair_station-14.svg"
+  },
+  {
+    "type": "bicycle_wash",
+    "description": "Clean a bicycle",
+    "icon": null
+  },
+  {
+    "type": "biergarten",
+    "description": "Biergarten or beer garden is an open-air area where alcoholic beverages along with food is prepared and served. See also the description of the tags amenity=pub;bar;restaurant. A biergarten can commonly be found attached to a beer hall, pub, bar, or restaurant. In this case, you can use biergarten=yes additional to amenity=pub;bar;restaurant.",
+    "icon": "Biergarten-16.svg"
+  },
+  {
+    "type": "boat_rental",
+    "description": "Rent a Boat",
+    "icon": "Boat_rental-14.svg"
+  },
+  {
+    "type": "boat_sharing",
+    "description": "Share a Boat",
+    "icon": null
+  },
+  {
+    "type": "brothel",
+    "description": "An establishment specifically dedicated to prostitution",
+    "icon": null
+  },
+  {
+    "type": "bureau_de_change",
+    "description": "Bureau de change, money changer, currency exchange, Wechsel, cambio – a place to change foreign bank notes and travellers cheques.",
+    "icon": "Bureau_de_change-14.svg"
+  },
+  {
+    "type": "bus_station",
+    "description": "May also be tagged as public_transport=station.",
+    "icon": "Bus_station-14.svg"
+  },
+  {
+    "type": "cafe",
+    "description": "Cafe is generally an informal place that offers casual meals and beverages; typically, the focus is on coffee or tea. Also known as a coffeehouse/shop, bistro or sidewalk cafe. The kind of food served may be mapped with the tags cuisine=* and diet:*=*. See also the tags amenity=restaurant;bar;fast_food.",
+    "icon": "Cafe-16.svg"
+  },
+  {
+    "type": "car_rental",
+    "description": "Rent a car",
+    "icon": "Rental-car-16.svg"
+  },
+  {
+    "type": "car_sharing",
+    "description": "Share a car",
+    "icon": null
+  },
+  {
+    "type": "car_wash",
+    "description": "Wash a car",
+    "icon": "Car_wash-14.svg"
+  },
+  {
+    "type": "casino",
+    "description": "A gambling venue with at least one table game(e.g. roulette, blackjack) that takes bets on sporting and other events at agreed upon odds.",
+    "icon": "Casino-14.svg"
+  },
+  {
+    "type": "charging_station",
+    "description": "Charging facility for electric vehicles",
+    "icon": "Charging_station.16.svg"
+  },
+  {
+    "type": "cinema",
+    "description": "A place where films are shown (US: movie theater)",
+    "icon": "Cinema-16.svg"
+  },
+  {
+    "type": "clinic",
+    "description": "A medium-sized medical facility or health centre.",
+    "icon": "Doctors-14.svg"
+  },
+  {
+    "type": "clock",
+    "description": "A public visible clock",
+    "icon": null
+  },
+  {
+    "type": "college",
+    "description": "Campus or buildings of an institute of Further Education (aka continuing education)",
+    "icon": null
+  },
+  {
+    "type": "community_centre",
+    "description": "A place mostly used for local events, festivities and group activities; including special interest and special age groups. .",
+    "icon": "Community_centre-14.svg"
+  },
+  {
+    "type": "compressed_air",
+    "description": "A device to inflate tires/tyres (e.g. motorcar, bicycle)",
+    "icon": null
+  },
+  {
+    "type": "conference_centre",
+    "description": "A large building that is used to hold a convention",
+    "icon": null
+  },
+  {
+    "type": "courthouse",
+    "description": "A building home to a court of law, where justice is dispensed",
+    "icon": "Courthouse-16.svg"
+  },
+  {
+    "type": "crematorium",
+    "description": "A place where dead human bodies are burnt",
+    "icon": null
+  },
+  {
+    "type": "dancing_school",
+    "description": "A dancing school or dance studio",
+    "icon": null
+  },
+  {
+    "type": "dentist",
+    "description": "A dentist practice / surgery.",
+    "icon": "Dentist-14.svg"
+  },
+  {
+    "type": "dive_centre",
+    "description": "A dive center is the base location where sports divers usually start scuba diving or make dive guided trips at new locations.",
+    "icon": null
+  },
+  {
+    "type": "doctors",
+    "description": "A doctor's practice / surgery.",
+    "icon": "Doctors-14.svg"
+  },
+  {
+    "type": "dog_toilet",
+    "description": "Area designated for dogs to urinate and excrete.",
+    "icon": null
+  },
+  {
+    "type": "dressing_room",
+    "description": "Area designated for changing clothes.",
+    "icon": null
+  },
+  {
+    "type": "drinking_water",
+    "description": "Drinking water is a place where humans can obtain potable water for consumption. Typically, the water is used for only drinking. Also known as a drinking fountain or bubbler.",
+    "icon": "Drinking-water-16.svg"
+  },
+  {
+    "type": "driver_training",
+    "description": "A place for driving training on a closed course",
+    "icon": null
+  },
+  {
+    "type": "driving_school",
+    "description": "Driving School which offers motor vehicle driving lessons",
+    "icon": "Shop-other-16.svg"
+  },
+  {
+    "type": "events_venue",
+    "description": "A building specifically used for organising events",
+    "icon": null
+  },
+  {
+    "type": "exhibition_centre",
+    "description": "An exhibition centre",
+    "icon": null
+  },
+  {
+    "type": "fast_food",
+    "description": "Fast food restaurant (see also amenity=restaurant). The kind of food served can be tagged with cuisine=* and diet:*=*.",
+    "icon": "Fast-food-16.svg"
+  },
+  {
+    "type": "ferry_terminal",
+    "description": "Ferry terminal/stop. A place where people/cars/etc. can board and leave a ferry.",
+    "icon": "Ferry-icon.svg"
+  },
+  {
+    "type": "fire_station",
+    "description": "A station of a fire brigade",
+    "icon": "Fire-station-16.svg"
+  },
+  {
+    "type": "first_aid_school",
+    "description": "A place where people can go for first aid courses.",
+    "icon": null
+  },
+  {
+    "type": "food_court",
+    "description": "An area with several different restaurant food counters and a shared eating area. Commonly found in malls, airports, etc.",
+    "icon": "Restaurant-14.svg"
+  },
+  {
+    "type": "fountain",
+    "description": "A fountain for cultural / decorational / recreational purposes.",
+    "icon": "Fountain-14.svg"
+  },
+  {
+    "type": "fuel",
+    "description": "Petrol station; gas station; marine fuel; … Streets to petrol stations are often tagged highway=service.",
+    "icon": "Fuel-16.svg"
+  },
+  {
+    "type": "funeral_hall",
+    "description": "A place for holding a funeral ceremony, other than a place of worship.",
+    "icon": null
+  },
+  {
+    "type": "gambling",
+    "description": "A place for gambling, not being a shop=bookmaker, shop=lottery, amenity=casino, or leisure=adult_gaming_centre. Games that are covered by this definition include bingo and pachinko.",
+    "icon": null
+  },
+  {
+    "type": "give_box",
+    "description": "A small facility where people drop off and pick up various types of items in the sense of free sharing and reuse.",
+    "icon": null
+  },
+  {
+    "type": "grave_yard",
+    "description": "A (smaller) place of burial, often you'll find a church nearby. Large places should be landuse=cemetery instead.",
+    "icon": null
+  },
+  {
+    "type": "grit_bin",
+    "description": "A container that holds grit or a mixture of salt and grit.",
+    "icon": null
+  },
+  {
+    "type": "hospital",
+    "description": "A hospital providing in-patient medical treatment. Often used in conjunction with emergency=* to note whether the medical centre has emergency facilities (A&E (brit.) or ER (am.))",
+    "icon": "Hospital-14.svg"
+  },
+  {
+    "type": "hunting_stand",
+    "description": "A hunting stand: an open or enclosed platform used by hunters to place themselves at an elevated height above the terrain",
+    "icon": "Hunting-stand-16.svg"
+  },
+  {
+    "type": "ice_cream",
+    "description": "Ice cream shop or ice cream parlour. A place that sells ice cream and frozen yoghurt over the counter",
+    "icon": "Ice-cream-14.svg"
+  },
+  {
+    "type": "internet_cafe",
+    "description": "A place whose principal role is providing internet services to the public.",
+    "icon": "Internet_cafe-14.svg"
+  },
+  {
+    "type": "kindergarten",
+    "description": "For children too young for a regular school (also known as preschool, playschool or nursery school), in some countries including afternoon supervision of primary school children.",
+    "icon": null
+  },
+  {
+    "type": "kitchen",
+    "description": "A public kitchen in a facility to use by everyone or customers",
+    "icon": null
+  },
+  {
+    "type": "kneipp_water_cure",
+    "description": "Outdoor foot bath facility. Usually this is a pool with cold water and handrail. Popular in German speaking countries.",
+    "icon": null
+  },
+  {
+    "type": "language_school",
+    "description": "Language School: an educational institution where one studies a foreign language.",
+    "icon": null
+  },
+  {
+    "type": "library",
+    "description": "A public library (municipal, university, …) to borrow books from.",
+    "icon": "Library-16.svg"
+  },
+  {
+    "type": "lounge",
+    "description": "A comfortable waiting area for customers, usually found in airports and other transportation hubs. Typically has extra amenities or sustenance.",
+    "icon": null
+  },
+  {
+    "type": "lounger",
+    "description": "An object for people to lie down.",
+    "icon": null
+  },
+  {
+    "type": "love_hotel",
+    "description": "A love hotel is a type of short-stay hotel operated primarily for the purpose of allowing guests privacy for sexual activities.",
+    "icon": null
+  },
+  {
+    "type": "mailroom",
+    "description": "A mailroom for receiving packages or letters.",
+    "icon": null
+  },
+  {
+    "type": "marketplace",
+    "description": "A marketplace where goods and services are traded daily or weekly.",
+    "icon": "Marketplace-14.svg"
+  },
+  {
+    "type": "monastery",
+    "description": "Monastery is the location of a monastery or a building in which monks and nuns live.",
+    "icon": null
+  },
+  {
+    "type": "money_transfer",
+    "description": "A place that offers money transfers, especially cash to cash",
+    "icon": null
+  },
+  {
+    "type": "mortuary",
+    "description": "A morgue or funeral home, used for the storage of human corpses.",
+    "icon": null
+  },
+  {
+    "type": "motorcycle_parking",
+    "description": "Parking for motorcycles",
+    "icon": "Parking-motorcycle-16.svg"
+  },
+  {
+    "type": "music_school",
+    "description": "A music school, an educational institution specialized in the study, training, and research of music.",
+    "icon": null
+  },
+  {
+    "type": "music_venue",
+    "description": "An indoor place to hear contemporary live music.",
+    "icon": null
+  },
+  {
+    "type": "nightclub",
+    "description": "A place to drink and dance (nightclub). The German word is \"Disco\" or \"Discothek\". Please don't confuse this with the German \"Nachtclub\" which is most likely amenity=stripclub.",
+    "icon": "Nightclub-16.svg"
+  },
+  {
+    "type": "nursing_home",
+    "description": "Discouraged tag for a home for disabled or elderly persons who need permanent care. Use amenity=social_facility + social_facility=nursing_home now.",
+    "icon": "Social_amenity_darken_80-16.svg"
+  },
+  {
+    "type": "parcel_locker",
+    "description": "Machine for picking up and sending parcels",
+    "icon": null
+  },
+  {
+    "type": "parking",
+    "description": "Parking area for vehicles. Streets on car parking are often tagged highway=service and service=parking_aisle.",
+    "icon": "Parking-16.svg"
+  },
+  {
+    "type": "parking_entrance",
+    "description": "An entrance or exit to an underground or multi-storey parking facility. Group multiple parking entrances together with a relation using the tags type=site and site=parking",
+    "icon": "Parking_entrance-14.svg"
+  },
+  {
+    "type": "parking_space",
+    "description": "A single parking space within a car park. Parking spaces should be mapped within an amenity=parking area. Group multiple parking spaces together with a relation using the tags type=site and site=parking",
+    "icon": null
+  },
+  {
+    "type": "payment_centre",
+    "description": "A non-bank place, where people can pay bills of public and private services and taxes.",
+    "icon": null
+  },
+  {
+    "type": "payment_terminal",
+    "description": "Self-service payment kiosk/terminal",
+    "icon": null
+  },
+  {
+    "type": "pharmacy",
+    "description": "Pharmacy: a shop where a pharmacist sells medicationsdispensing=yes/no - availability of prescription-only medications",
+    "icon": "Pharmacy-14.svg"
+  },
+  {
+    "type": "photo_booth",
+    "description": "A stand to create instant photos.",
+    "icon": null
+  },
+  {
+    "type": "place_of_mourning",
+    "description": "A room or building where families and friends can come, before the funeral, and view the body of the person who has died.",
+    "icon": null
+  },
+  {
+    "type": "place_of_worship",
+    "description": "A church, mosque, or temple, etc. Note that you also need religion=*, usually denomination=* and preferably name=* as well as amenity=place_of_worship. See the article for details.",
+    "icon": "Christian-16.svg"
+  },
+  {
+    "type": "planetarium",
+    "description": "A planetarium.",
+    "icon": null
+  },
+  {
+    "type": "police",
+    "description": "A police station where police officers patrol from and that is a first point of contact for civilians",
+    "icon": "Police-16.svg"
+  },
+  {
+    "type": "post_box",
+    "description": "A box for the reception of mail. Alternative mail-carriers can be tagged via operator=*",
+    "icon": "Post_box-12.svg"
+  },
+  {
+    "type": "post_depot",
+    "description": "Post depot or delivery office, where letters and parcels are collected and sorted prior to delivery.",
+    "icon": null
+  },
+  {
+    "type": "post_office",
+    "description": "Post office building with postal services",
+    "icon": "Post_office-14.svg"
+  },
+  {
+    "type": "prison",
+    "description": "A prison or jail where people are incarcerated before trial or after conviction",
+    "icon": "Prison-16.svg"
+  },
+  {
+    "type": "pub",
+    "description": "A place selling beer and other alcoholic drinks; may also provide food or accommodation (UK). See description of amenity=bar and amenity=pub for distinction between bar and pub",
+    "icon": "Pub-16.svg"
+  },
+  {
+    "type": "public_bath",
+    "description": "A location where the public may bathe in common, etc. japanese onsen, turkish bath, hot spring",
+    "icon": "Public_bath.svg"
+  },
+  {
+    "type": "public_bookcase",
+    "description": "A street furniture containing books. Take one or leave one.",
+    "icon": "Public_bookcase-14.svg"
+  },
+  {
+    "type": "public_building",
+    "description": "A generic public building. Don't use! See office=government.",
+    "icon": null
+  },
+  {
+    "type": "ranger_station",
+    "description": "National Park visitor headquarters: official park visitor facility with police, visitor information, permit services, etc",
+    "icon": null
+  },
+  {
+    "type": "recycling",
+    "description": "Recycling facilities (bottle banks, etc.). Combine with recycling_type=container for containers or recycling_type=centre for recycling centres.",
+    "icon": "Recycling-16.svg"
+  },
+  {
+    "type": "refugee_site",
+    "description": "A human settlement sheltering refugees or internally displaced persons",
+    "icon": null
+  },
+  {
+    "type": "research_institute",
+    "description": "An establishment endowed for doing research.",
+    "icon": null
+  },
+  {
+    "type": "restaurant",
+    "description": "Restaurant (not fast food, see amenity=fast_food). The kind of food served can be tagged with cuisine=* and diet:*=*.",
+    "icon": "Restaurant-14.svg"
+  },
+  {
+    "type": "sanitary_dump_station",
+    "description": "A place for depositing human waste from a toilet holding tank.",
+    "icon": null
+  },
+  {
+    "type": "school",
+    "description": "School and grounds - primary, middle and secondary schools",
+    "icon": null
+  },
+  {
+    "type": "shelter",
+    "description": "A small shelter against bad weather conditions. To additionally describe the kind of shelter use shelter_type=*.",
+    "icon": "Shelter-14.svg"
+  },
+  {
+    "type": "shower",
+    "description": "Public shower.",
+    "icon": "Shower-14.svg"
+  },
+  {
+    "type": "social_centre",
+    "description": "A place for free and not-for-profit activities.",
+    "icon": null
+  },
+  {
+    "type": "social_facility",
+    "description": "A facility that provides social services: group & nursing homes, workshops for the disabled, homeless shelters, etc.",
+    "icon": "Social_facility-14.svg"
+  },
+  {
+    "type": "stage",
+    "description": "A raised platform for performers.",
+    "icon": null
+  },
+  {
+    "type": "stripclub",
+    "description": "A place that offers striptease or lapdancing (for sexual services use amenity=brothel).",
+    "icon": null
+  },
+  {
+    "type": "studio",
+    "description": "TV radio or recording studio",
+    "icon": null
+  },
+  {
+    "type": "surf_school",
+    "description": "A surf school is an establishment that teaches surfing.",
+    "icon": null
+  },
+  {
+    "type": "swingerclub",
+    "description": "A club where people meet to have a party and group sex.",
+    "icon": null
+  },
+  {
+    "type": "taxi",
+    "description": "A place where taxis wait for passengers.",
+    "icon": "Taxi-16.svg"
+  },
+  {
+    "type": "telephone",
+    "description": "Public telephone",
+    "icon": "Telephone.16.svg"
+  },
+  {
+    "type": "theatre",
+    "description": "A theatre or opera house where live performances occur, such as plays, musicals and formal concerts. Use amenity=cinema for movie theaters.",
+    "icon": "Theatre-16.svg"
+  },
+  {
+    "type": "toilets",
+    "description": "Public toilets (might require a fee)",
+    "icon": "Toilets-16.svg"
+  },
+  {
+    "type": "townhall",
+    "description": "Building where the administration of a village, town or city may be located, or just a community meeting place",
+    "icon": "Town-hall-16.svg"
+  },
+  {
+    "type": "toy_library",
+    "description": "A place to borrow games and toys, or play with them on site.",
+    "icon": null
+  },
+  {
+    "type": "traffic_park",
+    "description": "Juvenile traffic schools",
+    "icon": null
+  },
+  {
+    "type": "training",
+    "description": "Public place where you can get training.",
+    "icon": null
+  },
+  {
+    "type": "university",
+    "description": "A university campus: an institute of higher education",
+    "icon": null
+  },
+  {
+    "type": "vehicle_inspection",
+    "description": "Government vehicle inspection",
+    "icon": "Vehicle_inspection-14.svg"
+  },
+  {
+    "type": "vending_machine",
+    "description": "A machine selling goods - food, tickets, newspapers, etc. Add type of goods using vending=*",
+    "icon": null
+  },
+  {
+    "type": "veterinary",
+    "description": "A place where a veterinary surgeon, also known as a veterinarian or vet, practices.",
+    "icon": "Veterinary-14.svg"
+  },
+  {
+    "type": "waste_basket",
+    "description": "A single small container for depositing garbage that is easily accessible for pedestrians.",
+    "icon": "Waste-basket-12.svg"
+  },
+  {
+    "type": "waste_disposal",
+    "description": "A medium or large disposal bin, typically for bagged up household or industrial waste.",
+    "icon": "Waste_disposal-14.svg"
+  },
+  {
+    "type": "waste_transfer_station",
+    "description": "A waste transfer station is a location that accepts, consolidates and transfers waste in bulk.",
+    "icon": null
+  },
+  {
+    "type": "water_point",
+    "description": "Place where you can get large amounts of drinking water",
+    "icon": null
+  },
+  {
+    "type": "watering_place",
+    "description": "Place where water is contained and animals can drink",
+    "icon": null
+  },
+  {
+    "type": "weighbridge",
+    "description": "A large weight scale to weigh vehicles and goods",
+    "icon": null
+  }
+]
