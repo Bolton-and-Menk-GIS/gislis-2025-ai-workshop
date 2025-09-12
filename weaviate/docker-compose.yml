@@ -1,27 +1,50 @@
----
+version: '3.8'
+
 services:
-  weaviate:
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
     command:
-    - --host
-    - 0.0.0.0
-    - --port
-    - '8080'
-    - --scheme
-    - http
-    image: cr.weaviate.io/semitechnologies/weaviate:1.32.7
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.websecure.address=:8443"
     ports:
-    - 8085:8080
-    - 50051:50051
+      - "8443:8443"
+      - "8080:8080"
     volumes:
-    - weaviate_data:/var/lib/weaviate
-    restart: on-failure:0
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - weaviate-net
+
+  weaviate:
+    image: cr.weaviate.io/semitechnologies/weaviate:1.32.7
+    container_name: weaviate
+    restart: unless-stopped
+  # No command or ports needed; Traefik will route HTTP traffic
+    ports:
+    - 50051:50051
     environment:
       QUERY_DEFAULTS_LIMIT: 25
       AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
       PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
-      ENABLE_API_BASED_MODULES: 'true'
+      DEFAULT_VECTORIZER_MODULE: 'none'
       ENABLE_MODULES: 'text2vec-ollama,generative-ollama'
       CLUSTER_HOSTNAME: 'node1'
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.weaviate.rule=Host(`localhost`)"
+      - "traefik.http.routers.weaviate.entrypoints=websecure"
+      - "traefik.http.routers.weaviate.tls=true"
+      - "traefik.http.services.weaviate.loadbalancer.server.port=8080"
+    networks:
+      - weaviate-net
+
 volumes:
   weaviate_data:
-...
+
+networks:
+  weaviate-net:
+    driver: bridge
