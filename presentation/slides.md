@@ -39,7 +39,7 @@ src: ./pages/lecture/large_language_models.md
 ---
 
 ---
-src: ./pages/lecture/local_ai_assistant.md
+src: ./pages/demo/local_ai_assistant.md
 ---
 
 ---
