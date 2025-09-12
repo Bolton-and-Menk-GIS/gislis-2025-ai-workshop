@@ -52,7 +52,6 @@ preview:
   script:
     - mkdir preview
     - cp -r presentation/dist/* preview/
-    - echo "Preview available at: https://${CI_PROJECT_NAMESPACE}.gitlab.io/${CI_PROJECT_NAME}/-/jobs/${CI_JOB_ID}/artifacts/preview/index.html"
   artifacts:
     paths:
       - preview
