@@ -1,0 +1,78 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  NODE_VERSION: "18"
+
+cache:
+  key:
+    files:
+      - presentation/package-lock.json
+  paths:
+    - presentation/node_modules/
+
+build:
+  stage: build
+  image: node:${NODE_VERSION}
+  before_script:
+    - cd presentation
+    - npm ci
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - presentation/dist/
+    expire_in: 1 hour
+  only:
+    - main
+    - merge_requests
+
+pages:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - mkdir public
+    - cp -r presentation/dist/* public/
+    - |
+      if [ ! -f public/index.html ]; then
+        echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=./index.html"></head><body>Redirecting...</body></html>' > public/index.html
+      fi
+  artifacts:
+    paths:
+      - public
+  dependencies:
+    - build
+  only:
+    - main
+
+preview:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - mkdir preview
+    - cp -r presentation/dist/* preview/
+  artifacts:
+    paths:
+      - preview
+    expire_in: 1 week
+  dependencies:
+    - build
+  only:
+    - merge_requests
+  environment:
+    name: "preview/$CI_COMMIT_REF_NAME"
+    url: "https://${CI_PROJECT_NAMESPACE}.gitlab.io/${CI_PROJECT_NAME}/-/jobs/${CI_JOB_ID}/artifacts/preview/index.html"
+    on_stop: cleanup_preview
+
+cleanup_preview:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - echo "Cleaning up preview for $CI_COMMIT_REF_NAME"
+  when: manual
+  environment:
+    name: "preview/$CI_COMMIT_REF_NAME"
+    action: stop
+  only:
+    - merge_requests

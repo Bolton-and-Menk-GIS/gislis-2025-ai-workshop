@@ -5,15 +5,23 @@ models:
   - name: starcoder2:3b
     provider: ollama
     model: starcoder2:3b
+    roles: 
+    - autocomplete
+  - name: DeepSeek-R1
+    provider: ollama
+    model: deepseek-r1:1.5b
     roles:
-      - autocomplete
-  - name: Qwen2.5-Coder-1.5B 
+      - chat
+      - edit
+      - apply
+  - name: qwen2.5-coder
     provider: ollama
     model: qwen2.5-coder:1.5b
     roles:
       - chat
       - edit
       - apply
+      - autocomplete
   - name: Nomic Embed
     provider: ollama
     model: nomic-embed-text
