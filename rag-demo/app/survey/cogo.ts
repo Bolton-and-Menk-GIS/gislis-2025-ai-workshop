@@ -91,6 +91,38 @@ export function buildParcelPolygon(
   return polygon([coords]).geometry;
 }
 
+/**
+ * Check closure error of a parcel traverse.
+ *
+ * @returns misclosure vector and distance
+ */
+export function checkClosure(
+  refX: number,
+  refY: number,
+  payload: ParcelPayload
+): { misclosure: [number, number]; distance: number } {
+  // Compute Point of Beginning
+  let [x, y] = offsetPoint(
+    refX,
+    refY,
+    payload.referencePoint.tieLine.bearing,
+    payload.referencePoint.tieLine.distance
+  );
+  const pob = [x, y];
+
+  // Traverse calls
+  for (const call of payload.traverse) {
+    [x, y] = offsetPoint(x, y, call.bearing, call.distance);
+  }
+
+  // Misclosure vector
+  const dx = x - pob[0];
+  const dy = y - pob[1];
+  const dist = Math.sqrt(dx * dx + dy * dy);
+
+  return { misclosure: [dx, dy], distance: dist };
+}
+
 
 const test = ()=> {
 

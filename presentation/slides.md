@@ -34,8 +34,21 @@ Caleb Mackey & Phil Nagel
 
 [phil.nagel@bolton-menk.com](mailto:phil.nagel@bolton-menk.com)
 
+
+---
+src: ./pages/lecture/agenda_and_intro.md
+---
+
 ---
 src: ./pages/lecture/large_language_models.md
+---
+
+---
+src: ./pages/lecture/rag.md
+---
+
+---
+src: ./pages/lecture/gis_dev_and_takeaways.md
 ---
 
 ---
