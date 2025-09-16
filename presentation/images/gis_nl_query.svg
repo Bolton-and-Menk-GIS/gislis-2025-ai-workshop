@@ -1,0 +1,75 @@
+<svg viewBox="0 0 1080 360" width="100%" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    :root {
+      --svg-fg: #222;
+      --svg-bg: #fff;
+      --svg-accent: #4B843A;
+      --svg-flood: #0071BC;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --svg-fg: #fff;
+        --svg-bg: #181A1B;
+        --svg-accent: #F4B731;
+        --svg-flood: #8DB8D8;
+      }
+    }
+    .t{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;fill:var(--svg-fg)}
+    .l{font-size:14px}
+    .s{stroke:var(--svg-fg);fill:none;stroke-width:2}
+    .m{fill:var(--svg-accent);fill-opacity:.05;stroke:var(--svg-fg);stroke-opacity:.35}
+    .f{fill:var(--svg-flood);fill-opacity:.10;stroke:var(--svg-flood);stroke-dasharray:6 4}
+    .hi{fill:var(--svg-accent);fill-opacity:.18;stroke:var(--svg-accent)}
+    .bubble{fill:var(--svg-fg);fill-opacity:.08;stroke:var(--svg-fg);stroke-opacity:.4}
+  </style>
+  <rect width="100%" height="100%" fill="var(--svg-bg)"/>
+
+  <text x="20" y="28" class="t" font-weight="700">Natural-Language GIS Query (Example)</text>
+
+  <!-- Map frame -->
+  <rect x="20" y="50" width="680" height="280" rx="12" class="m"/>
+
+  <!-- Flood zone overlay -->
+  <path d="M60,120 L200,90 L320,130 L380,110 L480,150 L540,130 L630,160 L650,210 L600,260 L520,240 L430,270 L330,230 L210,250 Z"
+        class="f"/>
+
+  <!-- Parcels (boxes) -->
+  <g class="s" stroke-opacity=".35">
+    <!-- grid -->
+    <rect x="60" y="80" width="120" height="60" class="m"/>
+    <rect x="190" y="80" width="120" height="60" class="m"/>
+    <rect x="320" y="80" width="120" height="60" class="m"/>
+    <rect x="60" y="150" width="120" height="60" class="m"/>
+    <rect x="190" y="150" width="120" height="60" class="m"/>
+    <rect x="320" y="150" width="120" height="60" class="m"/>
+    <rect x="320" y="150" width="60" height="60" class="m"/>
+    <rect x="380" y="150" width="60" height="60" class="m"/>
+    <rect x="450" y="150" width="120" height="60" class="m"/>
+    <rect x="450" y="80" width="120" height="60" class="m"/>
+    <rect x="580" y="80" width="90"  height="130" class="m"/>
+  </g>
+
+  <!-- Highlighted parcels (result) -->
+  <rect x="190" y="150" width="120" height="60" rx="4" class="hi"/>
+  <rect x="450" y="150" width="120" height="60" rx="4" class="hi"/>
+
+  <!-- Legend -->
+  <rect x="730" y="70" width="340" height="110" rx="10" class="bubble"/>
+  <text x="750" y="95" class="t l">Query</text>
+  <text x="750" y="115" class="t l">“Show parcels in FEMA flood zone</text>
+  <text x="750" y="133" class="t l">with area &gt; 5 acres.”</text>
+
+  <rect x="730" y="200" width="340" height="110" rx="10" class="bubble"/>
+  <text x="750" y="225" class="t l">Pipeline</text>
+  <text x="750" y="245" class="t l">NL → intent + filters → SQL/where-clause</text>
+  <text x="750" y="265" class="t l">Spatial intersect + area calc → Select/highlight</text>
+
+  <!-- Callout lines -->
+  <line x1="730" y1="125" x2="450" y2="180" class="s" stroke-dasharray="5 4" stroke-opacity=".5"/>
+  <line x1="730" y1="245" x2="300" y2="180" class="s" stroke-dasharray="5 4" stroke-opacity=".5"/>
+
+  <!-- Mini legend swatches -->
+  <rect x="40" y="345" width="14" height="14" class="f"/><text x="60" y="356" class="t l">Flood Zone</text>
+  <rect x="180" y="345" width="14" height="14" class="hi"/><text x="200" y="356" class="t l">Results</text>
+  <rect x="300" y="345" width="14" height="14" class="m"/><text x="320" y="356" class="t l">Parcels</text>
+</svg>

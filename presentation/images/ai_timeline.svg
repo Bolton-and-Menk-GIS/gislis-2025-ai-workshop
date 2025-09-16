@@ -1,0 +1,58 @@
+<svg viewBox="0 0 980 200" width="100%" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    :root {
+      --svg-fg: #222;
+      --svg-bg: #fff;
+      --svg-accent: #4B843A;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --svg-fg: #fff;
+        --svg-bg: #181A1B;
+        --svg-accent: #F4B731;
+      }
+    }
+    .t{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;fill:var(--svg-fg)}
+    .s{stroke:var(--svg-fg);fill:none;stroke-width:2}
+    .b{fill:var(--svg-accent);fill-opacity:.08;stroke:var(--svg-fg);stroke-opacity:.4}
+    .l{font-size:14px}
+    .h{font-weight:600;font-size:16px}
+  </style>
+  <rect width="100%" height="100%" fill="var(--svg-bg)"/>
+  <text x="20" y="28" class="t h">From Rules → Generative AI</text>
+  <line x1="40" y1="100" x2="940" y2="100" class="s" stroke-opacity=".35"/>
+  <!-- Ticks -->
+  <g class="t l" fill-opacity=".7">
+    <text x="70" y="140">1980s</text>
+    <text x="240" y="140">2000s</text>
+    <text x="410" y="140">2012</text>
+    <text x="580" y="140">2017</text>
+    <text x="750" y="140">2022–</text>
+  </g>
+  <!-- Nodes -->
+  <g>
+    <rect x="30" y="55" rx="10" ry="10" width="160" height="40" class="b"/>
+    <text x="110" y="80" text-anchor="middle" class="t l">Expert Systems</text>
+
+    <rect x="200" y="55" rx="10" ry="10" width="160" height="40" class="b"/>
+    <text x="280" y="80" text-anchor="middle" class="t l">Statistical ML</text>
+
+    <rect x="370" y="55" rx="10" ry="10" width="160" height="40" class="b"/>
+    <text x="450" y="80" text-anchor="middle" class="t l">Deep Learning</text>
+
+    <rect x="540" y="55" rx="10" ry="10" width="160" height="40" class="b"/>
+    <text x="620" y="80" text-anchor="middle" class="t l">Transformers</text>
+
+    <rect x="710" y="45" rx="12" ry="12" width="240" height="60" class="b"/>
+    <text x="830" y="70" text-anchor="middle" class="t l">Foundation Models</text>
+    <text x="830" y="88" text-anchor="middle" class="t l">+ Generative AI (LLMs)</text>
+  </g>
+  <!-- Arrows -->
+  <g class="s" stroke-linecap="round">
+    <line x1="190" y1="75" x2="200" y2="75"/><polyline points="200,75 194,71 194,79"/>
+    <line x1="360" y1="75" x2="370" y2="75"/><polyline points="370,75 364,71 364,79"/>
+    <line x1="530" y1="75" x2="540" y2="75"/><polyline points="540,75 534,71 534,79"/>
+    <line x1="700" y1="75" x2="710" y2="75"/><polyline points="710,75 704,71 704,79"/>
+  </g>
+  <text x="20" y="175" class="t l" fill-opacity=".75">Key enablers: data scale • GPUs • transformer architecture</text>
+</svg>

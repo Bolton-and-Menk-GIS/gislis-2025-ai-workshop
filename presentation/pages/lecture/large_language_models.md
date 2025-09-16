@@ -6,7 +6,7 @@ theme: seriph
 # background: https://cover.sli.dev
 # some information about your slides (markdown enabled)
 # apply unocss classes to the current slide
-class: text-center
+# class: text-center
 # https://sli.dev/features/drawing
 drawings:
   persist: false
@@ -18,7 +18,7 @@ mdc: true
 # seoMeta:
 #  ogImage: https://cover.sli.dev
 ---
-## 🧠 What Is an LLM (Large Language Model)?
+## 🧠 What Is a *Large Language Model (LLM)*?
 
 At the most basic level, an LLM is:
 
@@ -55,9 +55,6 @@ It doesn’t “think” or “understand” like a human — it just got *reall
 
 </div>
   
-
-
-
 
 <!--
 Content before the first click
@@ -156,4 +153,27 @@ Every time you send a message:
 | **Inference**| When the model is used to generate output (like during a chat)          |
 
 ---
+
+# LLMs for Developers
+
+## Superpowers for Productivity
+- Writing cleaner code faster  
+- Auto-generating tests & docs  
+- Acting as a *pair programmer*  
+- Refactoring & exploring new APIs  
+
+👨‍💻 Example: GitHub Copilot inline code suggestion screenshot  
+
+---
+
+# LLMs for Data
+
+## Making Sense of Information
+- Summarization of long text  
+- Q&A from documents  
+- Extracting structured fields (e.g., JSON, tables)  
+- Natural language → SQL  
+
+📊 *Visual:* before/after example (long text → short summary)  
+
 
