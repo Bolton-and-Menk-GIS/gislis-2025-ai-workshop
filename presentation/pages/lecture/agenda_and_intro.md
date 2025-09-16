@@ -43,7 +43,7 @@ layout: cover
 
 # Timeline 
 
-![ai_timeline](/images/ai_timeline.svg)
+![ai_timeline](../../images/ai_timeline.svg)
 
 <div v-click>
 
