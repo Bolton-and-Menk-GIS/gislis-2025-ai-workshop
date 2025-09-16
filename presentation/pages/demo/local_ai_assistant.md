@@ -43,7 +43,7 @@
 
 ---
 layout: image-right
-image: images/tools-model-download.png
+image: ../../images/tools-model-download.png
 backgroundSize: 70%
 ---
 
@@ -57,7 +57,7 @@ backgroundSize: 70%
 
 ---
 layout: image-left
-image: images/coding-model-download.png
+image: ../../images/coding-model-download.png
 backgroundSize: 70%
 ---
 
@@ -68,7 +68,7 @@ backgroundSize: 70%
 
 ---
 layout: image-right
-image: images/model-download-parameters.png
+image: ../../images/model-download-parameters.png
 backgroundSize: 70%
 ---
 

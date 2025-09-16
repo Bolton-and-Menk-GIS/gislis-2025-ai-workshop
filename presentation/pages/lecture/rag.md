@@ -4,7 +4,7 @@
 - LLM + database = smarter answers  
 - Keeps responses accurate & grounded in your data  
 
-![rag-flow](/images/rag_workflow.svg)
+![rag-flow](../../images/rag_workflow.svg)
 
 ---
 

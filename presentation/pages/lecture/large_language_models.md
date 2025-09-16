@@ -142,6 +142,11 @@ Every time you send a message:
 
 ---
 
+# Popular LLMs
+
+![popular-llms](../../images/PopularLLms.png)
+---
+
 ## 📦 TL;DR — Quick Glossary
 
 | Term         | Meaning                                                                 |
