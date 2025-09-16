@@ -176,5 +176,4 @@ Every time you send a message:
 
 📊 *Visual:* before/after example (long text → short summary)  
 
----
 

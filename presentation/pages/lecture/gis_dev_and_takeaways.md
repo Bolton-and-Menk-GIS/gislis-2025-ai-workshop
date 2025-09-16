@@ -4,7 +4,7 @@
 
 - Automate dev tasks (configs, unit tests, documentation, boilerplate code)  
 - Natural language queries for spatial/attribute data  
-- Summarize geospatial reports  
+- Summarize/categorize large volumes of data on the fly in your applications  
 - Build smarter GIS dashboards & tools  
 
 ![gis-llm](/images/gis_nl_query.svg)
@@ -14,7 +14,7 @@
 # Demo Preview
 
 What we’ll do today:  
-- Use AI assistants (ChatGPT, Copilot)  
+- Use AI assistants (ChatGPT, Copilot, GitLab Duo)  
 - Build apps that leverage LLMs  
 - Explore RAG for GIS data  
 
