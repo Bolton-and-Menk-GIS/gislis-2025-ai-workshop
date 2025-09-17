@@ -7,7 +7,7 @@
 - Summarize/categorize large volumes of data on the fly in your applications  
 - Build smarter GIS dashboards & tools  
 
-![gis-llm](../../images/gis_nl_query.svg)
+![gis-llm](/images/gis_nl_query.svg)
 
 ---
 
