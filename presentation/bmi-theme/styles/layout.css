@@ -1,8 +1,5 @@
 /* Bolton & Menk Slidev Theme CSS */
-@import url(https://www.bolton-menk.com/wp-content/themes/boltonmenk/fonts/DIN/DINOT.ttf?ver=1.0.0);
-@import url(https://www.bolton-menk.com/wp-content/themes/boltonmenk/fonts/DIN/DINOT-CondBold.ttf?ver=1.0.0);
-@import url(https://www.bolton-menk.com/wp-content/themes/boltonmenk/fonts/DIN/DINOT-Medium.ttf?ver=1.0.0);
-@import url(https://www.bolton-menk.com/wp-content/themes/boltonmenk/fonts/DIN/DINOT-Medium.ttf?ver=1.0.0);
+@import url("https://gis.bolton-menk.com/assets/fonts/DINOT.css");
 
 :root {
   --slidev-theme-primary: #4B843A;
