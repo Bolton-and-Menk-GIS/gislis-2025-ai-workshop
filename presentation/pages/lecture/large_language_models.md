@@ -26,13 +26,14 @@ At the most basic level, an LLM is:
 
 <div v-click>
 
-A program that has learned to **predict the next word (or part of a word)** in a sentence based on everything that came before it.
+<!-- A program that has learned to **predict the next word (or part of a word)** in a sentence based on everything that came before it. -->
+*A sophisticated mathematical function that predicts what word comes next for any piece of text. It does not determine a single word with 100% certainty, but assigns a probability to all the possible next words.*
 
 </div>
 
 <div v-click>
 
-It doesn’t “think” or “understand” like a human — it just got *really, really good* at filling in the blank.
+It doesn’t “think” or “understand” like a human — it just got *really good* at filling in the blank.
 
 </div>
 
@@ -67,6 +68,13 @@ Also highlighted after the first click
 
 [click] Last click (skip two clicks)
 -->
+
+---
+layout: image
+
+image: ../../images/llm-prediction-text.png
+backgroundSize: contain
+---
 
 ---
 
@@ -140,6 +148,64 @@ Every time you send a message:
 3. Tokens are **decoded back into text**.
 4. It stops when it decides it's finished or reaches a token limit.
 
+
+---
+layout: image
+image: ../../images/chat-context-flow.svg
+backgroundSize: fit
+backgroundColor: white
+---
+
+---
+
+
+# Understanding the Context Window
+
+- **Context window** = the "memory span" of a model.  
+- It’s how much text (prompt + conversation + docs) the model can see at once.  
+- Measured in *tokens* (≈ chunks of words).  
+- If you exceed it → oldest content gets dropped.  
+
+💡 Larger context windows = model can handle longer docs or chats.
+
+---
+
+# Are Chats Stateless?
+
+- Yes — each request is **stateless**.  
+- The model doesn’t “remember” past chats.  
+- Your app sends the **entire conversation history** (or a subset) each time.  
+- Developers control what gets sent forward.  
+
+💡 This is why session management & truncation strategies matter.
+
+---
+
+# Hallucinations
+
+- Models predict the next word, not "facts."  
+- Without grounding, they may **make things up**.  
+- Causes:  
+  - Missing or vague context  
+  - Overly broad prompts  
+  - Long conversations where early details drop off  
+
+💡 **Solution:** retrieval-augmented generation (RAG) or explicit references. More on this later!
+
+---
+
+# Temperature & LLM Response Style
+
+- **Temperature = randomness knob (0 → 1)**  
+  - `0.0–0.3`: focused, consistent, less creative  
+  - `0.7`: balanced mix of accuracy & creativity  
+  - `1.0+`: creative, varied, sometimes wilder  
+  - in short, Temperature lets you trade off **creativity vs reliability**.  
+
+💡 Use **low temp** for SQL, code, and facts.  
+
+💡 Use **higher temp** for brainstorming, summaries, and text generation.
+
 ---
 
 # Popular LLMs
@@ -151,11 +217,13 @@ Every time you send a message:
 
 | Term         | Meaning                                                                 |
 |--------------|-------------------------------------------------------------------------|
-| **LLM**      | A next-token predictor trained on massive text corpora                  |
+| **LLM**      | A sophisticated mathematical function to predict text                  |
 | **Token**    | A chunk of text (word, part of a word, or punctuation)                  |
 | **Parameter**| A weight in the neural net adjusted during training                     |
 | **Training** | The process of minimizing prediction errors on huge text data           |
 | **Inference**| When the model is used to generate output (like during a chat)          |
+| **Hallucination** | The model makes up answers without factual basis |
+| **Temperature** | Randomness knob for responses
 
 ---
 
@@ -166,8 +234,6 @@ Every time you send a message:
 - Auto-generating tests & docs  
 - Acting as a *pair programmer*  
 - Refactoring & exploring new APIs  
-
-👨‍💻 Example: GitHub Copilot inline code suggestion screenshot  
 
 ---
 

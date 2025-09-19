@@ -27,7 +27,7 @@
   <text x="20" y="28" class="t" font-weight="700">Natural-Language GIS Query (Example)</text>
 
   <!-- Map frame -->
-  <rect x="20" y="50" width="680" height="280" rx="12" class="m"/>
+  <rect x="20" y="50" width="680" height="240" rx="12" class="m"/>
 
   <!-- Flood zone overlay -->
   <path d="M60,120 L200,90 L320,130 L380,110 L480,150 L540,130 L630,160 L650,210 L600,260 L520,240 L430,270 L330,230 L210,250 Z"
@@ -54,22 +54,22 @@
   <rect x="450" y="150" width="120" height="60" rx="4" class="hi"/>
 
   <!-- Legend -->
-  <rect x="730" y="70" width="340" height="110" rx="10" class="bubble"/>
+  <rect x="730" y="70" width="340" height="90" rx="10" class="bubble"/>
   <text x="750" y="95" class="t l">Query</text>
   <text x="750" y="115" class="t l">“Show parcels in FEMA flood zone</text>
   <text x="750" y="133" class="t l">with area &gt; 5 acres.”</text>
 
-  <rect x="730" y="200" width="340" height="110" rx="10" class="bubble"/>
+  <rect x="730" y="200" width="340" height="90" rx="10" class="bubble"/>
   <text x="750" y="225" class="t l">Pipeline</text>
   <text x="750" y="245" class="t l">NL → intent + filters → SQL/where-clause</text>
   <text x="750" y="265" class="t l">Spatial intersect + area calc → Select/highlight</text>
 
   <!-- Callout lines -->
-  <line x1="730" y1="125" x2="450" y2="180" class="s" stroke-dasharray="5 4" stroke-opacity=".5"/>
+  <line x1="730" y1="115" x2="450" y2="180" class="s" stroke-dasharray="5 4" stroke-opacity=".5"/>
   <line x1="730" y1="245" x2="300" y2="180" class="s" stroke-dasharray="5 4" stroke-opacity=".5"/>
 
   <!-- Mini legend swatches -->
-  <rect x="40" y="345" width="14" height="14" class="f"/><text x="60" y="356" class="t l">Flood Zone</text>
-  <rect x="180" y="345" width="14" height="14" class="hi"/><text x="200" y="356" class="t l">Results</text>
-  <rect x="300" y="345" width="14" height="14" class="m"/><text x="320" y="356" class="t l">Parcels</text>
+  <rect x="40" y="305" width="14" height="14" class="f"/><text x="60" y="316" class="t l">Flood Zone</text>
+  <rect x="180" y="305" width="14" height="14" class="hi"/><text x="200" y="316" class="t l">Results</text>
+  <rect x="300" y="305" width="14" height="14" class="m"/><text x="320" y="316" class="t l">Parcels</text>
 </svg>

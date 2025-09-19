@@ -3,6 +3,7 @@
 **Retrieval-Augmented Generation**  
 - LLM + database = smarter answers  
 - Keeps responses accurate & grounded in your data  
+  - reduces hallucinations 
 
 ![rag-flow](../../images/rag_workflow.svg)
 

@@ -22,7 +22,22 @@ layout: cover
 - Early AI: expert systems, rules-based  
 - Modern AI: machine learning → deep learning → generative AI  
 
-📊 *Visual:* simple timeline showing expert systems → ML → deep learning → transformers  
+<div v-click>
+
+![ai_timeline](../../images/ai_timeline.svg)
+</div>
+
+<div v-click>
+
+**2017**: *Attention Is All You Need* - Google introduced the [Transformer architecture](https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf), which is the foundational model for almost all modern LLMs. More on this later!
+
+</div>
+
+<div v-click>
+
+**2035**: *Artificial General Intelligence (AGI)* - Skynet? The Matrix? AI wipes out humanity?
+
+</div>
 
 ---
 
@@ -37,16 +52,3 @@ layout: cover
 
 💡 “AI won’t replace you, but developers using AI will replace those who don’t.”  
 
-
-
----
-
-# Timeline 
-
-![ai_timeline](../../images/ai_timeline.svg)
-
-<div v-click>
-
-**2035**: *Artificial General Intelligence (AGI)* - Skynet plot? The Matrix? AI wipes out humanity?
-
-</div>
