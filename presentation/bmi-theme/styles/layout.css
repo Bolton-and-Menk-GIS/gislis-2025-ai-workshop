@@ -55,7 +55,7 @@ html.light {
   @apply h-full grid;
 
   h1 {
-    @apply text-6xl leading-20;
+    @apply text-5xl leading-20;
     color: var(--slidev-theme-primary);
   }
 
@@ -72,4 +72,12 @@ html.light {
   a {
     color: var(--slidev-theme-accent);
   }
+}
+
+.scroll-y {
+  max-height: calc(100vh - 80px); /* Adjust as needed */
+  overflow-y: auto;
+  background: var(--slidev-code-background, #f8f8f8); /* Optional: match code block bg */
+  border-radius: 8px; /* Optional */
+  padding: 1em; /* Optional */
 }
