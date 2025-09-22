@@ -1,17 +1,25 @@
 <script setup lang="ts">
 // This component is used to display the BMI logo in the bottom right corner of each slide.
-// import WhiteTripod from '../images/white-tripod.svg'
+interface Props {
+  triangleColor?: 'gray' | 'secondary';
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  triangleColor: 'gray',
+});
+// Import the necessary images for the BottomRight component
 const whiteTripod = new URL('../images/white-tripod-opacity.svg', import.meta.url).href;
 const yellowBar = new URL('../images/yellow-bar.svg', import.meta.url).href;
 const grayBar = new URL('../images/gray-bar.svg', import.meta.url).href;
-const grayTriangle = new URL('../images/gray-triangle.svg', import.meta.url).href;
+const triangle = new URL(`../images/${props.triangleColor ?? 'gray'}-triangle.svg`, import.meta.url).href;
 </script>
+
 <template>
   <div class="logo-bottom-right">
     <img :src="whiteTripod" class="white-tripod"/>
     <div class="corner-graphics">
       <img :src="whiteTripod" class="white-tripod" />
-      <img :src="grayTriangle" class="corner-graphic triangle" />
+      <img :src="triangle" class="corner-graphic triangle" />
       <img :src="grayBar" class="corner-graphic gray-bar" />
       <img :src="yellowBar" class="corner-graphic yellow-bar" />
     </div>
@@ -60,7 +68,8 @@ const grayTriangle = new URL('../images/gray-triangle.svg', import.meta.url).hre
   width: 150px;
   z-index: 3;
   opacity: 0.85;
-  mix-blend-mode: exclusion;
+  // mix-blend-mode: exclusion;
+  mix-blend-mode: multiply;
 }
 
 .yellow-bar {

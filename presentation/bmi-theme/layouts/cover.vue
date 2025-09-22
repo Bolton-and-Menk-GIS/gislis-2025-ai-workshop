@@ -18,8 +18,9 @@ import BrandLogo from '../components/BrandLogo.vue';
 .cover-bmi {
   background: url('../images/bmi-cover-bg-green.png') center/cover no-repeat;
   &--content > h1, h2, h3, h4, h5, h6 {
-    color: white !important;;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+  } &--content > * {
+    color: white !important;
   }
 }
 

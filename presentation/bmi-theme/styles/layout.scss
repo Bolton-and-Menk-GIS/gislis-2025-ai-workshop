@@ -1,8 +1,11 @@
 /* Bolton & Menk Slidev Theme CSS */
+@use "sass:list";
 @import url(https://www.bolton-menk.com/wp-content/themes/boltonmenk/fonts/DIN/DINOT.ttf?ver=1.0.0);
 @import url(https://www.bolton-menk.com/wp-content/themes/boltonmenk/fonts/DIN/DINOT-CondBold.ttf?ver=1.0.0);
 @import url(https://www.bolton-menk.com/wp-content/themes/boltonmenk/fonts/DIN/DINOT-Medium.ttf?ver=1.0.0);
 @import url(https://www.bolton-menk.com/wp-content/themes/boltonmenk/fonts/DIN/DINOT-Medium.ttf?ver=1.0.0);
+
+$nest-font-sizes: (1em, 0.92em, 0.85em, 0.78em, 0.72em);
 
 :root {
   --slidev-theme-primary: #4B843A;
@@ -13,11 +16,14 @@
   --slidev-theme-error: #BE1E2D;
   --slidev-theme-success: #8DBA4C;
   --slidev-theme-neutral: #B1B3B6;
-  --slidev-theme-background: #181A1B;
+  /* --slidev-theme-background: #181A1B; */
+  --slidev-theme-background: #03405F;
   --slidev-theme-surface: #23272A;
   --slidev-theme-text: #FFFFFF;
   --slidev-theme-text-secondary: #E1E1E6;
   --slidev-theme-font-family: 'DIN OT', Calibri, sans-serif;
+  --slidev-theme-title-color: #F4B731;
+
 }
 
 html.light {
@@ -25,6 +31,7 @@ html.light {
   --slidev-theme-surface: #F5F5F5;
   --slidev-theme-text: #181A1B;
   --slidev-theme-text-secondary: #4B843A;
+  --slidev-theme-title-color: #4B843A;
 }
 
 .slidev-layout {
@@ -34,7 +41,7 @@ html.light {
 }
 
 .slidev-title {
-  color: var(--slidev-theme-primary);
+  color: var(--slidev-theme-title-color);
 }
 
 .slidev-accent {
@@ -70,6 +77,31 @@ html.light {
   }
 
   a {
+    color: var(--slidev-theme-accent);
+  }
+}
+
+@mixin nested-list-font-size($level: 1) {
+  @if $level <= list.length($nest-font-sizes) {
+    font-size: list.nth($nest-font-sizes, $level);
+    > ul li, > ol li {
+      @include nested-list-font-size($level + 1);
+    }
+  }
+}
+
+.slidev-layout.bmi-default ul li,
+.slidev-layout.bmi-default ol li {
+  @include nested-list-font-size();
+}
+
+.slidev-layout.bmi-default {
+  & h1, & h2, & h3, & h4, & h5, & h6 {
+    font-weight: 600;
+    color: var(--slidev-theme-title-color);
+    /* text-shadow: var(--slidev-theme-title-shadow); */
+  }
+  & a {
     color: var(--slidev-theme-accent);
   }
 }
