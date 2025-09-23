@@ -151,7 +151,7 @@ Every time you send a message:
 
 ---
 layout: image
-image: ../../images/chat-context-flow.svg
+image: ../../images/prompt-assembly.svg
 backgroundSize: fit
 backgroundColor: white
 ---
@@ -227,7 +227,7 @@ backgroundColor: white
 
 ---
 
-# LLMs for Developers
+# AI for Developers
 
 ## Superpowers for Productivity
 - Writing cleaner code faster  
@@ -237,12 +237,13 @@ backgroundColor: white
 
 ---
 
-# LLMs for Data
+# AI for Data
 
 ## Making Sense of Information
 - Summarization of long text  
 - Q&A from documents  
 - Extracting structured fields (e.g., JSON, tables)  
+- convert unstructured data into structured data
 - Natural language → SQL  
 
 📊 *Visual:* before/after example (long text → short summary)  

@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { onSlideLeave } from '@slidev/client'
+import { onSlideLeave, useDarkMode } from '@slidev/client'
 import BottomRight from '../components/BottomRight.vue';
 import BrandLogo from '../components/BrandLogo.vue';
 
 const showBottomRight = ref(true);
+
+const { isDark } = useDarkMode();
 
 onSlideLeave(() => {
   showBottomRight.value = false;
@@ -29,8 +31,11 @@ onSlideLeave(() => {
 </template>
 
 <style lang="scss">
+html.dark {
+  
+}
 .bmi-default {
-  background: url('../images/bmi-cover-bg-green.png') center/cover no-repeat;
+  background: url('../images/intro_bkg_flip.jpg') center/cover no-repeat;
   padding: 1rem 2rem;
   &--overlay {
     background-color: var(--slidev-theme-background);
@@ -38,6 +43,7 @@ onSlideLeave(() => {
     left: 0;
     right: 0;
     bottom: 48px;
+    // mix-blend-mode: multiply;
   }
 }
 </style>

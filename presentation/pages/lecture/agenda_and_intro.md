@@ -1,25 +1,29 @@
 ---
-theme: default
-layout: cover
+layout: intro
 ---
 
 # Agenda
 
 1. What is AI? (context & history)  
 2. Current State of AI  
-3. LLMs & Developer Productivity  
-4. Data-focused AI (Summarization, Q&A)  
-5. Retrieval-Augmented Generation (RAG)  
-6. Ollama and Local Models
-7. AI and Coding
-8. Demos  
+3. Generative AI and LLMs 
+4. AI and Supercharging Development
+   1. Use cases and examples
+   2. Ollama and Local Models 
+   3. Demos
+5. Creating Data-Driven AI Solutions
+   1. Data-focused AI   
+   2. Retrieval-Augmented Generation (RAG) 
+   3. Demos 
+    
 
 ---
 
 # What is AI?
 
-- AI = systems that perform tasks requiring human-like intelligence  
+- Systems that perform tasks requiring human-like intelligence  
 - Early AI: expert systems, rules-based  
+  - used "If-Then" logic, lacked ability to learn from new data and difficult to scale 
 - Modern AI: machine learning → deep learning → generative AI  
 
 <div v-click>
@@ -35,15 +39,25 @@ layout: cover
 
 <div v-click>
 
-**2035**: *Artificial General Intelligence (AGI)* - Skynet? The Matrix? AI wipes out humanity?
+**Future?**: *Artificial General Intelligence (AGI)* - SkyNet? The Matrix? AI wipes out humanity?
 
 </div>
 
 ---
 
+## Machine Learning and Deep Learning 
+
+- *Machine Learning* (ML) - algorithms trained on data to make decisions or predictions without manual programming.
+  - *Remote Sensing* - if you have ever done a [supervised or unsupervised classification](https://gisgeography.com/supervised-unsupervised-classification-arcgis/), then you have done some basic ML. 
+- *Deep Learning* (DL) - sub type of ML that uses deep, multi-layered neural networks to learn hierarchal representations of data.
+
+---
+
+
 # Current State of AI
 
 - Generative AI is everywhere: ChatGPT, Copilot, MidJourney, Claude  
+  - creates new content such as text, code, images, audio, or video, from existing data 
 - Powered by:  
   - Large datasets  
   - Transformer architectures  
@@ -51,4 +65,14 @@ layout: cover
 - Limitations: hallucinations, bias, cost  
 
 💡 “AI won’t replace you, but developers using AI will replace those who don’t.”  
+
+---
+
+# Skills and Techniques 
+
+- *Prompt Engineering* - 
+- *Fine Tuning* -
+- *Retrieval-Augmented Generation* -
+
+
 

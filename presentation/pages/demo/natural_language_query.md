@@ -1,6 +1,17 @@
 ## Natural Language Query Demo
 
+*Goal - create a reusable chat interface where users can use natural language to query features in the map.:* 
 
+- determine user intent (i.e. does user want to query a map layer?)
+- determine target layer
+- create a `WHERE` clause matching the user request
+- select and zoom to features
+
+---
+layout: image
+image: ../../images/natural_lang_chat.png
+backgroundSize: 80vh
+---
 
 ---
 

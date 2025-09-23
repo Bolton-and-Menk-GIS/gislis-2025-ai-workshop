@@ -1,5 +1,7 @@
 <script setup lang="ts">
 // This component is used to display the BMI logo in the bottom right corner of each slide.
+import { computed } from 'vue'
+import { useDarkMode } from '@slidev/client';
 interface Props {
   triangleColor?: 'gray' | 'secondary';
 }
@@ -7,11 +9,13 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   triangleColor: 'gray',
 });
+
+const { isDark } = useDarkMode();
 // Import the necessary images for the BottomRight component
 const whiteTripod = new URL('../images/white-tripod-opacity.svg', import.meta.url).href;
 const yellowBar = new URL('../images/yellow-bar.svg', import.meta.url).href;
 const grayBar = new URL('../images/gray-bar.svg', import.meta.url).href;
-const triangle = new URL(`../images/${props.triangleColor ?? 'gray'}-triangle.svg`, import.meta.url).href;
+const triangle = computed(()=> new URL(`../images/${props.triangleColor ?? 'gray'}-triangle${props.triangleColor !== 'gray' ? isDark.value ? '-dark':'-light': ''}.svg`, import.meta.url).href);
 </script>
 
 <template>
