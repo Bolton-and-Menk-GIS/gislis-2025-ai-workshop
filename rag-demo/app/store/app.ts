@@ -2,7 +2,7 @@ import { computed } from "vue";
 // import { Dark } from "quasar";
 import { defineStore } from 'pinia'
 import { useStorage } from "@vueuse/core";
-import { getPreferredBrowserColorScheme } from "#imports";
+import { getPreferredBrowserColorScheme, setEsriTheme } from "@/utils";
 import type { UserSettings, AppTheme, ColorTheme } from "~/typings";
 
 export const useAppState = defineStore('app', ()=> {
@@ -27,6 +27,7 @@ export const useAppState = defineStore('app', ()=> {
     
     // Set the theme on the document element
     document.documentElement.setAttribute('data-theme', resolvedTheme);
+    setEsriTheme(resolvedTheme)
     userSettings.value.theme = resolvedTheme
     return resolvedTheme;
   }
@@ -40,7 +41,7 @@ export const useAppState = defineStore('app', ()=> {
   const isDark = computed(()=> colorTheme.value === 'dark')
 
   const toggleDarkMode = () => {
-    userSettings.value.theme = isDark.value ? 'light' : 'dark'
+    setTheme(isDark.value ? 'light' : 'dark')
   }
 
   return {

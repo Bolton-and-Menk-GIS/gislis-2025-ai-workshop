@@ -7,9 +7,6 @@ if (import.meta.client){
   appState.loadInitialTheme()
 }
 
-// import { useQuasar } from 'quasar'
-// const $q = useQuasar()
-// $q.dark.set('auto')
 </script>
 <template>
   <NuxtLayout>

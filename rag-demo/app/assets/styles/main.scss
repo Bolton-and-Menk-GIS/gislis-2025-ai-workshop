@@ -71,26 +71,6 @@ $colors: (
   secondary: $secondary,
   contrast: $contrast,
   // tertiary: $tertiary,
-  white: white,
-  black: black,
-  transparent: 'transparent',
-  red: red,
-  green: green,
-  blue: blue,
-  yellow: yellow,
-  gray: gray,
-  orange: orange,
-  purple: purple,
-  pink: pink,
-  brown: brown,
-  cyan: cyan,
-  lime: lime,
-  teal: teal,
-  indigo: indigo,
-  violet: violet,
-  magenta: magenta,
-  gold: gold,
-  silver: silver
 );
 
 @each $name, $color in $colors {

@@ -1,7 +1,20 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
+  vite: {
+    vue: {
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag.startsWith('calcite-') || tag.startsWith('arcgis-'),
+        },
+      },
+      features: {
+        propsDestructure: true,
+      },
+    },
+  },
   css: [
+    // In app.vue or a plugin file
     "@picocss/pico",
     "@picocss/pico/css/pico.colors.min.css",
     "~/assets/styles/main.scss"
@@ -15,8 +28,14 @@ export default defineNuxtConfig({
   },
 
   devtools: { enabled: true },
-  modules: [
-    // 'nuxt-quasar-ui', 
-    '@pinia/nuxt'
+  modules: [// 'nuxt-quasar-ui', 
+    '@pinia/nuxt', 
+    [
+      "nuxt-openapi-docs-module",
+      {
+        folder: './docs/openapi',
+        name: 'OpenApiDocs'
+      }
+    ]
   ]
 })
