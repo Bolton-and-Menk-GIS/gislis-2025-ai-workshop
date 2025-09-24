@@ -11,10 +11,11 @@ layout: intro
    1. Use cases and examples
    2. Ollama and Local Models 
    3. Demos
-5. Creating Data-Driven AI Solutions
-   1. Data-focused AI   
-   2. Retrieval-Augmented Generation (RAG) 
-   3. Demos 
+5. Creating AI-Driven Solutions
+   1. Getting better outputs from LLMs
+   2. Data-focused AI   
+   3. Retrieval-Augmented Generation (RAG) 
+   4. Demos 
     
 
 ---
