@@ -138,7 +138,7 @@ class: text-center
 Add a Google style Python docstring to the `add_area_field` function. Follow existing docstring patterns. Match verbiage and style from rest of file.
 
 ### Task 2: Implementation ⚙️
-Create a new ArcGIS Python Toolbox tool wrapping the `buffer_features` function. Reference existing `Toolbox` class. Use `CalculateArea` tool as template
+Create a new ArcGIS Python Toolbox tool class wrapping the `buffer_features` function. Add it to the existing `Toolbox` class's tools list. Use `CalculateArea` tool as template
 
 </v-clicks>
 
