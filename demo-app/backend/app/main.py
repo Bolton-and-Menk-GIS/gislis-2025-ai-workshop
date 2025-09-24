@@ -1,0 +1,36 @@
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
+
+from app.routers.health import health_api
+from app.routers.rag import rag_api
+from app.routers.chat import chat_api
+
+app = FastAPI(
+    title="RAG Demo API",
+    description="FastAPI + SQLAlchemy + pgvector demo backend",
+    version="1.0.0",
+)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.mount("/app", StaticFiles(directory="static", html=True), name="static")
+
+routers = [
+    rag_api,
+    health_api,
+    chat_api,
+]
+
+# Register routers
+for router in routers:
+    app.include_router(router, prefix='/api')
+    print(f"Registered router: {router.prefix}")
+
