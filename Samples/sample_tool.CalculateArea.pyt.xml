@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<metadata xml:lang="en">
+    <Esri>
+        <CreaDate>20250924</CreaDate>
+        <CreaTime>14541400</CreaTime>
+        <ArcGISFormat>1.0</ArcGISFormat>
+        <SyncOnce>TRUE</SyncOnce>
+        <ModDate>20250924</ModDate>
+        <ModTime>15255200</ModTime>
+        <scaleRange>
+            <minScale>150000000</minScale>
+            <maxScale>5000</maxScale>
+        </scaleRange>
+        <ArcGISProfile>ItemDescription</ArcGISProfile>
+    </Esri>
+    <tool name="CalculateArea" displayname="Calculate Polygon Area" toolboxalias="customtools"
+        xmlns="">
+        <arcToolboxHelpPath>c:\program files\arcgis\pro\Resources\Help\gp</arcToolboxHelpPath>
+        <parameters>
+            <param name="input_fc" displayname="Input Polygon Feature Class" type="Required"
+                direction="Input" datatype="Feature Class" expression="input_fc">
+                <dialogReference>&lt;DIV
+                    STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The input
+                    polygon feature class. Field will be added and the area will be calculated in
+                    square meters.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
+                <pythonReference>&lt;DIV
+                    STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The input
+                    polygon feature class. Field will be added and the area will be calculated in
+                    square meters.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
+            </param>
+            <param name="field_name" displayname="Field Name" type="Optional" direction="Input"
+                datatype="String" expression="{field_name}">
+                <dialogReference>&lt;DIV
+                    STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The field name to
+                    add and calculate the area into.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
+                <pythonReference>&lt;DIV
+                    STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;The field name to
+                    add and calculate the area into.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
+            </param>
+        </parameters>
+        <summary>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Adds
+            a new field to a polygon feature class and calculates its
+            area&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</summary>
+    </tool>
+    <dataIdInfo>
+        <idCitation>
+            <resTitle>Calculate Polygon Area</resTitle>
+        </idCitation>
+        <searchKeys>
+            <keyword>area</keyword>
+        </searchKeys>
+    </dataIdInfo>
+    <distInfo>
+        <distributor>
+            <distorFormat>
+                <formatName>ArcToolbox Tool</formatName>
+            </distorFormat>
+        </distributor>
+    </distInfo>
+    <mdHrLv>
+        <ScopeCd value="005" />
+    </mdHrLv>
+    <mdDateSt Sync="TRUE">20250924</mdDateSt>
+</metadata>
