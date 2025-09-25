@@ -171,6 +171,9 @@ export const useChatFeatures = (options: UseChatFeaturesOptions)=> {
           log(`[chatbot]: successfully connected to AI Service`)
           socket.value = ws
           deferredSocket.value.resolve(ws)
+          if (options?.onConnected){
+            options.onConnected(ws)
+          }
         }
 
         ws.onmessage = onReceiveMessage

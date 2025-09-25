@@ -1,8 +1,16 @@
 <script lang="ts" setup>
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, useTemplateRef } from 'vue'
 
 const MapViewer = defineAsyncComponent(() => import('./MapViewer.vue'));
 const ChatBot = defineAsyncComponent(() => import('@/components/ChatBot.vue'));
+
+const chatExpand = useTemplateRef<HTMLArcgisExpandElement>('chatExpand');
+
+const onCloseChat = () => {
+  if (chatExpand.value) {
+    chatExpand.value.collapse();
+  }
+}
 </script>
 
 <template>
@@ -12,13 +20,17 @@ const ChatBot = defineAsyncComponent(() => import('@/components/ChatBot.vue'));
       :center="([-93.35,44.96] as any)" 
       :zoom="9"
     >
-      <arcgis-expand position="top-right" expand-icon="effects" expand-tooltip="Chat with the map">
+      <arcgis-expand 
+        ref="chatExpand"
+        position="top-right" 
+        expand-icon="effects" 
+        expand-tooltip="Chat with the map"
+      >
         <arcgis-placement>
-
           <ChatBot 
             url="http://localhost:8000/api/chat"
             storage-key="map-chat-messages"
-            clear-history
+            @close="onCloseChat"
           />
         </arcgis-placement>
       </arcgis-expand>

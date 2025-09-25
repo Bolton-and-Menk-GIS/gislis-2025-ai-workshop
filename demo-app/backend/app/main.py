@@ -4,7 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers.health import health_api
 from app.routers.rag import rag_api
-from app.routers.chat import chat_api
+from app.routers.pdf import pdf_api 
+from app.routers.chat import chat_api 
 
 app = FastAPI(
     title="RAG Demo API",
@@ -12,7 +13,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
-
+# register CORS middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
@@ -22,11 +23,14 @@ app.add_middleware(
 )
 
 app.mount("/app", StaticFiles(directory="static", html=True), name="static")
+app.mount("/surveys", StaticFiles(directory="surveys"), name="surveys")
 
 routers = [
     rag_api,
     health_api,
+    pdf_api,
     chat_api,
+    
 ]
 
 # Register routers

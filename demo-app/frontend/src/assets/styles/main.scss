@@ -10,6 +10,7 @@
 :root:not([data-theme=dark]),
 :host:not([data-theme=dark]) {
    // custom stuff
+  --pico-primary: #01aaff;
   --pico-bmi-card-background-color: var(--pico-color-grey-100);
 }
 
@@ -26,6 +27,61 @@
 
 .pico hr {
   border-top: 1px solid var(--pico-contrast);
+}
+
+span.material-symbols-outlined {
+  height: auto;
+  vertical-align: middle;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+
+  // Optional: subtle background on hover/focus
+  &:hover,
+  &:focus {
+    background: var(--pico-primary-background, #e0e7ef);
+    box-shadow: 0 0 0 2px var(--pico-primary, #4B843A, 0.15);
+    outline: none;
+  }
+
+  // Optional: active state
+  &:active {
+    background: var(--pico-primary-background, #d0d7df);
+  }
+
+  &--flat {
+    padding: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+    --pico-color: var(--pico-color) !important;
+
+    // &:hover,
+    // &:focus,
+    // &:active {
+    //   background: none !important;
+    //   box-shadow: none !important;
+    //   outline: none !important;
+    // }
+  }
+
+  // Make sure the icon is sized appropriately
+  .material-symbols-outlined {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
 }
 
 $space: (

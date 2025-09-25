@@ -1,27 +1,39 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
 import { useChatFeatures, type UseChatFeaturesOptions } from '@/composables';
-import { useStorage } from '@vueuse/core';
 import type { ChatMessage } from '@/typings';
 
-interface Props extends UseChatFeaturesOptions{
+interface Props extends Pick<UseChatFeaturesOptions, 'url' | 'storageKey' | 'clearHistory'> {
   title?: string;
 }
 
-const { url, title='AI Assistant', storageKey='chat-messages', clearHistory=false } = defineProps<Props>();
+const emit = defineEmits<{
+  (e: 'message-received', msg: ChatMessage): void;
+  (e: 'connected', ws: WebSocket): void;
+  (e: 'close'): void;
+}>();
+
+const { 
+  url, 
+  title='AI Assistant', 
+  storageKey='chat-messages', 
+  clearHistory=false, 
+} = defineProps<Props>();
 
 const {
   isBusy,
   userInput,
   messages,
+  clearMessages,
  } = useChatFeatures({
   url,
   storageKey,
   clearHistory,
   onMessageReceived: (msg: ChatMessage)=> {
     console.log('Message received in ChatBot component:', msg);
+    emit('message-received', msg);
   },
   onConnected: (ws: WebSocket)=> {
+    emit('connected', ws);
     console.log('WebSocket connected in ChatBot component:', ws);
     messages.value.push({
       role: 'assistant',
@@ -30,14 +42,12 @@ const {
   }
 });
 
+messages.value.push({
+  role: 'assistant',
+  content: "Hello! I'm your AI assistant. How can I help you today?"
+});
 
-// const onUserInput = (e: Event) => {
-//   e.preventDefault();
-//   if (!e.target) return;
-//   const textarea = e.target as HTMLTextAreaElement;
-//   textarea.dataset.replicatedValue = userInput.value; // for auto-grow
-// };
-
+isBusy.value = true
 
 </script>
 
@@ -46,20 +56,43 @@ const {
     <header>
       <nav class="px-md">
         <ul>
-          <li><h4>{{ title }}</h4></li>
+          <li><h4 class="pt-sm">{{ title }}</h4></li>
         </ul>
         <ul>
-          <li><div class="chatbot--close pr-sm"></div></li>
+          <li>
+            <button 
+              class="icon-btn--flat pr-sm"
+              data-tooltip="Clear Chat History" 
+              data-placement="bottom" 
+              @click="clearMessages" 
+            >
+              <span class="material-symbols-outlined">
+                clear_all
+              </span>
+            </button>
+          </li>
+          <li>
+            <button 
+              class="icon-btn--flat pr-sm" 
+              @click="emit('close')"
+            >
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </li>
         </ul>
-        
       </nav>
       
     </header>
+
     <hr class="pico chatbot--separator" />
 
     <div class="chatbot--content chatbot--scroll pa-sm">
-      <div v-for="(msg, index) in messages" :key="index" :class="`chat-bot--message chat-bot--message--${msg.role}`">
-        <strong>{{ msg.role === 'user' ? 'You' : 'Bot' }}:</strong> {{ msg.content }} 
+      <div v-for="(msg, index) in messages" :key="index">
+        <div :class="`chatbot-message chatbot-message--${msg.role.toLowerCase()}`">
+          <div class="bubble">
+            <strong>{{ msg.role === 'user' ? 'You' : 'Bot' }}:</strong> {{ msg.content }} 
+          </div>
+        </div>
       </div>
       <div v-if="isBusy" class="chatbot-message chatbot-message--assistant">
         <div class="bubble typing">
@@ -67,26 +100,22 @@ const {
         </div>
       </div>
     </div>
-
     
     <footer class="chatbot--user-form mt-sm">
       <form class="pico" @submit.prevent.stop>
         <fieldset role="group">
-          <!-- <div class="grow-wrap"> -->
-            <textarea 
-              name="userInput"
-              class="chatbot--input"
-              v-model="userInput"
-              placeholder="Type your message..." 
-            />
-          <!-- </div> -->
-          <input type="submit" value="Send" style="height: auto;" />
+          <textarea 
+            name="userInput"
+            rows="3"
+            class="chatbot--input"
+            v-model="userInput"
+            placeholder="Type your message..." 
+          />
+          <input class="pico-btn-sm" type="submit" value="Send" :disabled="isBusy" />
         </fieldset>
-
-        <!-- <input type="reset" value="Clear" @click="messages = []" style="height: auto; cursor: pointer;" /> -->
-      
       </form>
     </footer>
+
   </article>
 </template>
 
@@ -108,37 +137,41 @@ const {
   &--input {
     font-size: 0.85rem;
   }
-  &--user-form {
+  &--user-form * input, textarea {
     font-size: 0.85rem;
   }
   &--container {
     display: flex;
     flex-direction: column;
-    height: 600px;
-    max-height: 75vh;
+    height: 700px;
+    max-height: 80vh;
     min-width: 400px;
     border: 1px solid var(--pico-secondary-border);
-    // border: 1px solid #ddd;
   }
 }
+
+.pico-btn-sm {
+  height: auto !important;
+  font-size: 0.85rem !important;
+  padding: 0 0.5rem !important;
+}
+
 .chatbot--scroll {
   flex: 1 1 auto;
   overflow-y: auto;
   max-height: none; // Remove max-height if you want it to fill the space
   height: auto;     // Let flexbox control the height
-  padding-right: 4px;
+  padding-right: 4px;  /* To prevent scrollbar overlap */
   background: var(--pico-bmi-card-background-color);
   border-radius: var(--pico-border-radius);
-  // overflow-y: auto;
-  // height: 500px;
-  // max-height: 60vh;
-  // padding-right: 4px; /* To prevent scrollbar overlap */
 }
+
 .chatbot-message {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin-bottom: 12px;
+  font-size: 0.9rem !important;
 
   &--user {
     align-items: flex-end;
@@ -178,7 +211,7 @@ const {
     align-items: center;
     min-width: 44px;
     min-height: 24px;
-    background: $primary;
+    background: $secondary;
     color: white;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 16px;

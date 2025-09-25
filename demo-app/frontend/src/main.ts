@@ -6,12 +6,10 @@ import { defineCustomElements as defineCustomMapElements } from '@arcgis/map-com
 defineCalciteElements(window)
 defineCustomMapElements(window)
 
-// calcite css
+// calcite and pico css
 import '@esri/calcite-components/dist/calcite/calcite.css'
-// import '@picocss/pico'
 import '@picocss/pico/css/pico.colors.min.css'
 import '@picocss/pico/css/pico.conditional.min.css'
-// import '@picocss/pico/css/pico.conditional.min.css'
 
 import App from './App.vue'
 import router from './router'
