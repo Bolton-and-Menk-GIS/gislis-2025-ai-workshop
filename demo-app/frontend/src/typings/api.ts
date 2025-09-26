@@ -1,0 +1,14 @@
+import type { components } from "@/generated/api";
+
+export type AskPromptType = components['schemas']['AskPromptOption']['name']
+export type AskPromptOptions = components['schemas']['AskPromptOptions']
+export type AskPayload = components['schemas']['AskPayload']
+export type ChatResponse = components['schemas']['ChatResponse']
+export type LLMModel = components['schemas']['LLMModel']
+export type ModelDetails = components['schemas']['ModelDetails']
+export type OllamaModelsResponse = components['schemas']['OllamaModelsResponse']
+export type PDFResult = components['schemas']['PDFResult']
+export type RagRequest = components['schemas']['RagRequest']
+export type RagResponse = components['schemas']['RagResponse']
+export type Extent = components['schemas']['Extent']
+export type HealthResponse = components['schemas']['HealthResponse']

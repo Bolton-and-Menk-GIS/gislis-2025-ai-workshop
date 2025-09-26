@@ -8,10 +8,6 @@ fetcher.configure({
   baseUrl: import.meta.env.VITE_API_URL || 'http://localhost:8000'
 })
 
-export type AskPromptType = components['schemas']['AskPromptOption']['name']
-export type AskPromptOptions = components['schemas']['AskPromptOptions']
-
-
 // Create API endpoints
 export const api = {
   fetcher,
