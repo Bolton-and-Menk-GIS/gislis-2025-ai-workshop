@@ -19,6 +19,15 @@
    // custom stuff
   --pico-bmi-card-background-color: var(--pico-color-grey-850);
 }
+.pico [data-tooltip]::before {
+  min-width: 320px;
+  max-width: 450px;
+  white-space: normal;
+  word-break: break-word;
+  padding: 0.5em 1em;
+  border-radius: 0.5em;
+  box-sizing: border-box;
+}
 
 .pico hr {
   border-top: 1px solid var(--pico-contrast);
@@ -165,3 +174,4 @@ $colors: (
   .text-#{$name} { color: $color !important; }
   .border-#{$name} { border-color: $color !important; }
 }
+
