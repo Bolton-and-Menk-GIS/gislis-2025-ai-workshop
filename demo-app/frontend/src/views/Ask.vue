@@ -2,14 +2,19 @@
 import { ref, computed, onMounted } from 'vue'
 import { 
   api, 
-  type AskPromptOptions, 
-  type AskPromptType 
 } from '@/api'
+import type { 
+  AskPromptOptions, 
+  AskPromptType 
+} from '@/typings'
 
 const busy = ref(true)
 const question = ref('')
 const temperature = ref(0.7)
-const maxTokens = ref(4096)
+const maxTokens = ref(1000)
+const timeout = ref(180)
+const model = ref('gpt-3.5-turbo')
+const modelOptions = ref<string[]>([])
 const promptTypes = ref<AskPromptOptions['options']>([])
 const selectedPrompts = ref<AskPromptType[]>([])
 const orderedSelection = computed(() => 
@@ -27,11 +32,11 @@ async function askQuestion() {
   for (const type of selectedPrompts.value) {
     loading.value[type] = true
     api.askQuestion({
-      model: "gpt-3.5-turbo", // Set model type or let it default to the desired value
+      model: model.value, 
       text: question.value,
       prompt: type as AskPromptType,
       temperature: temperature.value,
-      timeout: 180,
+      timeout: timeout.value,
       max_tokens: maxTokens.value,
     }).then(response => {
       answers.value = {
@@ -52,6 +57,9 @@ onMounted(async () => {
     const response = await api.getAskPrompts({})
     promptTypes.value = response.data.options
     selectedPrompts.value = promptTypes.value.map(pt => pt.name)
+
+    const modelResponse = await api.getModels({})
+    modelOptions.value = modelResponse.data.models.map((m) => m.name)
   } catch(err){
     console.warn('Error fetching prompt types:', err)
   } finally {
@@ -67,7 +75,7 @@ onMounted(async () => {
       <form @submit.prevent="askQuestion" class="pico">
         <label for="question">Ask a question:</label>
         <fieldset role="group">
-          <input id="question" v-model="question" type="text" required />
+          <input id="question" v-model="question" type="text" placeholder="what do you want to know?" required />
           <input type="submit" value="Ask" :disabled="busy || isThinking" style="height: auto"/>
         </fieldset>
 
@@ -76,16 +84,26 @@ onMounted(async () => {
             <div class="py-sm">Select answer types:</div>
             <label v-for="type in promptTypes" :key="type.name">
               <input type="checkbox" v-model="selectedPrompts" :value="type.name" />
-              {{ type.label }}
+              <span :data-tooltip="type.description" data-placement="right" style="border-bottom: unset;">{{ type.label }}</span>
             </label>
+          </div>
+
+          <div class="form-element">
+            <label for="model">Model:</label>
+            <select id="model" v-model="model">
+              <option v-for="m in modelOptions" :key="m" :value="m">{{ m }}</option>
+            </select>
+
+            <label for="timeout">Timeout (in seconds)</label>
+            <input id="timeout" type="number" min="30" max="400" v-model.number="timeout" />
           </div>
 
           <div class="form-element">
             <label for="temperature">Temperature: {{ temperature }}</label>
             <input id="temperature" type="range" min="0" max="2" step="0.1" v-model.number="temperature" />
 
-            <label for="maxTokens">Max Tokens</label>
-            <input id="maxTokens" type="number" min="100" max="4096" v-model.number="maxTokens" />
+            <label for="maxTokens">Max Tokens: {{ maxTokens }}</label>
+            <input id="maxTokens" type="range" min="100" max="4096" step="100" v-model.number="maxTokens" />
           </div>
 
         </div>
@@ -122,15 +140,20 @@ onMounted(async () => {
 <style lang="scss">
 .form-element {
   align-self: center;
+  width: 80%;
 }
 
 .ask-controls {
-  width: 80vw;
   margin: 0 auto;
 }
 
+.answer-types{
+  margin: 0 25%;
+  width: 50%;
+}
+
 .answer-card {
-  min-height: 150px;
+  min-height: 250px;
   padding: 1rem;
   border-radius: 8px;
   box-shadow: var(--pico-shadow-lg);
@@ -158,6 +181,5 @@ onMounted(async () => {
     // background-color: var(--pico-color-pink-50);
     border: 2px solid var(--pico-color-red-400);
   }
-  
 }
 </style>
