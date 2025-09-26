@@ -1,13 +1,14 @@
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from app.utils.models import get_available_models
-from app.schemas import LLMModel, OllamaModelsResponse
+from app.schemas.prompts import AskPromptOptions
+from app.schemas.llm import OllamaModelsResponse, AskPayload, ChatResponse
+from app.utils.openai import run_chat_completion, load_prompt_template
+# Uncomment the following lines if agent orchestrators and ChatContext are implemented
 # from app.agents.orchestrators import chat_orchestrator
 # from app.utils.types import ChatContext
 
-chat_api = APIRouter(prefix="/chat", tags=["chat"])
-
-
+chat_api = APIRouter(prefix="/assistant", tags=["AI Assistant"])
 
 @chat_api.get("/models", response_model=OllamaModelsResponse)
 async def get_models():
@@ -15,7 +16,24 @@ async def get_models():
     available_models = await get_available_models()
     return {"models": available_models}
 
-@chat_api.post("/question")
+@chat_api.post("/ask", response_model=ChatResponse)
+async def ask_question(payload: AskPayload):
+    prompt = load_prompt_template(name=payload.prompt or 'ask', question=payload.text, context=payload.context or None)
+    messages = [{"role": "user", "content": prompt}]
+    response = await run_chat_completion(
+        messages=messages,
+        model=payload.model,
+        temperature=payload.temperature,
+        max_tokens=payload.max_tokens,
+        timeout=payload.timeout,
+        stream=False
+    )
+    return ChatResponse(response=response)
+
+@chat_api.get("/ask/prompts", response_model=AskPromptOptions)
+async def get_prompts():
+    """Return available prompt types for asking a question."""
+    return AskPromptOptions()
 
 @chat_api.websocket("/ws/chat")
 async def chat_websocket(websocket: WebSocket):

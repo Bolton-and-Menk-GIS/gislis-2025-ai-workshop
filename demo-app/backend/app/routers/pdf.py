@@ -1,7 +1,7 @@
 import io
 from fastapi import APIRouter, File, UploadFile
 from typing import Annotated
-from app.schemas import PDFResult
+from app.schemas.llm import PDFResult
 from app.utils.pdf_parser import parse_pdf
 
 pdf_api = APIRouter(prefix="/pdf", tags=["pdf"])

@@ -5,11 +5,9 @@ from pydantic import Field
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'chatbot.sqlite'))
-print('db_path:', db_path)
 
 DEFAULT_OLLAMA_URL = 'http://vm-gis-3002:11434/v1'
 DEFAULT_OPENAI_URL = 'https://api.openai.com/v1'

@@ -3,7 +3,7 @@ import io
 import pymupdf
 import pytesseract
 from pdf2image import convert_from_path, convert_from_bytes
-from app.schemas import PDFResult
+from app.schemas.llm import PDFResult
 
 def extract_text_from_pdf(filename: str | None = None, stream: io.BytesIO | None=None, **kwargs) -> list[str]:
     """Extract text from a PDF file using PyMuPDF."""

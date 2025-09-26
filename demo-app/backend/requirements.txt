@@ -3,6 +3,8 @@ databases
 dotenv
 httpx==0.28.1
 fastapi==0.110.0
+openai
+orjson
 geoalchemy2==0.14.4
 uvicorn[standard]==0.27.1
 sqlalchemy==2.0.27
