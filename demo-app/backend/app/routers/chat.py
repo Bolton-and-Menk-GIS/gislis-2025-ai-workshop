@@ -28,7 +28,7 @@ async def ask_question(payload: AskPayload):
         timeout=payload.timeout,
         stream=False
     )
-    return ChatResponse(response=response)
+    return response
 
 @chat_api.get("/ask/prompts", response_model=AskPromptOptions)
 async def get_prompts():

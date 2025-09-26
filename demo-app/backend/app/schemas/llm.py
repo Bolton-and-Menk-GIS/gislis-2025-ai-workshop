@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional, Literal, Any
 from app.schemas.prompts import AskPromptType
+from openai.types.completion_usage import CompletionUsage
 
 ClientType = Literal['openai', 'ollama', 'huggingface']
 
@@ -66,6 +67,8 @@ class ChatPayload(ChatPayloadBase):
 class ChatResponse(BaseModel):
     response: Any
     context: Optional[dict] = None
+    model: str
+    usage: Optional[CompletionUsage] = None
 
     class Config:
         model_config = ConfigDict(extra="allow")

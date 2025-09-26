@@ -4,10 +4,12 @@ from fastapi import WebSocket
 from datetime import datetime, timezone
 from app.config import settings
 from openai import AsyncOpenAI
+
 from app.utils.models import validate_model, DEFAULT_OLLAMA_MODEL, DEFAULT_OPENAI_MODEL
 from app.utils.logging import logger
 from typing import List, Union, Literal, Optional
-from app.schemas.llm import ClientType
+from app.schemas.llm import ClientType, ChatResponse
+
 
 default_prompt_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'prompts'))
 
@@ -32,7 +34,8 @@ def get_llm_client(client_type: ClientType='openai', base_url: Optional[str]=Non
         api_key = settings.openai_api_key
 
     if client_type == 'ollama' and not base_url:
-        base_url = settings.ollama_url
+        base_url = f'{settings.ollama_url}/v1'
+        logger.info(f'Creating LLM client of type "{client_type}" with base_url="{base_url}"')
 
     return AsyncOpenAI(
         base_url=base_url,
@@ -104,9 +107,12 @@ async def run_chat_completion(messages: list, model: str='gpt-3.5-turbo', stream
     result = response.choices[0].message.content.strip()
     if result.startswith('{') and result.endswith('}'):
         try:
-            resp = orjson.loads(result)
-            return resp
+            result = orjson.loads(result)
         except Exception as e:
             print('Error parsing JSON:', e)
     else:
-        return result
+        return ChatResponse(
+            response=result,
+            model=model_info.name,
+            usage=response.usage.dict() if response.usage else None
+        )
