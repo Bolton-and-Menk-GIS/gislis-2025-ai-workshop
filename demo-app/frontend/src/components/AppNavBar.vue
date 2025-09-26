@@ -1,17 +1,20 @@
 <script lang="ts" setup>
 import { useAppState } from '@/stores';
+import { useRoute } from 'vue-router';
+
+const route = useRoute()
 
 const appStore = useAppState()
 </script>
 
 <template>
-  <header class="pico app-navbar ">
+  <header class="pico app-navbar">
     <nav :class="`px-md pico-background-violet-${appStore.isDark ? 6: 5}00`">
       <ul>
         <li><h3 class="nav-title">AI Demos</h3></li>
       </ul>
       <ul>
-        <li><a href="#">RAG</a></li>
+        <li><RouterLink to="/ask" active-class="active-link">Ask</RouterLink></li>
         <li><a href="#">Services</a></li>
         <li><a href="#">Products</a></li>
         <li style="color: white; cursor: pointer;">
@@ -27,6 +30,12 @@ const appStore = useAppState()
   height: 72px;
 }
 .nav-title {
+  color: var(--pico-color-violet-50) !important;
+}
+
+.active-link {
+  font-weight: bold;
+  text-decoration: underline !important;
   color: var(--pico-color-violet-50) !important;
 }
 </style>

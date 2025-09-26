@@ -20,11 +20,6 @@
   --pico-bmi-card-background-color: var(--pico-color-grey-850);
 }
 
-.pico input, .pico optgroup, .pico select, .pico textarea {
-  line-height: var(--pico-line-height);
-  font-size: 0.75rem;
-}
-
 .pico hr {
   border-top: 1px solid var(--pico-contrast);
 }
@@ -82,6 +77,12 @@ span.material-symbols-outlined {
     font-size: 1.5rem;
     line-height: 1;
   }
+}
+
+.pico-btn-sm {
+  height: auto !important;
+  font-size: 0.85rem !important;
+  padding: 0 0.5rem !important;
 }
 
 $space: (

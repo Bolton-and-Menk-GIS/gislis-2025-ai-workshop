@@ -119,7 +119,12 @@ isBusy.value = true
   </article>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.pico input, .pico optgroup, .pico select, .pico textarea {
+  line-height: var(--pico-line-height);
+  font-size: 0.75rem;
+}
+
 .chatbot {
   &--separator {
     margin: 0.25rem;
@@ -148,12 +153,6 @@ isBusy.value = true
     min-width: 400px;
     border: 1px solid var(--pico-secondary-border);
   }
-}
-
-.pico-btn-sm {
-  height: auto !important;
-  font-size: 0.85rem !important;
-  padding: 0 0.5rem !important;
 }
 
 .chatbot--scroll {
