@@ -1,17 +1,11 @@
 
-import os
 from fastapi import WebSocket
-from datetime import datetime, timezone
 from app.config import settings
 from openai import AsyncOpenAI
-
-from app.utils.models import validate_model, DEFAULT_OLLAMA_MODEL, DEFAULT_OPENAI_MODEL
+from app.utils.models import validate_model
 from app.utils.logging import logger
-from typing import List, Union, Literal, Optional
 from app.schemas.llm import ClientType, ChatResponse
-
-
-default_prompt_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'prompts'))
+from typing import Optional
 
 try:
     import orjson
@@ -41,25 +35,6 @@ def get_llm_client(client_type: ClientType='openai', base_url: Optional[str]=Non
         base_url=base_url,
         api_key=api_key
     )
-
-def load_prompt_template(name: str='ask', template_path: str=default_prompt_path, ext: str='md', context: Optional[dict]=None, **kwargs) -> str:
-    """Load a prompt template from a file.
-
-    Args:
-        name (str): The name of the prompt template file (without extension).
-        template_path (str): The path to the prompt template file.
-        ext (str): The file extension of the prompt template file.
-        **kwargs: Additional keyword arguments to format the template.
-    Returns:
-        str: The content of the prompt template.
-    """
-    template_file = os.path.join(template_path, f'{name}.{ext}')
-    if not os.path.exists(template_file):
-        template_file = os.path.join(template_path, 'ask.md')
-    with open(template_file, 'r') as file:
-        prompt = file.read().format(context=context, **kwargs)
-    logger.info(f'Loaded prompt template {os.path.basename(template_file)}, prompt is:\n\n{prompt}\n\n')
-    return prompt
 
 async def run_chat_completion(messages: list, model: str='gpt-3.5-turbo', stream=True, websocket: Optional[WebSocket]=None, max_tokens: Optional[int]=4096, timeout: Optional[int]=180, temperature: Optional[float]=0.7, **kwargs):
     """Run chat completion using the OpenAI API.

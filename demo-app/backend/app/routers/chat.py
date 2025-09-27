@@ -3,7 +3,8 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from app.utils.models import get_available_models
 from app.schemas.prompts import AskPromptOptions
 from app.schemas.llm import OllamaModelsResponse, AskPayload, ChatResponse
-from app.utils.openai import run_chat_completion, load_prompt_template
+from app.utils.openai import run_chat_completion
+from app.utils.prompts import load_prompt_template
 # Uncomment the following lines if agent orchestrators and ChatContext are implemented
 # from app.agents.orchestrators import chat_orchestrator
 # from app.utils.types import ChatContext
