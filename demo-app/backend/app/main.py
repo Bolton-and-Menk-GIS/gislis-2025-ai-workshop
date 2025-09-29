@@ -5,7 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routers.health import health_api
 from app.routers.rag import rag_api
 from app.routers.pdf import pdf_api 
-from app.routers.chat import chat_api 
+from app.routers.chat import chat_api
+from app.routers.survey import survey_api
 
 app = FastAPI(
     title="RAG Demo API",
@@ -30,7 +31,7 @@ routers = [
     health_api,
     pdf_api,
     chat_api,
-    
+    survey_api,
 ]
 
 # Register routers

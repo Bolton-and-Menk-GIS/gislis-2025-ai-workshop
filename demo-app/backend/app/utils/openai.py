@@ -6,7 +6,7 @@ from app.utils.models import validate_model
 from app.utils.logging import logger
 from app.schemas.llm import ClientType, ChatResponse
 from typing import Optional
-
+import json
 try:
     import orjson
 except ImportError:  # pragma: nocover
@@ -36,7 +36,7 @@ def get_llm_client(client_type: ClientType='openai', base_url: Optional[str]=Non
         api_key=api_key
     )
 
-async def run_chat_completion(messages: list, model: str='gpt-3.5-turbo', stream=True, websocket: Optional[WebSocket]=None, max_tokens: Optional[int]=4096, timeout: Optional[int]=180, temperature: Optional[float]=0.7, **kwargs):
+async def run_chat_completion(messages: list, model: str='gpt-3.5-turbo', stream=True, websocket: Optional[WebSocket]=None, max_tokens: Optional[int]=4096, timeout: Optional[int]=180, temperature: Optional[float]=0.7, **kwargs) -> ChatResponse:
     """Run chat completion using the OpenAI API.
 
     Args:
@@ -68,7 +68,7 @@ async def run_chat_completion(messages: list, model: str='gpt-3.5-turbo', stream
             delta = chunk.choices[0].delta.content
             if delta:
                 await websocket.send_text(delta)
-        return {}
+        return {} # type: ignore
 
     response = await openaiClient.chat.completions.create(
         model=model,
@@ -80,14 +80,19 @@ async def run_chat_completion(messages: list, model: str='gpt-3.5-turbo', stream
     )
 
     result = response.choices[0].message.content.strip()
+    if result.startswith('```json') and result.endswith('```'):
+        # print('Stripping code block markers from JSON response: ', result)
+        result = '\n'.join(result.split('\n')[1:-1]).strip()
+        # print('after stripping: ', result)
     if result.startswith('{') and result.endswith('}'):
         try:
             result = orjson.loads(result)
+            # result = json.loads(result)
         except Exception as e:
             print('Error parsing JSON:', e)
-    else:
-        return ChatResponse(
-            response=result,
-            model=model_info.name,
-            usage=response.usage.dict() if response.usage else None
-        )
+    
+    return ChatResponse(
+        response=result,
+        model=model_info.name,
+        usage=response.usage.dict() if response.usage else None
+    )

@@ -1,66 +1,91 @@
 <script lang="ts" setup>
 import { onMounted, watch, useTemplateRef } from 'vue';
 import { log } from '@/utils';
-// import type { ExtractProperties, NonFunctionProperties } from '~/typings';
 import { useAppState } from '@/stores/app';
+import type { ArcgisMapCustomEvent } from '@arcgis/map-components';
 
-import type { ArcgisMap } from '@arcgis/map-components/components/arcgis-map';
+const emit = defineEmits<{
+  (e: 'map-ready', event: ArcgisMapCustomEvent<void>): void;
+}>();
 
-// type Props = Partial<NonFunctionProperties<ArcgisMap>>
-// type Props = Partial<__esri.MapViewProperties>;
-
-const mapRef = useTemplateRef<InstanceType<typeof ArcgisMap>>('mapRef');
-
+const mapRef = useTemplateRef<HTMLArcgisMapElement>('mapRef');
+// mapRef.value?.addEventListener('arcgisViewReadyChange', (e) => {
+//   e.target.view
+//   emit('map-ready', e as CustomEvent);
+// });
+// type Props = Pick<HTMLArcgisMapElement, 'itemId' | 'basemap' | 'center' | 'zoom' /* vue-ignore */ > & {
 type Props = {
-  basemap?: ArcgisMap['basemap'];
-  center?: ArcgisMap['center'];
-  zoom?: ArcgisMap['zoom'];
+  zoom?: number;
+  center?: __esri.Point | number[] | string;
+  itemId?: string;
+  basemap?: string | __esri.Basemap;
+  switchBasemapOnThemeChange?: boolean;
+  basemapDark?: string | __esri.Basemap;
+  basemapLight?: string | __esri.Basemap;
   [key: string]: unknown;
 };
 
-// type Props = Pick<__esri.MapViewProperties, | 'center' | 'zoom'> & {
-//   basemap?: ArcgisMap['basemap'];
-//   [key: string]: unknown;
-// }
+const { 
+  itemId, 
+  basemap, 
+  zoom=10,
+  center=[-93.35,44.96],
+  basemapDark='dark-gray-vector', 
+  basemapLight='topo-vector', 
+  switchBasemapOnThemeChange=true,
+} = defineProps<Props>();  
 
-const props = defineProps<Props>();
+const bindableProps = {
+  itemId,
+  basemap,
+  center,
+  zoom,
+};
 
 onMounted(() => {
-  const appStore = useAppState();
-  watch(()=> appStore.isDark,
-  (dark)=> {
-    log('Map Viewer - Dark mode changed:', dark);
-    if (mapRef.value) {
-      // Example: Change map style based on dark mode
-      mapRef.value.basemap = dark ? 'streets-night-vector' : 'topo-vector';
-      log('[Map Viewer]: Map style updated to:', mapRef.value.basemap);
-    }
+  mapRef.value?.addEventListener('arcgisViewReadyChange',(e) => {
+    log('Map has been loaded', e);
+    emit('map-ready', e);
+  })
 
-    // You can add logic here to update the map style based on dark mode
-  }, { immediate: true });
+  if (basemapDark && basemapLight && switchBasemapOnThemeChange) {
+    const appStore = useAppState();
+    watch(()=> appStore.isDark,
+    (dark)=> {
+      log('Map Viewer - Dark mode changed:', dark);
+      if (mapRef.value) {
+        // Example: Change map style based on dark mode
+        mapRef.value.basemap = dark ? basemapDark: basemapLight;
+        log('[Map Viewer]: Map style updated to:', mapRef.value.basemap);
+      }
+  
+      // You can add logic here to update the map style based on dark mode
+    }, { immediate: true });
+  }
 })
 
-const onMapLoaded = (e: CustomEvent) => {
+const onMapLoaded = (e: ArcgisMapCustomEvent<void>) => {
   console.log('Map has been loaded', e);
+  emit('map-ready', e);
 };
+
 </script>
 
 <template>
-  <arcgis-map v-bind="props" @load="onMapLoaded" ref="mapRef">
+  <arcgis-map 
+    v-bind="(bindableProps as any)" 
+    ref="mapRef"
+    @arcgis-view-ready-change="onMapLoaded" 
+  >
     <arcgis-zoom position="top-left"></arcgis-zoom>
     <arcgis-home position="top-left" />
     
-    <arcgis-expand 
-      position="top-left" 
-      
-    >
+    <arcgis-expand position="top-left">
       <arcgis-legend />
     </arcgis-expand>
 
-    <arcgis-expand position="top-left" expand-icon="layers" expand-tooltip="Show Layers" :view-model="{ view: mapRef?.view }">
-      <arcgis-placement>
-        <arcgis-layer-list />
-      </arcgis-placement>
+    <arcgis-expand position="top-left" expand-tooltip="Show Layers" >
+      <arcgis-layer-list />
     </arcgis-expand>
 
     <arcgis-search position="top-right" />

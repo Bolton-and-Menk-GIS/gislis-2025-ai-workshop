@@ -8,7 +8,7 @@ import type {
   AskPromptType 
 } from '@/typings'
 
-const busy = ref(true)
+const busy = ref(false)
 const question = ref('')
 const temperature = ref(0.7)
 const maxTokens = ref(1000)
@@ -28,7 +28,13 @@ const isThinking = computed(() =>
   Object.values(loading.value).some(v => v)
 )
 
+const clearResults = () => {
+  answers.value = {}
+  loading.value = {}
+}
+
 async function askQuestion() {
+  clearResults()
   for (const type of selectedPrompts.value) {
     loading.value[type] = true
     api.askQuestion({
@@ -54,10 +60,13 @@ onMounted(async () => {
   // Fetch available prompt types from /ask/prompts endpoint
   try {
     busy.value = true
+
+    // load the available ask prompts
     const response = await api.getAskPrompts({})
     promptTypes.value = response.data.options
     selectedPrompts.value = promptTypes.value.map(pt => pt.name)
 
+    // load the available LLMs
     const modelResponse = await api.getModels({})
     modelOptions.value = modelResponse.data.models.map((m) => m.name)
   } catch(err){
@@ -76,7 +85,13 @@ onMounted(async () => {
         <label for="question">Ask a question:</label>
         <fieldset role="group">
           <input id="question" v-model="question" type="text" placeholder="what do you want to know?" required />
-          <input type="submit" value="Ask" :disabled="busy || isThinking" style="height: auto"/>
+          <button 
+            type="submit" 
+            aria-label="Ask" 
+            :aria-busy="busy || isThinking" 
+            :disabled="busy || isThinking" 
+            style="height: auto"
+          >Ask</button>
         </fieldset>
 
         <div class="grid ask-controls py-md">
@@ -84,7 +99,12 @@ onMounted(async () => {
             <div class="py-sm">Select answer types:</div>
             <label v-for="type in promptTypes" :key="type.name">
               <input type="checkbox" v-model="selectedPrompts" :value="type.name" />
-              <span :data-tooltip="type.description" data-placement="right" style="border-bottom: unset;">{{ type.label }}</span>
+              <span :data-tooltip="type.description" data-placement="right" style="border-bottom: unset;">
+                {{ type.label }}
+                <span class="material-symbols-outlined pico-color-violet-400" style="font-size: 90%;">
+                  info
+                </span>
+              </span>
             </label>
           </div>
 
@@ -117,15 +137,8 @@ onMounted(async () => {
       <div
         v-for="type in orderedSelection"
         :key="type"
-        class="pico answer-card"
-        :class="['contrast', { 
-          'ask': type === 'ask', 
-          'sassy': type === 'sassy', 
-          'professor': type === 'professor', 
-          'simple': type === 'simple', 
-          'contrarian': type === 'contrarian', 
-          }
-        ]"
+        :class="type"
+        class="pico answer-card contrast"
       >
         <h4 class="pico">{{ promptTypes.find(p => p.name === type)?.label }}</h4>
         <article class="pico" v-if="loading[type]" aria-busy="true">Thinking...</article>

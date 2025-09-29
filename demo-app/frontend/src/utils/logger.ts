@@ -11,18 +11,18 @@ export type LogLevel = (typeof logLevels)[number]
  */
 export const createLog =
   (level: LogLevel) =>
-  (msg: string, ...args: any) => {
+  (msg: string, ...args: unknown[]) => {
     level = logLevels.includes(level) ? level : 'info'
     return logger[level](`[ai-workshop]: ${msg}`, ...args)
   }
 
-export const trace = createLog('trace')
-
-export const debug = createLog('debug')
-
 export const log = createLog('info')
 
 export const info = log
+
+export const trace = createLog('trace')
+
+export const debug = createLog('debug')
 
 export const warn = createLog('warn')
 

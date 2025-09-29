@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+const baseUrl = import.meta.env.BASE_URL
+
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(baseUrl),
   routes: [
     {
       path: '/',
@@ -12,6 +14,11 @@ const router = createRouter({
       path: '/ask',
       name: 'Ask',
       component: ()=> import('@/views/Ask.vue')
+    },
+    {
+      path: '/survey',
+      name: 'Survey',
+      component: ()=> import('@/views/SurveyDemo.vue')
     }
   ],
 })

@@ -41,7 +41,7 @@ set_client(settings.ai_client)
 print('client and baseurl: ', settings.ai_client, settings.openai_base_url)
 
 # Initialize database connection
-database = databases.Database(settings.connection_string)
-metadata = sqlalchemy.MetaData()
-engine = sqlalchemy.create_engine(settings.connection_string)
+# database = databases.Database(settings.connection_string)
+# metadata = sqlalchemy.MetaData()
+# engine = sqlalchemy.create_engine(settings.connection_string)
 

@@ -12,7 +12,7 @@ appState.loadInitialTheme()
   <header>
     <app-nav-bar />
   </header>
-  <main class="container-fluid main-view">
+  <main class="main-view">
     <RouterView />
   </main>
 </template>

@@ -1,22 +1,31 @@
 <script lang="ts" setup>
 import { useAppState } from '@/stores';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 
-const route = useRoute()
+const router = useRouter()
 
 const appStore = useAppState()
+
+const links = [
+  { name: 'Ask', path: 'ask' },
+  { name: 'Survey', path: 'survey' },
+  { name: 'RAG', path: 'rag' },
+]
 </script>
 
 <template>
   <header class="pico app-navbar">
-    <nav :class="`px-md pico-background-violet-${appStore.isDark ? 6: 5}00`">
+    <nav class="px-md pico-background-violet-600">
       <ul>
-        <li><h3 class="nav-title">AI Demos</h3></li>
+        <li @click="router.push('/')"><h3 class="nav-title">AI Demos</h3></li>
       </ul>
       <ul>
-        <li><RouterLink to="/ask" active-class="active-link">Ask</RouterLink></li>
-        <li><a href="#">Services</a></li>
-        <li><a href="#">Products</a></li>
+        <li v-for="link in links" :key="link.name">
+          <RouterLink 
+            :to="`/${link.path}`" 
+            active-class="active-link"
+          >{{ link.name }}</RouterLink>
+        </li>
         <li style="color: white; cursor: pointer;">
           <calcite-icon :icon="appStore.isDark ? 'brightness': 'moon'" @click="appStore.toggleDarkMode"></calcite-icon>
         </li>
@@ -30,7 +39,11 @@ const appStore = useAppState()
   height: 72px;
 }
 .nav-title {
+  cursor: pointer;
   color: var(--pico-color-violet-50) !important;
+  &:hover {
+    color: var(--pico-color-violet-100) !important;
+  }
 }
 
 .active-link {

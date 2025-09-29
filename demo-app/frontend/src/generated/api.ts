@@ -210,6 +210,35 @@ export interface components {
             context?: {
                 [key: string]: unknown;
             } | null;
+            /** Model */
+            model: string;
+            usage?: components["schemas"]["CompletionUsage"] | null;
+        };
+        /** CompletionTokensDetails */
+        CompletionTokensDetails: {
+            /** Accepted Prediction Tokens */
+            accepted_prediction_tokens?: number | null;
+            /** Audio Tokens */
+            audio_tokens?: number | null;
+            /** Reasoning Tokens */
+            reasoning_tokens?: number | null;
+            /** Rejected Prediction Tokens */
+            rejected_prediction_tokens?: number | null;
+        } & {
+            [key: string]: unknown;
+        };
+        /** CompletionUsage */
+        CompletionUsage: {
+            /** Completion Tokens */
+            completion_tokens: number;
+            /** Prompt Tokens */
+            prompt_tokens: number;
+            /** Total Tokens */
+            total_tokens: number;
+            completion_tokens_details?: components["schemas"]["CompletionTokensDetails"] | null;
+            prompt_tokens_details?: components["schemas"]["PromptTokensDetails"] | null;
+        } & {
+            [key: string]: unknown;
         };
         /** Extent */
         Extent: {
@@ -314,6 +343,15 @@ export interface components {
              * @default []
              */
             content: string[];
+        };
+        /** PromptTokensDetails */
+        PromptTokensDetails: {
+            /** Audio Tokens */
+            audio_tokens?: number | null;
+            /** Cached Tokens */
+            cached_tokens?: number | null;
+        } & {
+            [key: string]: unknown;
         };
         /** RagRequest */
         RagRequest: {

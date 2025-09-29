@@ -1,11 +1,12 @@
-import { computed } from "vue";
-// import { Dark } from "quasar";
+import { shallowRef, computed } from "vue";
 import { defineStore } from 'pinia'
 import { useStorage } from "@vueuse/core";
 import { getPreferredBrowserColorScheme, setEsriTheme } from "@/utils";
-import type { UserSettings, AppTheme, ColorTheme } from "@/typings";
+import type { UserSettings, AppTheme, ColorTheme, AppConfig } from "@/typings";
 
 export const useAppState = defineStore('app', ()=> {
+
+  const config = shallowRef<AppConfig>({} as unknown as AppConfig)
 
   const userSettings = useStorage<UserSettings>('rag-demo', 
     {
@@ -45,8 +46,9 @@ export const useAppState = defineStore('app', ()=> {
   }
 
   return {
-    userSettings,
     isDark,
+    config,
+    userSettings,
     colorTheme,
     setTheme,
     loadInitialTheme,

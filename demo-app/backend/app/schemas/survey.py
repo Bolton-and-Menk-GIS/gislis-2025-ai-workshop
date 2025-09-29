@@ -1,6 +1,43 @@
-from pydantic import BaseModel, Field
-from typing import List, Optional
+from pydantic import BaseModel, Field, ConfigDict
+from typing import List, Optional, Literal
 from datetime import datetime
+
+class TieLine(BaseModel):
+    bearing: str
+    distance: float
+
+DivisionLevel = Literal['section', 'quarter', 'forty']
+class ReferencePoint(BaseModel):
+    corner: str
+    tieLine: TieLine
+    divisionLevel: DivisionLevel
+    referenceWhere: str
+
+    class Config:
+        model_config = ConfigDict(extra="allow")
+
+class TraverseSegment(BaseModel):
+    bearing: str
+    distance: float
+
+class SurveyInfo(BaseModel):
+    section: int | str
+    township: int | str
+    townshipDirection: str
+    range: int | str
+    rangeDirection: str
+    quarterQuarter: str
+    referencePoint: ReferencePoint
+    traverse: List[TraverseSegment]
+    area: Optional[str | int] = None
+    whereClause: str
+
+    class Config:
+        model_config = ConfigDict(extra="allow")
+
+class LegalDescriptionInfo(BaseModel):
+    legalDescription: str | None = None
+    confidence: float = 0.0
 
 class SurveyPoint(BaseModel):
     id: str
@@ -33,6 +70,9 @@ class SurveyRequest(BaseModel):
     name: str
     description: Optional[str] = None
     coordinate_system: Optional[str] = "NAD83"
+
+class GetSurveyRequest(BaseModel):
+    legalDescription: str
 
 class SurveyResponse(BaseModel):
     id: str
