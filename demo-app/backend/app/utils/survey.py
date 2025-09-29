@@ -2,9 +2,18 @@ from app.schemas.survey import SurveyInfo, LegalDescriptionInfo
 from app.utils.prompts import load_prompt_template
 from app.utils.openai import run_chat_completion
 
-async def extract_legal_description(text: str, model="gpt-4o-mini"):
+# async def extract_legal_description(text: str, model="gpt-4o-mini"):
+#     """Extract the legal description from the text."""
+#     prompt = load_prompt_template('extractLegalDescription', text=text)
+#     messages = [
+#         {"role": "system", "content": prompt},
+#     ]
+#     result = await run_chat_completion(messages, model=model)
+#     return LegalDescriptionInfo(**result.response)
+
+async def extract_legal_description(paragraphs: str, model="gpt-4o-mini"):
     """Extract the legal description from the text."""
-    prompt = load_prompt_template('extractLegalDescription', text=text)
+    prompt = load_prompt_template('extractLegalDescription', paragraphs=paragraphs)
     messages = [
         {"role": "system", "content": prompt},
     ]

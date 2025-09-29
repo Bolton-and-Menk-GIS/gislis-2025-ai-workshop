@@ -13,6 +13,7 @@ pgvector==0.2.5
 pydantic==2.6.4
 pydantic_settings==2.6.4
 pdf2image
+pdfplumber
 python-multipart
 PyMuPDF
 pymupdf4llm

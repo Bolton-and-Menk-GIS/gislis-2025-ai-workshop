@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, computed_field
 from typing import List, Optional, Literal
 from datetime import datetime
 
@@ -35,9 +35,18 @@ class SurveyInfo(BaseModel):
     class Config:
         model_config = ConfigDict(extra="allow")
 
+class LegalDescriptionEntry(BaseModel):
+    index: int
+    text: str
+    confidence: float
+
 class LegalDescriptionInfo(BaseModel):
-    legalDescription: str | None = None
-    confidence: float = 0.0
+    legalDescriptions: List[LegalDescriptionEntry] = Field(default_factory=list)
+
+    @computed_field
+    @property
+    def count(self) -> int:
+        return len(self.legalDescriptions)
 
 class SurveyPoint(BaseModel):
     id: str
