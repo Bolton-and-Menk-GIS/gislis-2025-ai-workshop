@@ -150,25 +150,26 @@ export function buildSurveyFeatures(
 
   // Step 2: Traverse calls
   for (const [idx, call] of survey.traverse.entries()) {
-    const start = [x, y]
+    const start = [x, y] as [number, number]
     const offset = offsetPoint(x, y, call.bearing, call.distance, conversionFactor);
     x = offset[0]
     y = offset[1]
     coords.push([x, y]);
 
     // create polyline graphic with label
+    console.log('line paths: ',  [ [ start, [ x, y] ] ])
     lines.push(
       new Graphic({
         geometry: {
           type: 'polyline',
-          paths: [ [ start, [ x, y] ] ],
+          paths:  [[ start, [ x, y] ]],
           spatialReference
         },
         attributes: {
           lineIndex: idx,
           distanceFt: call.distance,
           bearing: call.bearing,
-          label: `${call.bearing} ${call.distance}'`,
+          label: `${call.bearing}   ${call.distance}'`,
           startLongitude: start[0],
           startLatitude: start[1],
           endLongitude: x,

@@ -15,8 +15,11 @@ const platFields = [
   'filename'
 ]
 
-const lineNumericFields = [
+const lineIntegerFields = [
   'lineIndex',
+]
+
+const lineFloatFields = [
   'distanceFt',
   'startLongitude',
   'startLatitude',
@@ -28,7 +31,8 @@ const lineFields = [
   'bearing',
   'label',
   'filename',
-  ...lineNumericFields
+  ...lineIntegerFields,
+  ...lineFloatFields
 ]
 
 const tiePointNumericFields = [
@@ -73,7 +77,7 @@ export const surveyLayerProperties = {
       type: 'simple-fill',
       color: [0, 0, 0, 0], // transparent
       outline: {
-        width: 1.2,
+        width: 1.5,
         color: [255, 255, 0]
       }
     }
@@ -98,7 +102,11 @@ export const cogoLayerProperties = {
       ({
         name: f,
         alias: f,
-        type: lineNumericFields.includes(f) ? 'integer': 'string'
+        type: lineFloatFields.includes(f) 
+          ? 'double'
+            : lineIntegerFields.includes(f)
+              ? 'integer'
+              : 'string'
       })
     ) as __esri.FieldProperties[]
   ],
@@ -106,11 +114,14 @@ export const cogoLayerProperties = {
   labelsVisible: true,
   labelingInfo: [
     {
+      deconflictionStrategy: "none",
+      repeatLabelDistance: 500,
       labelExpressionInfo: { expression: "$feature.label"},
       symbol: {
         type: 'text',
+        font: { size: 11, weight: 'bold' },
         color: 'black',
-        haloSize: 0.9,
+        haloSize: 1,
         haloColor: 'white'
       }
     }
@@ -119,9 +130,12 @@ export const cogoLayerProperties = {
     type: 'simple',
     symbol: {
       type: 'simple-line',
-      style: 'short-dash-dot',
-      color: [0, 0, 0, 1], // transparent
-      width: 1.5,
+      cap: "round",
+      color: [0,122,194,1],
+      join: "round",
+      miterLimit: 1,
+      style: "long-dash-dot-dot",
+      width: 3.5
     }
   }
 } as __esri.FeatureLayerProperties
