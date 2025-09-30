@@ -12,3 +12,5 @@ This repo contains the [presentation](./presentation/) and [demo materials](./de
 ## Demo Setup
 
 The [demo-app](./demo-app/) features a Full Stack example complete with an API for working with Large Language Models (LLM) to enhance your web applications. 
+
+## Docker Container
