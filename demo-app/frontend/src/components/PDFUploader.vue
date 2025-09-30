@@ -4,7 +4,8 @@ import * as pdfjsLib from 'pdfjs-dist'
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker?url'
 
 const emit = defineEmits<{
-  (e: 'upload', file: File): void
+  (e: 'upload', file: File): void;
+  (e: 'reset'): void;
 }>()
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker
@@ -73,6 +74,7 @@ const reset = ()=> {
   thumbnailUrl.value = null
   error.value = null
   busy.value = false
+  emit('reset')
 }
 </script>
 
@@ -84,7 +86,16 @@ const reset = ()=> {
     <hr class="pico" />
     <div class="pdf-preview-container pa-md" v-if="thumbnailUrl">
       <div class="thumbnail-preview">
+        
         <img :src="thumbnailUrl" alt="PDF thumbnail" />
+        <calcite-button 
+          class="thumbnail-clear float-right" 
+          kind="danger" 
+          scale="s" 
+          icon-start="x-circle" 
+          @click="reset"
+          :disabled="busy"
+        ></calcite-button>
         <div class="thumbnail-name">
           <small class="thumbnail-name">{{ pdfFile?.name ?? 'Uknown.pdf' }}</small>
         </div>
@@ -152,10 +163,5 @@ const reset = ()=> {
     border-radius: 0.5rem;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
-}
-.text-danger {
-  color: #e74c3c;
-  display: block;
-  margin-top: 0.5rem;
 }
 </style>

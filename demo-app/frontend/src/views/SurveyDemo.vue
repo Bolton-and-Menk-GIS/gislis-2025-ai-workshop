@@ -71,7 +71,6 @@ const onMapReady = (e: ArcgisMapCustomEvent<void>) => {
 
 const clearPDF = () => {
   pdf.reset()
-  pdfUploader.value?.reset()
   surveyInfos.value = []
   legalDescriptions.value = []
 }
@@ -82,6 +81,7 @@ const clearPDF = () => {
   <Suspense>
     <MapViewer
       id="survey-map"
+      basemap="hybrid"
       :item-id="demoConfig.map?.webmapId || ''"
       @map-ready="onMapReady"
     >
@@ -93,37 +93,34 @@ const clearPDF = () => {
       >
         <arcgis-placement>
           <div class="survey-pdf--container">
-            <PDFUploader @upload="onUploadPDF" ref="pdfUploader" />
+            <PDFUploader @upload="onUploadPDF" @reset="clearPDF" ref="pdfUploader" />
             <div class="survey-pdf--actions">
-              <button 
-                v-if="pdf.file.value"
-                class="pico survey-pdf--clear pa-sm" 
-                :disabled="!pdf.file.value || pdf.busy.value"
-                @click="pdf.reset"
-              >Clear</button>
-
-              <div class="pico survey-pdf--busy py-sm" v-if="pdf.file.value && pdf.busy.value">
-                <progress 
-                  class="pico survey-pdf--progress px-md" 
-                  :value="pdf.progress.value" 
-                  max="100"
-                ></progress>
-                <div>
-                  <i class="pico">{{ pdf.progressMessage }}</i>
+              <div class="pico survey-pdf--busy mx-auto" v-if="pdf.file.value && pdf.busy.value">
+                <!-- <article  
+                  class="pico survey-pdf--progress pa-lg" 
+                  :aria-busy="pdf.busy.value" 
+                ></article> -->
+                <calcite-loader active v-if="pdf.busy.value" scale="s"></calcite-loader>
+                <div class="pb-md progress-message">
+                  <i class="pico">{{ pdf.progressMessage }}...</i>
                 </div>
               </div>
             </div>
 
             <div class="survey-pdf--legal">
-              <template 
-                v-for="(legal, idx) in legalDescriptions"
-                :key="`legal-${idx}`"
-              >
-                <details class="pico pa-md" :name="`Legal Description ${idx + 1}`">
-                  <summary class="pico pb-sm">Legal Description {{ idx + 1 }}</summary>
-                  <p class="pico legal-description pa-md py-sm">{{ legal }}</p>
-                </details>
-              </template>
+              <calcite-accordion class="pa-md">
+
+                <calcite-accordion-item 
+                  v-for="(legal, idx) in legalDescriptions"
+                  :key="`legal-${idx}`"
+                  icon-start="file-text"
+                  :heading="`Legal Description ${idx + 1}`"
+                >
+                  <calcite-notice open>
+                    <div slot="message" class="legal-description">{{ legal }}</div>
+                  </calcite-notice>
+                </calcite-accordion-item>
+              </calcite-accordion>
             </div>
           </div>
         </arcgis-placement>
@@ -168,14 +165,12 @@ const clearPDF = () => {
 
 <style lang="scss">
 .survey-pdf--legal {
-  max-width: 300px;
-  max-height: 200px;
-  overflow-y: auto;
+  max-width: 380px;
 }
 
 .legal-description {
-  border: 1px solid var(--pico-border, #ccc);
-  border-radius: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .survey-pdf--busy {
