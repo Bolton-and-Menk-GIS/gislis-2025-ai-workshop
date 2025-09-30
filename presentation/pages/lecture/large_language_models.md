@@ -204,11 +204,6 @@ backgroundColor: white -->
 
 # Popular LLMs
 
-![popular-llms](../../images/PopularLLms.png)
----
-
-# Popular LLMs
-
 ![popular-llms](/images/PopularLLMs.png)
 ---
 
