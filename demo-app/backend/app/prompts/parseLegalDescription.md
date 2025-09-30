@@ -42,7 +42,7 @@ Extract survey information from a legal description and return JSON only, follow
 
 ### Rules
 - Use `parcelWhere` for the polygon that contains the final parcel.  
-- Use `referenceWhere` for the polygon(s) needed to locate the anchor point.  
+- Use `referenceWhere` for the polygon(s) needed to locate the anchor point, only create query for "QSEC" or "QQSEC" fields.  
 - Bearings must be quadrant format (e.g. `Ndd-mm-ssE`).  
 - If a course references "on said [line]" (e.g., "on said West line", "on said East line"):
   - Use the exact bearing that was previously defined for that line earlier in the description.

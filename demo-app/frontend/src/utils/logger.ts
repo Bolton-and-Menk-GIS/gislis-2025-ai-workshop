@@ -16,11 +16,14 @@ export const createLog =
     return logger[level](`[ai-workshop]: ${msg}`, ...args)
   }
 
-export const log = createLog('info')
+export const info = createLog('info')
 
-export const info = log
+// export const info = log
 
 export const trace = createLog('trace')
+
+// export const log = createLog('debug')
+export const log = console.log
 
 export const debug = createLog('debug')
 

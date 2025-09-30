@@ -28,11 +28,12 @@ function offsetPoint(
   x: number,
   y: number,
   bearing: string,
-  distance: number
+  distance: number,
+  conversionFactor=0.3048
 ): [number, number] {
   const az = dmsBearingToAzimuth(bearing);
-  const dx = distance * Math.sin(az);
-  const dy = distance * Math.cos(az);
+  const dx = (distance * conversionFactor) * Math.sin(az);
+  const dy = (distance * conversionFactor) * Math.cos(az);
   return [x + dx, y + dy];
 }
 
@@ -68,14 +69,16 @@ export interface ParcelPayload {
 export function buildParcelPolygon(
   refX: number,
   refY: number,
-  payload: ParcelPayload
+  payload: ParcelPayload,
+  conversionFactor=0.3048
 ): Polygon {
   // Step 1: Compute Point of Beginning (POB)
   let [x, y] = offsetPoint(
     refX,
     refY,
     payload.referencePoint.tieLine.bearing,
-    payload.referencePoint.tieLine.distance
+    payload.referencePoint.tieLine.distance,
+    conversionFactor
   );
   const coords: [number, number][] = [[x, y]];
 
@@ -148,4 +151,6 @@ const test = ()=> {
   
   console.log(JSON.stringify(parcelGeom, null, 2));
 }
+
+test()
 

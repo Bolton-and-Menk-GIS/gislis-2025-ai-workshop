@@ -1,15 +1,22 @@
 <script lang="ts" setup>
-import { ref, computed, useTemplateRef, defineAsyncComponent } from 'vue'
+import { ref, watch, useTemplateRef, defineAsyncComponent } from 'vue'
+import { usePLSSLayers, usePDF } from '@/composables';
 import { useAppState } from '@/stores';
+import { updateHook, log } from '@/utils';
+import type { SurveyInfo } from '@/typings';
 import type { ArcgisMapCustomEvent } from '@arcgis/map-components';
 const MapViewer = defineAsyncComponent(() => import('./MapViewer.vue'));
 const ChatBot = defineAsyncComponent(() => import('@/components/ChatBot.vue'));
+const MeasureWidget = defineAsyncComponent(() => import('@/components/MeasureWidget.vue'));
 const PDFUploader = defineAsyncComponent(() => import('@/components/PDFUploader.vue'))
 
 const appStore = useAppState()
 
 const chatExpand = useTemplateRef<HTMLArcgisExpandElement>('chatExpand');
 const pdfExpand = useTemplateRef<HTMLArcgisExpandElement>('pdfExpand');
+const pdfUploader = useTemplateRef<InstanceType<typeof PDFUploader>>('pdfUploader');
+const surveyInfos = ref<SurveyInfo[]>([]);
+const legalDescriptions = ref<string[]>([]);
 
 const demoConfig = appStore.config.demos.survey
 
@@ -25,21 +32,48 @@ const onClosePDF = () => {
   }
 }
 
+const pdf = usePDF()
+
+const onUploadPDF = async (file: File) => {
+  log('[SurveyDemo]: PDF File Uploaded:', file)
+  pdf.file.value = file
+  try {
+    const result = await pdf.uploadFileAndExtractSurveyInfo()
+    log('PDF Upload and Extract Result:', result)
+    surveyInfos.value.push(...result.surveyInfoResults)
+    legalDescriptions.value = result.legalDescriptions?.map(ld => ld.text) || []
+    
+  } catch (error) {
+    console.error('Error uploading and extracting PDF:', error)
+  }
+}
+
+
 const onMapReady = (e: ArcgisMapCustomEvent<void>) => {
   console.log('Map is ready!', e);
-  const mapComponent = e.target;
   const view = e.target!.view;
-  // @ts-expect-error -- ignore --
-  window.view = view
 
-  const townships = view.map?.allLayers.find(l => l.title === 'PLSS Township')
-  const fortys = view.map?.allLayers.find(l => l.title === 'PLSS Intersected')
-  console.log('Townships layer:', townships);
-  console.log('Fortys layer:', fortys);
-  // @ts-expect-error -- ignore --
-  window.townships = townships
-  // @ts-expect-error -- ignore --
-  window.fortys = fortys
+  const plss = usePLSSLayers({ view });
+  updateHook({ view, map: view.map, plss })
+
+  // Watch for both to be ready
+  watch([surveyInfos.value], async ([surveys]) => {
+    log('Survey Infos changed:', surveys)
+    if (surveys.length) {
+      // when new survey infos are added, create boundaries
+      for (const survey of surveys){
+        log('Creating survey boundary for:', survey)
+        await plss.createSurveyBoundary(survey)
+      }
+    }
+  })
+}
+
+const clearPDF = () => {
+  pdf.reset()
+  pdfUploader.value?.reset()
+  surveyInfos.value = []
+  legalDescriptions.value = []
 }
 
 </script>
@@ -47,8 +81,9 @@ const onMapReady = (e: ArcgisMapCustomEvent<void>) => {
 <template>
   <Suspense>
     <MapViewer
-        :item-id="demoConfig.map?.webmapId || ''"
-        @map-ready="onMapReady"
+      id="survey-map"
+      :item-id="demoConfig.map?.webmapId || ''"
+      @map-ready="onMapReady"
     >
       <arcgis-expand 
         ref="pdfExpand"
@@ -57,7 +92,40 @@ const onMapReady = (e: ArcgisMapCustomEvent<void>) => {
         expand-tooltip="Upload Survey PDF"
       >
         <arcgis-placement>
-          <PDFUploader />
+          <div class="survey-pdf--container">
+            <PDFUploader @upload="onUploadPDF" ref="pdfUploader" />
+            <div class="survey-pdf--actions">
+              <button 
+                v-if="pdf.file.value"
+                class="pico survey-pdf--clear pa-sm" 
+                :disabled="!pdf.file.value || pdf.busy.value"
+                @click="pdf.reset"
+              >Clear</button>
+
+              <div class="pico survey-pdf--busy py-sm" v-if="pdf.file.value && pdf.busy.value">
+                <progress 
+                  class="pico survey-pdf--progress px-md" 
+                  :value="pdf.progress.value" 
+                  max="100"
+                ></progress>
+                <div>
+                  <i class="pico">{{ pdf.progressMessage }}</i>
+                </div>
+              </div>
+            </div>
+
+            <div class="survey-pdf--legal">
+              <template 
+                v-for="(legal, idx) in legalDescriptions"
+                :key="`legal-${idx}`"
+              >
+                <details class="pico pa-md" :name="`Legal Description ${idx + 1}`">
+                  <summary class="pico pb-sm">Legal Description {{ idx + 1 }}</summary>
+                  <p class="pico legal-description pa-md py-sm">{{ legal }}</p>
+                </details>
+              </template>
+            </div>
+          </div>
         </arcgis-placement>
       </arcgis-expand>
 
@@ -76,6 +144,18 @@ const onMapReady = (e: ArcgisMapCustomEvent<void>) => {
         </arcgis-placement>
       </arcgis-expand>
 
+      <arcgis-expand 
+        position="bottom-right" 
+        expand-icon="measure" 
+        expand-tooltip="Measurement Tool"
+      >
+        <arcgis-placement>
+         <MeasureWidget 
+          reference-element="measure-widget"
+         />
+         </arcgis-placement>
+      </arcgis-expand>
+
     </MapViewer>
 
     <template #fallback>
@@ -85,3 +165,21 @@ const onMapReady = (e: ArcgisMapCustomEvent<void>) => {
   </Suspense>
 
 </template>
+
+<style lang="scss">
+.survey-pdf--legal {
+  max-width: 300px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.legal-description {
+  border: 1px solid var(--pico-border, #ccc);
+  border-radius: 0.5rem;
+}
+
+.survey-pdf--busy {
+  text-align: center;
+  max-width: 250px;
+}
+</style>

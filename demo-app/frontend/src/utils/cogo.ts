@@ -1,11 +1,18 @@
-import { Polygon } from '@arcgis/core/geometry'
+import Point from '@arcgis/core/geometry/Point'
+import Polygon from '@arcgis/core/geometry/Polygon'
+import Polyline from '@arcgis/core/geometry/Polyline'
+import type { SurveyInfo } from '@/typings';
+import { log } from './logger'
+import { destination, point, toWgs84, toMercator } from '@turf/turf'
+import * as intersectionOperator from "@arcgis/core/geometry/operators/intersectionOperator";
+import Graphic from '@arcgis/core/Graphic';
 
 /**
  * Convert quadrant bearing (e.g. "S01-42-10E") to azimuth in radians.
  * Azimuth measured clockwise from north.
  */
-function dmsBearingToAzimuth(bearing: string): number {
-  const dir1 = bearing[0]; // N or S
+function dmsBearingToAzimuth(bearing: string, format: 'radians' | 'degrees'='degrees'): number {
+  const dir1 = bearing[0].toUpperCase(); // N or S
   const dir2 = bearing.slice(-1); // E or W
   const [deg, min, sec] = bearing.slice(1, -1).split("-").map(Number) as [number, number, number]
   const angle = deg + min / 60 + sec / 3600;
@@ -17,44 +24,75 @@ function dmsBearingToAzimuth(bearing: string): number {
   else if (dir1 === "S" && dir2 === "W") azimuth = 180 + angle;
   else throw new Error(`Invalid bearing: ${bearing}`);
 
-  return (azimuth * Math.PI) / 180; // radians
+  const radians = (azimuth * Math.PI) / 180; 
+  return format === 'radians' ? radians : radians * 180 / Math.PI
 }
 
 /**
- * Offset a point by bearing + distance in planar feet.
+ * create an offset point using the [turf.destination](https://turfjs.org/docs/api/destination) function
+ * @param lon 
+ * @param lat 
+ * @param bearing 
+ * @param distance 
+ * @param conversionFactor 
+ * @returns 
  */
-function offsetPoint(
-  x: number,
-  y: number,
-  bearing: string,
-  distance: number,
-  conversionFactor=0.3048
+export function offsetPoint(
+  lon: number,
+  lat: number,
+  bearing: string, 
+  distance: number, 
+  conversionFactor=1,
+  debug=false
 ): [number, number] {
-  const az = dmsBearingToAzimuth(bearing);
-  const dx = (distance * conversionFactor) * Math.sin(az);
-  const dy = (distance * conversionFactor) * Math.cos(az);
-  return [x + dx, y + dy];
+  const azimuth = dmsBearingToAzimuth(bearing, 'degrees') // Turf expects degrees!
+  const start = point([lon, lat])
+  const dest = destination(start, (distance * conversionFactor) / 1000, azimuth, { units: 'kilometers' })
+  // only show when debugging
+  if (debug){
+    console.table({
+      azimuth,
+      bearing,
+      distance,
+      'distance (converted)': (distance * conversionFactor) / 1000,
+      lon,
+      lat,
+    })
+  }
+  const [destLon, destLat] = dest.geometry.coordinates
+  return [destLon, destLat]
 }
 
 /**
- * Types for the AI JSON payload
+ * will get the section corner point by intersecting section/quarter/quarter-quarter polygons
+ * @param polygons 
+ * @param cornerDescription 
+ * @returns 
  */
-export interface TieLine {
-  bearing: string;
-  distance: number;
-}
+export function getSectionCornerPoint(polygons: __esri.Polygon[], cornerDescription: string) {
+  // get the shared boundary (line intersect)
+  const polyline = intersectionOperator.execute(...polygons.map(ft => new Polyline({ 
+      paths: (ft as __esri.Polygon).rings,
+      spatialReference: ft.spatialReference
+    })) as [__esri.Polyline, __esri.Polyline]
+  ) as __esri.Polyline
 
-export interface TraverseCall {
-  bearing: string;
-  distance: number;
-}
+  // Flatten all coordinates
+  const coords = polyline.paths.flat() as [number, number][]
+  const desc = cornerDescription.toLowerCase()
 
-export interface ParcelPayload {
-  referencePoint: {
-    corner: string;
-    tieLine: TieLine;
-  };
-  traverse: TraverseCall[];
+  let candidate = coords[0];
+
+  for (const pt of coords) {
+    const [x, y] = pt;
+
+    if (desc.includes("east") && x > candidate[0]) candidate = pt;
+    if (desc.includes("west") && x < candidate[0]) candidate = pt;
+    if (desc.includes("north") && y > candidate[1]) candidate = pt;
+    if (desc.includes("south") && y < candidate[1]) candidate = pt;
+  }
+
+  return new Point({ x: candidate[0], y: candidate[1], spatialReference: polyline.spatialReference });
 }
 
 /**
@@ -65,37 +103,101 @@ export interface ParcelPayload {
  * @param payload  Parsed legal description payload from AI
  * @returns Turf.js Polygon
  */
-export function buildParcelPolygon(
+export function buildSurveyFeatures(
   refX: number,
   refY: number,
-  payload: ParcelPayload,
+  survey: SurveyInfo,
   conversionFactor=0.3048
-): __esri.Polygon {
+){
+  const spatialReference = { 
+    wkid: 4326
+  }
+
+  const plssAttributes = {
+    range: survey.range,
+    rangeDir: survey.rangeDirection,
+    township: survey.township,
+    townshipDir: survey.townshipDirection,
+    section: survey.section,
+    divisionLevel: survey.referencePoint.divisionLevel,
+    quarterQuarer: survey.quarterQuarter,
+  }
+
+  const tiePoint = new Graphic({
+    geometry: {
+      type: 'point',
+      x: refX,
+      y: refY,
+      spatialReference
+    },
+    attributes: {
+      latitude: refY,
+      longitude: refX,
+      description: survey.referencePoint.corner,
+      ...plssAttributes
+    }
+  })
   // Step 1: Compute Point of Beginning (POB)
   let [x, y] = offsetPoint(
     refX,
     refY,
-    payload.referencePoint.tieLine.bearing,
-    payload.referencePoint.tieLine.distance,
+    survey.referencePoint.tieLine.bearing,
+    survey.referencePoint.tieLine.distance,
     conversionFactor
   );
   const coords: [number, number][] = [[x, y]];
+  const lines: __esri.Graphic[] = []
 
   // Step 2: Traverse calls
-  for (const call of payload.traverse) {
-    [x, y] = offsetPoint(x, y, call.bearing, call.distance, conversionFactor);
+  for (const [idx, call] of survey.traverse.entries()) {
+    const start = [x, y]
+    const offset = offsetPoint(x, y, call.bearing, call.distance, conversionFactor);
+    x = offset[0]
+    y = offset[1]
     coords.push([x, y]);
+
+    // create polyline graphic with label
+    lines.push(
+      new Graphic({
+        geometry: {
+          type: 'polyline',
+          paths: [ [ start, [ x, y] ] ],
+          spatialReference
+        },
+        attributes: {
+          lineIndex: idx,
+          distanceFt: call.distance,
+          bearing: call.bearing,
+          label: `${call.bearing} ${call.distance}'`,
+          startLongitude: start[0],
+          startLatitude: start[1],
+          endLongitude: x,
+          endLatitude: y
+        }
+      })
+    )
   }
 
   // Step 3: Close polygon
   coords.push(coords[0]);
 
-  return new Polygon({ 
-    rings: [coords],
-    spatialReference: {  // Define the spatial reference for the coordinates
-      wkid: 102100  // The Web Mercator (auxiliary sphere) coordinate system
+  const boundaryPolygon = new Graphic({ 
+    geometry: {
+      type: 'polygon',
+      rings: [coords],
+      spatialReference
+    },
+    attributes: {
+      ...plssAttributes,
+      area: survey.area,
     }
   })
+
+  return {
+    lines,
+    tiePoint,
+    boundaryPolygon
+  }
 }
 
 /**
@@ -106,20 +208,22 @@ export function buildParcelPolygon(
 export function checkClosure(
   refX: number,
   refY: number,
-  payload: ParcelPayload
+  survey: SurveyInfo
 ): { misclosure: [number, number]; distance: number } {
   // Compute Point of Beginning
   let [x, y] = offsetPoint(
     refX,
     refY,
-    payload.referencePoint.tieLine.bearing,
-    payload.referencePoint.tieLine.distance
+    survey.referencePoint.tieLine.bearing,
+    survey.referencePoint.tieLine.distance
   );
   const pob = [x, y];
 
   // Traverse calls
-  for (const call of payload.traverse) {
-    [x, y] = offsetPoint(x, y, call.bearing, call.distance);
+  for (const call of survey.traverse) {
+    const offset = offsetPoint(x, y, call.bearing, call.distance);
+    x = offset[0]
+    y = offset[1]
   }
 
   // Misclosure vector
@@ -129,32 +233,4 @@ export function checkClosure(
 
   return { misclosure: [dx, dy], distance: dist };
 }
-
-
-const test = ()=> {
-
-  const payload: ParcelPayload = {
-    referencePoint: {
-      corner: "NE corner of NESE Section 19",
-      tieLine: { bearing: "S01-42-10E", distance: 495.0 },
-    },
-    traverse: [
-      { bearing: "S89-03-17W", distance: 1320.0 },
-      { bearing: "N01-42-10W", distance: 165.0 },
-      { bearing: "N89-03-17E", distance: 568.96 },
-      { bearing: "S01-42-10E", distance: 145.0 },
-      { bearing: "N89-03-17E", distance: 751.04 },
-      { bearing: "S01-42-10E", distance: 20.0 },
-    ],
-  };
-  
-  const refX = 500000; // from PLSS dataset
-  const refY = 100000;
-  
-  const parcelGeom = buildParcelPolygon(refX, refY, payload);
-  
-  console.log(JSON.stringify(parcelGeom, null, 2));
-}
-
-test()
 

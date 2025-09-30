@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { defineCustomElements as defineCalciteElements } from '@esri/calcite-components/dist/loader'
 import { defineCustomElements as defineCustomMapElements } from '@arcgis/map-components/dist/loader'
-import { loadConfig, log } from '@/utils'
+import { loadConfig, log, createHook } from '@/utils'
 defineCalciteElements(window)
 defineCustomMapElements(window)
 
@@ -13,6 +13,8 @@ import '@picocss/pico/css/pico.conditional.min.css'
 
 import App from './App.vue'
 import router from './router'
+
+createHook()
 
 const app = createApp(App)
 

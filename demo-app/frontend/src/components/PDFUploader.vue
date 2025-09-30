@@ -1,4 +1,3 @@
-<!-- filepath: demo-app/frontend/src/components/PdfUploader.vue -->
 <script setup lang="ts">
 import { ref, shallowRef } from 'vue'
 import * as pdfjsLib from 'pdfjs-dist'
@@ -15,27 +14,10 @@ const pdfFile = shallowRef<File | null>(null)
 const thumbnailUrl = ref<string | null>(null)
 const error = ref<string | null>(null)
 
-function handleDrop(e: DragEvent) {
-  e.preventDefault()
-  error.value = null
-  const files = e.dataTransfer?.files
-  if (files && files.length > 0) {
-    const file = files[0]
-    if (file.type !== 'application/pdf') {
-      error.value = 'Please upload a PDF file.'
-      return
-    }
-    pdfFile.value = file
-    generateThumbnail(file)
-    emit('upload', file)
-  }
-}
-
-async function handleInput(e: Event) {
+const processFile = async (files: File[]) => {
   busy.value = true
   error.value = null
   try {
-    const files = (e.target as HTMLInputElement).files
     if (files && files.length > 0) {
       const file = files[0]
       if (file.type !== 'application/pdf') {
@@ -48,6 +30,18 @@ async function handleInput(e: Event) {
   } finally {
     busy.value = false
   }
+} 
+
+function handleDrop(e: DragEvent) {
+  e.preventDefault()
+  error.value = null
+  const files = e.dataTransfer?.files
+  processFile(files ? Array.from(files) : [])
+}
+
+function handleInput(e: Event) {
+  const files = (e.target as HTMLInputElement).files
+  processFile(files ? Array.from(files) : [])
 }
 
 async function generateThumbnail(file: File) {
@@ -65,12 +59,20 @@ async function generateThumbnail(file: File) {
       const context = canvas.getContext('2d')
       await page.render({ canvasContext: context!, viewport, canvas }).promise
       thumbnailUrl.value = canvas.toDataURL()
+      emit('upload', file)
     } catch (err) {
       error.value = 'Failed to render PDF preview.'
       console.warn(err)
     }
   }
   reader.readAsArrayBuffer(file)
+}
+
+const reset = ()=> {
+  pdfFile.value = null
+  thumbnailUrl.value = null
+  error.value = null
+  busy.value = false
 }
 </script>
 
@@ -88,7 +90,6 @@ async function generateThumbnail(file: File) {
         </div>
       </div>
     </div>
-
 
     <div
       v-else

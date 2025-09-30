@@ -9,7 +9,7 @@ async def extract_legal_description(paragraphs: str, model="gpt-4o-mini"):
     messages = [
         {"role": "system", "content": prompt},
     ]
-    result = await run_chat_completion(messages, model=model)
+    result = await run_chat_completion(messages, model=model, temperature=0)
     return LegalDescriptionInfo(**result.response)
 
 async def get_survey_info(legalDescription: str, model="gpt-4o") -> SurveyInfo:
@@ -18,7 +18,7 @@ async def get_survey_info(legalDescription: str, model="gpt-4o") -> SurveyInfo:
     messages = [
         {"role": "system", "content": prompt},
     ]
-    result = await run_chat_completion(messages, model=model)
+    result = await run_chat_completion(messages, model=model, temperature=0)
 
     # print(json.dumps(result.response, indent=2)) # type: ignore
     return SurveyInfo(**result.response) # type: ignore

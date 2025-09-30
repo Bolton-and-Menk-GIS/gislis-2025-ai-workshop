@@ -109,6 +109,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/survey/extract-legal-descriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Get Legal Description From Survey File
+         * @description get structured survey information from a legal description.
+         */
+        post: operations["get_legal_description_from_survey_file_api_survey_extract_legal_descriptions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/survey/get-survey-info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Get Survey Info From Legal
+         * @description get structured survey information from a legal description.
+         */
+        post: operations["get_survey_info_from_legal_api_survey_get_survey_info_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -136,9 +176,7 @@ export interface components {
              */
             timeout: number | null;
             /** Context */
-            context?: {
-                [key: string]: unknown;
-            } | null;
+            context?: Record<string, never> | null;
             /** Text */
             text: string;
             /**
@@ -194,6 +232,14 @@ export interface components {
              */
             options: components["schemas"]["AskPromptOption"][];
         };
+        /** Body_get_legal_description_from_survey_file_api_survey_extract_legal_descriptions_post */
+        Body_get_legal_description_from_survey_file_api_survey_extract_legal_descriptions_post: {
+            /**
+             * File
+             * Format: binary
+             */
+            file: string;
+        };
         /** Body_parse_pdf_endpoint_api_pdf_parse_post */
         Body_parse_pdf_endpoint_api_pdf_parse_post: {
             /**
@@ -207,9 +253,7 @@ export interface components {
             /** Response */
             response: unknown;
             /** Context */
-            context?: {
-                [key: string]: unknown;
-            } | null;
+            context?: Record<string, never> | null;
             /** Model */
             model: string;
             usage?: components["schemas"]["CompletionUsage"] | null;
@@ -248,6 +292,11 @@ export interface components {
             lon: number;
             /** Radius */
             radius: number;
+        };
+        /** GetSurveyRequest */
+        GetSurveyRequest: {
+            /** Legaldescription */
+            legalDescription: string;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -288,6 +337,22 @@ export interface components {
              */
             digest: string | null;
             details: components["schemas"]["ModelDetails"];
+        };
+        /** LegalDescriptionEntry */
+        LegalDescriptionEntry: {
+            /** Index */
+            index: number;
+            /** Text */
+            text: string;
+            /** Confidence */
+            confidence: number;
+        };
+        /** LegalDescriptionInfo */
+        LegalDescriptionInfo: {
+            /** Legaldescriptions */
+            legalDescriptions?: components["schemas"]["LegalDescriptionEntry"][];
+            /** Count */
+            readonly count: number;
         };
         /** ModelDetails */
         ModelDetails: {
@@ -364,9 +429,56 @@ export interface components {
             /** Summary */
             summary: string;
             /** Features */
-            features?: {
-                [key: string]: unknown;
-            }[];
+            features?: Record<string, never>[];
+        };
+        /** ReferencePoint */
+        ReferencePoint: {
+            /** Corner */
+            corner: string;
+            tieLine: components["schemas"]["TieLine"];
+            /**
+             * Divisionlevel
+             * @enum {string}
+             */
+            divisionLevel: "section" | "quarter" | "forty";
+            /** Referencewhere */
+            referenceWhere: string;
+        };
+        /** SurveyInfo */
+        SurveyInfo: {
+            /** Section */
+            section: number | string;
+            /** Township */
+            township: number | string;
+            /** Townshipdirection */
+            townshipDirection: string;
+            /** Range */
+            range: number | string;
+            /** Rangedirection */
+            rangeDirection: string;
+            /** Quarterquarter */
+            quarterQuarter: string;
+            referencePoint: components["schemas"]["ReferencePoint"];
+            /** Traverse */
+            traverse: components["schemas"]["TraverseSegment"][];
+            /** Area */
+            area?: string | number | null;
+            /** Whereclause */
+            whereClause: string;
+        };
+        /** TieLine */
+        TieLine: {
+            /** Bearing */
+            bearing: string;
+            /** Distance */
+            distance: number;
+        };
+        /** TraverseSegment */
+        TraverseSegment: {
+            /** Bearing */
+            bearing: string;
+            /** Distance */
+            distance: number;
         };
         /** ValidationError */
         ValidationError: {
@@ -541,6 +653,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AskPromptOptions"];
+                };
+            };
+        };
+    };
+    get_legal_description_from_survey_file_api_survey_extract_legal_descriptions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_get_legal_description_from_survey_file_api_survey_extract_legal_descriptions_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LegalDescriptionInfo"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_survey_info_from_legal_api_survey_get_survey_info_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GetSurveyRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SurveyInfo"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
