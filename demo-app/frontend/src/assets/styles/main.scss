@@ -94,6 +94,16 @@ span.material-symbols-outlined {
   padding: 0 0.5rem !important;
 }
 
+.text-danger {
+  color: #e74c3c;
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.float-right {
+  float: right;
+}
+
 $space: (
   xs: 4px,
   sm: 8px,
