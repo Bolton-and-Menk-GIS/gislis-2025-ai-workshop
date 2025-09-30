@@ -123,7 +123,25 @@ backgroundSize: 90%
 
 ---
 layout: center
+class: text-center
 ---
-# Creating a Python Toolbox tool from a Python function
 
-Prompt: In the current file, considering the existing Toolbox and CalculateArea tool classes, build a new tool that wraps the buffer_features function
+# 🛠️ Creating a Python Toolbox Tool
+
+<div class="text-xl text-blue-500 font-mono mb-4">
+  📁 `Samples\sample_tool.pyt`
+</div>
+
+<v-clicks>
+
+### Task 1: Documentation 📝
+Add a Google style Python docstring to the `add_area_field` function. Follow existing docstring patterns. Match verbiage and style from rest of file.
+
+### Task 2: Implementation ⚙️
+Create a new ArcGIS Python Toolbox tool class wrapping the `buffer_features` function. Add it to the existing `Toolbox` class's tools list. Use `CalculateArea` tool as template
+
+### Task 3: Help within Pro
+Edit the file "sample_tool.BufferFeatures.pyt.xml" to include the tool element for documentation. An example of the element is found in the file "sample_tool.CalculateArea.pyt.xml". The tool and its documentation is in the file "sample_tool.pyt"
+
+</v-clicks>
+

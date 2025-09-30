@@ -6,6 +6,7 @@ theme: ./bmi-theme
 background: https://cover.sli.dev
 # some information about your slides (markdown enabled)
 title: Embracing AI
+selectable: true
 info: |
   ## Slidev Starter Template
   Presentation slides for developers.

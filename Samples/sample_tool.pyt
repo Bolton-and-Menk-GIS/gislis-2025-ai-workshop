@@ -87,13 +87,6 @@ def buffer_features(
 
 
 def add_area_field(input_fc: str, field_name: str = "Area_m2") -> None:
-    """
-    Adds a new field to the input polygon feature class and populates it with area in square meters.
-
-    Parameters:
-        input_fc (str): Path to the polygon feature class.
-        field_name (str): Name of the field to add (default is "Area_m2").
-    """
     # Add field if it doesn't exist
     existing_fields = [f.name for f in arcpy.ListFields(input_fc)]
     if field_name not in existing_fields:
