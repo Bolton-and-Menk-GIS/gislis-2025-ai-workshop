@@ -48,7 +48,7 @@ onMounted(() => {
     emit('map-ready', e);
   })
 
-  if (basemapDark && basemapLight && switchBasemapOnThemeChange) {
+  if (!basemap && basemapDark && basemapLight && switchBasemapOnThemeChange) {
     const appStore = useAppState();
     watch(()=> appStore.isDark,
     (dark)=> {
