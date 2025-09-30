@@ -44,6 +44,10 @@ Extract survey information from a legal description and return JSON only, follow
 - Use `parcelWhere` for the polygon that contains the final parcel.  
 - Use `referenceWhere` for the polygon(s) needed to locate the anchor point.  
 - Bearings must be quadrant format (e.g. `Ndd-mm-ssE`).  
+- If a course references "on said [line]" (e.g., "on said West line", "on said East line"):
+  - Use the exact bearing that was previously defined for that line earlier in the description.
+  - If only the cardinal direction is given (e.g., "southerly on said West line"), resolve it to the full bearing of the referenced line, not just "S".
+  - Example: If the West line was earlier defined as "S00-15-47W", then "southerly on said West line" must also be "S00-15-47W".
 - Distances are feet.  
 - Always output valid JSON only.  
 

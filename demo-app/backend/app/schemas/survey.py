@@ -26,7 +26,7 @@ class SurveyInfo(BaseModel):
     townshipDirection: str
     range: int | str
     rangeDirection: str
-    quarterQuarter: str
+    quarterQuarter: Optional[str]
     referencePoint: ReferencePoint
     traverse: List[TraverseSegment]
     area: Optional[str | int] = None
