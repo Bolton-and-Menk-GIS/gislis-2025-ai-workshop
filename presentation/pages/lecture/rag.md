@@ -1,3 +1,11 @@
+---
+layout: cover
+---
+
+## 📚 RAG (Retrieval-Augmented Generation)
+
+---
+
 # What is RAG?
 
 **Retrieval-Augmented Generation**  
@@ -17,9 +25,20 @@
   - Up-to-date info  
   - Control over data sources  
 
-🌍 Example: Querying parcel data by natural language, build a valid query by supplying true data schema with examples.  
-
 ---
+
+# Why RAG Matters for GIS
+
+* Spatial + tabular data often too big for prompt alone
+
+* RAG lets you query:
+
+  *POIs, parcels, census data, 311 reports
+
+  * Enrich user queries with map extent filters
+
+* Model sees just the relevant slice → makes better sense of it
+
 
 ---
 layout: section
@@ -63,3 +82,13 @@ CREATE INDEX ON pois
 ✅ Now Postgres can do semantic search
 
 ---
+
+# Key Takeaways:
+
+* Prompting = shape the output
+
+* Fine-tuning = align style & consistency
+
+* RAG = inject ground truth into the model
+
+* In geospatial apps → combine PostGIS filters + vector search + LLM summaries

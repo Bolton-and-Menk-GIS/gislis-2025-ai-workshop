@@ -67,13 +67,7 @@ layout: intro
 
 💡 “AI won’t replace you, but developers using AI will replace those who don’t.”  
 
----
 
-# Skills and Techniques 
-
-- *Prompt Engineering* - 
-- *Fine Tuning* -
-- *Retrieval-Augmented Generation* -
 
 
 

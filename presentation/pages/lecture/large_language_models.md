@@ -82,8 +82,6 @@ backgroundSize: contain
 
 They use deep learning, specifically the transformer architecture, to analyze massive datasets and and predict text one word at a time.
 
-
-
 ## 🔣 What Are Tokens?
 
 A **token** is a small chunk of text — usually:
@@ -91,10 +89,6 @@ A **token** is a small chunk of text — usually:
 - part of a word (`ing`, `pre`, `tion`)
 - punctuation or whitespace
 
-**Example tokenization:**
-
-
-GPT models use a tokenizer to split all text into tokens so that it can convert them into numbers (which are easier for the model to work with).
 
 ---
 
@@ -139,7 +133,7 @@ But:
 
 ---
 
-## 🤔 So What’s Happening When You Chat With It?
+## 🤔 So What’s Happening When You Chat With an LLM?
 
 Every time you send a message:
 
@@ -149,12 +143,12 @@ Every time you send a message:
 4. It stops when it decides it's finished or reaches a token limit.
 
 
----
+<!-- ---
 layout: image
 image: ../../images/prompt-assembly.svg
 backgroundSize: fit
-backgroundColor: white
----
+backgroundColor: white -->
+
 
 ---
 
@@ -235,17 +229,6 @@ backgroundColor: white
 - Acting as a *pair programmer*  
 - Refactoring & exploring new APIs  
 
----
 
-# AI for Data
-
-## Making Sense of Information
-- Summarization of long text  
-- Q&A from documents  
-- Extracting structured fields (e.g., JSON, tables)  
-- convert unstructured data into structured data
-- Natural language → SQL  
-
-📊 *Visual:* before/after example (long text → short summary)  
 
 
