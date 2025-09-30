@@ -3,6 +3,9 @@ import { log, buildSurveyFeatures, getSectionCornerPoint } from '@/utils';
 import type {
   SurveyInfo
 } from '@/typings'
+import { arcgisToGeoJSON } from "@terraformer/arcgis"
+// @ts-expect-error // no types available
+import { download } from '@crmackey/shp-write'
 import { surveyLayerProperties, cogoLayerProperties, tiePointLayerProperties } from '@/templates'
 import * as unionOperator from '@arcgis/core/geometry/operators/unionOperator'
 import Graphic from '@arcgis/core/Graphic';
@@ -251,6 +254,73 @@ export const usePLSSLayers = (options: usePLSSLayersOptions) => {
 
   }
 
+  /**
+   * export the survey features as shapefiles
+   */
+  const exportShapefiles = async ()=> {
+    const featureCollection = {
+      type: 'FeatureCollection',
+      features: [],
+      crs: {
+        type: "name",
+        properties: {
+          "name": "urn:ogc:def:crs:EPSG::4326"
+        }
+      }
+    }
+
+    const layers = [ tiePointLayer, cogoLayer, boundaryLayer ]
+
+    const proms: Promise<__esri.FeatureSet>[] = []
+    layers.forEach(l=> {
+      proms.push(
+        l.queryFeatures({
+          returnGeometry: true,
+          outFields: ['*'],
+        })
+      )
+    })
+    
+    // wait for all features to be fetched
+    const featureSets = await Promise.all(proms)
+    featureSets.forEach(fc => 
+      fc.features.forEach(ft => {
+        // @ts-expect-error // fc mismatch
+        featureCollection.features.push(arcgisToGeoJSON(ft, 'OBJECTID'))
+      })
+    )
+
+    log(`[plss]: FeatureCollection is: `, featureCollection)
+      
+    // download into shapefile
+    const output = await download(featureCollection, {
+      name: `SuveyBoundaries_${new Date().getTime()}`,
+      folder: 'types',
+      types: {
+        point: 'TiePoints',
+        polygon: 'SurveyBoundaries',
+        line: 'COGO_Lines'
+      }
+    })
+
+    // create alert notification
+    const alertElm = document.createElement('calcite-alert')
+    alertElm.kind = 'success'
+    alertElm.icon = 'file-zip'
+    alertElm.open = true
+    alertElm.autoClose = true
+    alertElm.autoCloseDuration = 'slow'
+    const titleDiv = document.createElement('div')
+    titleDiv.slot = 'title'
+    titleDiv.innerText = 'Download Complete'
+
+    const messageDiv = document.createElement('div')
+    messageDiv.slot = 'message'
+    messageDiv.innerText = `Your survey features exported to shapefile! You may have to enable downloads in your browser to find the file.`
+    alertElm.append(titleDiv, messageDiv)
+    document.body.append(alertElm)
+  }
+
   return {
     map,
     view, 
@@ -266,5 +336,6 @@ export const usePLSSLayers = (options: usePLSSLayersOptions) => {
     getLayerView,
     highlight, 
     unHighlight,
+    exportShapefiles,
   }
 }

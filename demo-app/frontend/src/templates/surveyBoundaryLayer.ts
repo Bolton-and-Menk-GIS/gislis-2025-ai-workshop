@@ -12,6 +12,7 @@ const platFields = [
   'quarterQuarter',
   'cornerDescription',
   'divisionLevel',
+  'surveyId',
   'filename'
 ]
 
@@ -31,6 +32,7 @@ const lineFields = [
   'bearing',
   'label',
   'filename',
+  'surveyId',
   ...lineIntegerFields,
   ...lineFloatFields
 ]
@@ -45,6 +47,7 @@ const tiePointFields = [
   ...numericFields,
   'description',
   'filename',
+  'surveyId',
 ]
 
 const spatialReference = { wkid: 4326 }

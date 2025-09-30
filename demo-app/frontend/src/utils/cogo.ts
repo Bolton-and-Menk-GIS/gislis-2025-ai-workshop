@@ -3,6 +3,7 @@ import Polygon from '@arcgis/core/geometry/Polygon'
 import Polyline from '@arcgis/core/geometry/Polyline'
 import type { SurveyInfo } from '@/typings';
 import { log } from './logger'
+import { v4 as uuidv4 } from 'uuid'
 import { destination, point, toWgs84, toMercator } from '@turf/turf'
 import * as intersectionOperator from "@arcgis/core/geometry/operators/intersectionOperator";
 import Graphic from '@arcgis/core/Graphic';
@@ -113,7 +114,10 @@ export function buildSurveyFeatures(
     wkid: 4326
   }
 
+  const surveyId = uuidv4()
+
   const plssAttributes = {
+    surveyId,
     range: survey.range,
     rangeDir: survey.rangeDirection,
     township: survey.township,
@@ -166,6 +170,7 @@ export function buildSurveyFeatures(
           spatialReference
         },
         attributes: {
+          surveyId,
           lineIndex: idx,
           distanceFt: call.distance,
           bearing: call.bearing,

@@ -24,14 +24,18 @@
   "dependencies": {
     "@arcgis/core": "^4.33.14",
     "@arcgis/map-components": "^4.33.23",
+    "@crmackey/shp-write": "^0.4.5",
     "@picocss/pico": "^2.1.1",
+    "@terraformer/arcgis": "^2.1.2",
     "@turf/turf": "^7.2.0",
+    "@types/terraformer__arcgis": "^2.0.5",
     "@vueuse/core": "^13.9.0",
     "js-yaml": "^4.1.0",
     "loglevel": "^1.9.2",
     "openapi-typescript-fetch": "^2.2.1",
     "pdfjs-dist": "^5.4.149",
     "pinia": "^3.0.3",
+    "uuid": "^13.0.0",
     "vue": "^3.5.18",
     "vue-router": "^4.5.1"
   },
