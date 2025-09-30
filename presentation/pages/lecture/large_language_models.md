@@ -207,6 +207,11 @@ backgroundColor: white -->
 ![popular-llms](../../images/PopularLLms.png)
 ---
 
+# Popular LLMs
+
+![popular-llms](/images/PopularLLMs.png)
+---
+
 ## 📦 TL;DR — Quick Glossary
 
 | Term         | Meaning                                                                 |
@@ -228,7 +233,6 @@ backgroundColor: white -->
 - Auto-generating tests & docs  
 - Acting as a *pair programmer*  
 - Refactoring & exploring new APIs  
-
 
 
 

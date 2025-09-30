@@ -1,5 +1,6 @@
 ---
-layout: intro
+theme: default
+layout: cover
 ---
 
 # Agenda
@@ -66,8 +67,4 @@ layout: intro
 - Limitations: hallucinations, bias, cost  
 
 💡 “AI won’t replace you, but developers using AI will replace those who don’t.”  
-
-
-
-
 
