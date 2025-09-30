@@ -8,11 +8,39 @@ import * as unionOperator from '@arcgis/core/geometry/operators/unionOperator'
 import Graphic from '@arcgis/core/Graphic';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer'
 
+
+interface PLSSFields {
+  /**
+   * first division (Townships) field name
+   * @default "FFRSTDIVNO"
+   */
+  firstDivision: string;
+  /**
+   * the township label field
+   * @default "TWNSHPLAB"
+   */
+  townshipLabel: string;
+  /**
+   * the quarter section field
+   * @default "QSEC"
+   */
+  quarterSection: string;
+}
 interface usePLSSLayersOptions {
   view: __esri.MapView;
   fortysLayerName?: string;
   townshipsLayerName?: string;
-  sectionsLayerName?: string
+  sectionsLayerName?: string;
+  /**
+   * field mappings for PLSS fields
+   */
+  fields?: PLSSFields;
+}
+
+const defaultPLSSFields: PLSSFields = {
+  firstDivision: 'FRSTDIVNO',
+  townshipLabel: 'TWNSHPLAB',
+  quarterSection: 'QSEC',
 }
 
 export const getLayerView = (view: __esri.MapView, lyr: __esri.FeatureLayer): __esri.FeatureLayerView | undefined => {
@@ -25,6 +53,7 @@ export const usePLSSLayers = (options: usePLSSLayersOptions) => {
     fortysLayerName = "PLSS Intersected",
     townshipsLayerName = "PLSS Township",
     sectionsLayerName = "PLSS First Division",
+    fields = defaultPLSSFields
   } = options
 
   const map = view.map!
@@ -50,9 +79,9 @@ export const usePLSSLayers = (options: usePLSSLayersOptions) => {
   const tiePointLayer = new FeatureLayer(tiePointLayerProperties)
 
   // add boundary layer to the map
-  view.map?.addMany([boundaryLayer, cogoLayer, tiePointLayer])
+  view.map?.addMany([cogoLayer, boundaryLayer, tiePointLayer])
 
-  // ensure all layers have outFields set to "*"
+  // ensure all layers have outFields set to "*" so all fields are fetched in queries
   watch([fortysLayer, townshipsLayer, sectionsLayer], 
     (layers)=> {
       layers.forEach(lyr => {
@@ -62,6 +91,10 @@ export const usePLSSLayers = (options: usePLSSLayersOptions) => {
             lyr.popupTemplate.outFields = ['*']
           }
           log(`[plss]: set outFields for "${lyr.title}"`)
+          if (lyr.title === townshipsLayerName){
+            // zoom level 10
+            lyr.minScale = 577790.554289 
+          }
         })
       })
     },
@@ -95,7 +128,7 @@ export const usePLSSLayers = (options: usePLSSLayersOptions) => {
     // form where clause like "TWNSHPLAB = '119N 21W'"
     let twpFeature: __esri.Graphic | undefined = undefined
 
-    if (currentTownshipFeature.value?.attributes.TWNSHPLAB === twpLabel){
+    if (currentTownshipFeature.value?.attributes[fields.townshipLabel] === twpLabel){
       // check if the current township boundary matches
       twpFeature = currentTownshipFeature.value
       log(`[plss]: using cached towhsnip feature: `, twpFeature)
@@ -123,7 +156,7 @@ export const usePLSSLayers = (options: usePLSSLayersOptions) => {
     let sectionFeature: __esri.Graphic | undefined = undefined
     const sectionWhere = `FRSTDIVNO = '${survey.section}'`
 
-    if (currentSectionFeature.value?.attributes.FRSTDIVNO === survey.section && currentSectionFeature.value?.attributes.TWNSHPLAB === twpLabel){
+    if (currentSectionFeature.value?.attributes[fields.firstDivision] === survey.section && currentSectionFeature.value?.attributes[fields.townshipLabel] === twpLabel){
       sectionFeature = currentSectionFeature.value
       log(`[plss]: using cached section feature: `, sectionFeature)
     } else {
@@ -166,7 +199,7 @@ export const usePLSSLayers = (options: usePLSSLayersOptions) => {
       if (survey.referencePoint.divisionLevel === 'quarter'){
         // group features by QSEC attribute
         const quartersLookup: Record<string, __esri.Graphic[]> = fortyFeatures.reduce((groups, ft) => {
-          const qsec = ft.attributes.QSEC
+          const qsec = ft.attributes[fields.quarterSection]
           if (!groups[qsec]){
             groups[qsec] = []
           }
