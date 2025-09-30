@@ -7,13 +7,11 @@ on:
     branches: [ main ]
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 jobs:
-  build:
-    name: Build presentation
+  build-and-deploy:
+    name: Build and (optionally) deploy
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -43,16 +41,11 @@ jobs:
             echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=./index.html"></head><body>Redirecting...</body></html>' > presentation/dist/index.html
           fi
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v2
+      - name: Deploy to gh-pages (only on push to main)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          path: presentation/dist
-
-  deploy:
-    name: Deploy to GitHub Pages
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    steps:
-      - name: Deploy
-        uses: actions/deploy-pages@v1
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: presentation/dist
+          publish_branch: gh-pages
+          keep_files: false
