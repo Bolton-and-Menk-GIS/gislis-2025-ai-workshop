@@ -40,8 +40,22 @@ Caleb Mackey & Phil Nagel
 src: ./pages/lecture/agenda_and_intro.md
 ---
 
+
+---
+src: ./pages/lecture/agenda_and_intro.md
+---
+
 ---
 src: ./pages/lecture/large_language_models.md
+---
+
+
+---
+src: ./pages/lecture/gis_dev_and_takeaways.md
+---
+
+---
+src: ./pages/lecture/ai_assistants.md
 ---
 
 ---
@@ -53,15 +67,19 @@ src: ./pages/lecture/gis_dev_and_takeaways.md
 ---
 
 ---
-src: ./pages/lecture/ai_assistants.md
----
-
----
 src: ./pages/demo/local_ai_assistant.md
 ---
 
 ---
 src: ./pages/demo/local_ai_setup.md
+---
+
+---
+src: ./pages/lecture/improving_outputs_from_llms.md
+---
+
+---
+src: ./pages/lecture/rag.md
 ---
 
 ---

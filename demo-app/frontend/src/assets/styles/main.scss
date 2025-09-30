@@ -1,0 +1,187 @@
+:root {
+  --pico-nav-element-spacing-vertical: 0.5rem;
+  --pico-form-element-spacing-horizontal: 0.35rem;
+  --pico-form-element-spacing-vertical: 0.35rem;
+  --pico-typography-spacing-vertical: 0.5rem;
+  --pico-line-height: 1.2;
+}
+
+[data-theme=light],
+:root:not([data-theme=dark]),
+:host:not([data-theme=dark]) {
+   // custom stuff
+  --pico-primary: #01aaff;
+  --pico-bmi-card-background-color: var(--pico-color-grey-100);
+}
+
+[data-theme=dark],
+:root[data-theme=dark]{
+   // custom stuff
+  --pico-bmi-card-background-color: var(--pico-color-grey-850);
+}
+.pico [data-tooltip]::before {
+  min-width: 320px;
+  max-width: 450px;
+  white-space: normal;
+  word-break: break-word;
+  padding: 0.5em 1em;
+  border-radius: 0.5em;
+  box-sizing: border-box;
+}
+
+.pico hr {
+  border-top: 1px solid var(--pico-contrast);
+}
+
+span.material-symbols-outlined {
+  height: auto;
+  vertical-align: middle;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+
+  // Optional: subtle background on hover/focus
+  &:hover,
+  &:focus {
+    background: var(--pico-primary-background, #e0e7ef);
+    box-shadow: 0 0 0 2px var(--pico-primary, #4B843A, 0.15);
+    outline: none;
+  }
+
+  // Optional: active state
+  &:active {
+    background: var(--pico-primary-background, #d0d7df);
+  }
+
+  &--flat {
+    padding: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+    --pico-color: var(--pico-color) !important;
+
+    // &:hover,
+    // &:focus,
+    // &:active {
+    //   background: none !important;
+    //   box-shadow: none !important;
+    //   outline: none !important;
+    // }
+  }
+
+  // Make sure the icon is sized appropriately
+  .material-symbols-outlined {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+}
+
+.pico-btn-sm {
+  height: auto !important;
+  font-size: 0.85rem !important;
+  padding: 0 0.5rem !important;
+}
+
+.text-danger {
+  color: #e74c3c;
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.float-right {
+  float: right;
+}
+
+$space: (
+  xs: 4px,
+  sm: 8px,
+  md: 16px,
+  lg: 24px,
+  xl: 32px
+);
+
+$axes: (
+  x: (left, right),
+  y: (top, bottom)
+);
+
+// All sides
+@each $key, $val in $space {
+  .pa-#{$key} { padding: $val !important; }
+  .ma-#{$key} { margin: $val !important; }
+}
+
+// Individual sides
+@each $key, $val in $space {
+  .pt-#{$key} { padding-top: $val !important; }
+  .pb-#{$key} { padding-bottom: $val !important; }
+  .pl-#{$key} { padding-left: $val !important; }
+  .pr-#{$key} { padding-right: $val !important; }
+  .mt-#{$key} { margin-top: $val !important; }
+  .mb-#{$key} { margin-bottom: $val !important; }
+  .ml-#{$key} { margin-left: $val !important; }
+  .mr-#{$key} { margin-right: $val !important; }
+}
+
+// Horizontal/vertical (x/y) for padding and margin
+@each $axis, $dirs in $axes {
+  @each $key, $val in $space {
+    .p#{$axis}-#{$key} {
+      @each $dir in $dirs {
+        padding-#{$dir}: $val !important;
+      }
+    }
+    .m#{$axis}-#{$key} {
+      @each $dir in $dirs {
+        margin-#{$dir}: $val !important;
+      }
+    }
+  }
+  // Auto variants
+  .p#{$axis}-auto {
+    @each $dir in $dirs {
+      padding-#{$dir}: auto !important;
+    }
+  }
+  .m#{$axis}-auto {
+    @each $dir in $dirs {
+      margin-#{$dir}: auto !important;
+    }
+  }
+}
+
+// All sides auto
+.pa-auto { padding: auto !important; }
+.ma-auto { margin: auto !important; }
+
+// Colors
+$primary: var(--pico-primary);
+$secondary: var(--pico-secondary);
+$contrast: var(--pico-contrast);
+// $tertiary: var(--pico-tertiary);
+
+$colors: (
+  primary: $primary,
+  secondary: $secondary,
+  contrast: $contrast,
+  // tertiary: $tertiary,
+);
+
+@each $name, $color in $colors {
+  .bg-#{$name} { background-color: $color !important; }
+  .text-#{$name} { color: $color !important; }
+  .border-#{$name} { border-color: $color !important; }
+}
+

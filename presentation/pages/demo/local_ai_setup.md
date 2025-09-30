@@ -72,7 +72,7 @@ open-webui serve
 
 ---
 layout: image-right
-image: ../../images/continue-configure-local.png
+image: /images/continue-configure-local.png
 backgroundSize: 70%
 ---
 
@@ -103,7 +103,7 @@ layout: two-cols
 
 ---
 layout: image-right
-image: ../../images/continue-chat-selection.png
+image: /images/continue-chat-selection.png
 backgroundSize: 90%
 ---
 
@@ -113,7 +113,7 @@ backgroundSize: 90%
 
 ---
 layout: image-left
-image: ../../images/continue-autocomplete-selection.png
+image: /images/continue-autocomplete-selection.png
 backgroundSize: 90%
 ---
 

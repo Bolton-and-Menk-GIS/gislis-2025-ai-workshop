@@ -9,7 +9,7 @@
 
 ---
 layout: image
-image: ../../images/natural_lang_chat.png
+image: /images/natural_lang_chat.png
 backgroundSize: 80vh
 ---
 
