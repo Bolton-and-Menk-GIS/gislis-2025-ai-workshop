@@ -1,0 +1,15 @@
+app:
+  title: AI Demos
+  description: A demo application showcasing AI capabilities.
+demos:
+  ask:
+    title: Ask
+    description: Ask questions and get answers using AI.
+  survey:
+    title: Survey
+    description: Use AI to parse Legal Descriptions and Survey Documents.
+    map:
+      webmapId: a9bede0cd0394c578132dd9e61e7d00f
+  rag:
+    title: RAG
+    description: Retrieve and generate content using AI.

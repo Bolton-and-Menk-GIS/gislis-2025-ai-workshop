@@ -30,9 +30,14 @@ mdc: true
 Caleb Mackey & Phil Nagel
 
 
-[caleb.mackey@bolton-menk.com](mailto:caleb.mackey@bolton-menk.com)
+[Caleb.Mackey@bolton-menk.com](mailto:caleb.mackey@bolton-menk.com)
 
-[phil.nagel@bolton-menk.com](mailto:phil.nagel@bolton-menk.com)
+[Phil.Nagel@bolton-menk.com](mailto:phil.nagel@bolton-menk.com)
+
+
+---
+src: ./pages/lecture/agenda_and_intro.md
+---
 
 
 ---
@@ -41,6 +46,15 @@ src: ./pages/lecture/agenda_and_intro.md
 
 ---
 src: ./pages/lecture/large_language_models.md
+---
+
+
+---
+src: ./pages/lecture/gis_dev_and_takeaways.md
+---
+
+---
+src: ./pages/lecture/ai_assistants.md
 ---
 
 ---
@@ -57,6 +71,18 @@ src: ./pages/demo/local_ai_assistant.md
 
 ---
 src: ./pages/demo/local_ai_setup.md
+---
+
+---
+src: ./pages/lecture/improving_outputs_from_llms.md
+---
+
+---
+src: ./pages/lecture/rag.md
+---
+
+---
+src: ./pages/demo/natural_language_query.md
 ---
 
 <Toc text-sm minDepth="1" maxDepth="2" />
