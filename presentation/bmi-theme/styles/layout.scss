@@ -113,3 +113,35 @@ html.light {
   border-radius: 8px; /* Optional */
   padding: 1em; /* Optional */
 }
+
+.slidev-code-wrapper {
+  margin: var(--slidev-code-margin) !important;
+  scroll-padding: var(--slidev-code-padding);
+  height: 700px;
+  max-height: 42vh;
+  width: 700px;
+  max-width: 68vw;
+  overflow-y: auto;
+  overflow-x: auto;
+  word-break: break-all;
+}
+
+slidev-code-wrapper pre,
+.slidev-code-wrapper code {
+  white-space: pre;
+  word-break: break-all;
+  max-width: 100%;
+  // overflow-x: auto;
+  box-sizing: border-box;
+}
+
+// .slidev-code-wrapper {
+//   margin: var(--slidev-code-margin) !important;
+//   scroll-padding: var(--slidev-code-padding);
+//   width: 100%;
+//   max-width: 900px;         // wider for large snippets, adjust as needed
+//   height: auto;
+//   max-height: 80vh;         // taller for more code, adjust as needed
+//   overflow: auto;
+//   box-sizing: border-box;
+// }

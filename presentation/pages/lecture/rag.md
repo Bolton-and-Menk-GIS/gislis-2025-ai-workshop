@@ -13,7 +13,7 @@ layout: cover
 - Keeps responses accurate & grounded in your data  
   - reduces hallucinations 
 
-![rag-flow](/images/rag_workflow.svg)
+<img style="height: 200px;" src="/images/rag_workflow.svg">
 
 ---
 
