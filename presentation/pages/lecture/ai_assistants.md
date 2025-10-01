@@ -10,4 +10,4 @@ text
 
 ---
 
-![copilot-vue-shims](../../images/copilot-vue-shims.png)
+![copilot-vue-shims](/images/copilot-vue-shims.png)

@@ -16,6 +16,7 @@
     "screenshot": "slidev export example.md --format png"
   },
   "dependencies": {
+    "@cheprasov/qrcode": "^0.1.0",
     "@slidev/types": "^52.1.0"
   },
   "devDependencies": {

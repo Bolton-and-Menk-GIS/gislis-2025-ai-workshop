@@ -30,7 +30,7 @@ layout: cover
 
 <div v-click>
 
-![ai_timeline](../../images/ai_timeline.svg)
+![ai_timeline](/images/ai_timeline.svg)
 </div>
 
 <div v-click>

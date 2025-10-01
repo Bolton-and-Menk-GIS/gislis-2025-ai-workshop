@@ -72,7 +72,7 @@ Also highlighted after the first click
 ---
 layout: image
 
-image: ../../images/llm-prediction-text.png
+image: /images/llm-prediction-text.png
 backgroundSize: contain
 ---
 
@@ -145,7 +145,7 @@ Every time you send a message:
 
 <!-- ---
 layout: image
-image: ../../images/prompt-assembly.svg
+image: /images/prompt-assembly.svg
 backgroundSize: fit
 backgroundColor: white -->
 

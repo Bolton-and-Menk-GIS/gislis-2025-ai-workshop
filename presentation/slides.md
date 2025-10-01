@@ -6,6 +6,7 @@ theme: ./bmi-theme
 background: https://cover.sli.dev
 # some information about your slides (markdown enabled)
 title: Embracing AI
+selectable: true
 info: |
   ## Slidev Starter Template
   Presentation slides for developers.
@@ -33,8 +34,9 @@ Caleb Mackey & Phil Nagel
 [Caleb.Mackey@bolton-menk.com](mailto:caleb.mackey@bolton-menk.com)
 
 [Phil.Nagel@bolton-menk.com](mailto:phil.nagel@bolton-menk.com)
-
-
+<div>
+<QRCode />
+</div>
 ---
 src: ./pages/lecture/agenda_and_intro.md
 ---
