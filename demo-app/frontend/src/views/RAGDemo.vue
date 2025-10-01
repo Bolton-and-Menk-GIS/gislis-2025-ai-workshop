@@ -2,6 +2,7 @@
 import { useTemplateRef, defineAsyncComponent, ref } from 'vue'
 import type { ArcgisMapCustomEvent } from '@arcgis/map-components';
 import { watch } from '@arcgis/core/core/reactiveUtils';
+import { webMercatorToGeographic } from '@arcgis/core/geometry/support/webMercatorUtils';
 import { debounce, log } from '@/utils';
 
 const MapViewer = defineAsyncComponent(() => import('./MapViewer.vue'));
@@ -18,7 +19,7 @@ const onMapReady = (e: ArcgisMapCustomEvent<void>)  => {
     // @ts-expect-error // type issue 
     watch(() => [view.stationary], (stationary) => {
       if (stationary) {
-        extent.value = view.extent?.toJSON();
+        extent.value = webMercatorToGeographic(view.extent)?.toJSON();
       } 
     }), 1000
   )
@@ -28,6 +29,10 @@ const onCloseChat = () => {
   if (chatExpand.value) {
     chatExpand.value.collapse();
   }
+}
+
+const onRagResult = (e) => {
+  log('RAG Result received in RAGDemo:', e);
 }
 
 </script>
@@ -52,8 +57,9 @@ const onCloseChat = () => {
         >
           <arcgis-placement>
             <ChatBot 
-              url="http://localhost:8000/api/chat"
+              :extent="extent"
               storage-key="map-chat-messages"
+              @message-received="onRagResult"
               @close="onCloseChat"
             />
           </arcgis-placement>
