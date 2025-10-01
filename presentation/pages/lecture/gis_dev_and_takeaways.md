@@ -8,7 +8,7 @@
   - Natural language queries for spatial/attribute data  
   - Summarize/categorize large volumes of data on the fly in your applications  
 
-![gis-llm](../../images/gis_nl_query.svg)
+![gis-llm](/images/gis_nl_query.svg)
 
 ---
 

@@ -16,7 +16,7 @@ import BrandLogo from '../components/BrandLogo.vue';
 <style lang="scss">
 
 .cover-bmi {
-  background: url('../images/intro_bkg_flip.jpg') center/cover no-repeat;
+  background: url('/images/intro_bkg_flip.jpg') center/cover no-repeat;
   &--content > h1, h2, h3, h4, h5, h6 {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
   } &--content > * {

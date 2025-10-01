@@ -35,7 +35,7 @@ html.dark {
   
 }
 .bmi-default {
-  background: url('../images/intro_bkg_flip.jpg') center/cover no-repeat;
+  background: url('/images/intro_bkg_flip.jpg') center/cover no-repeat;
   padding: 1rem 2rem;
   &--overlay {
     background-color: var(--slidev-theme-background);
