@@ -1,0 +1,70 @@
+<svg viewBox="0 0 1080 300" width="100%" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    :root {
+      --svg-fg: #222;
+      --svg-bg: #fff;
+      --svg-accent: #4B843A;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --svg-fg: #fff;
+        --svg-bg: #181A1B;
+        --svg-accent: #F4B731;
+      }
+    }
+    .t{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;fill:var(--svg-fg)}
+    .l{font-size:14px}
+    .s{stroke:var(--svg-fg);fill:none;stroke-width:2}
+    .b{fill:var(--svg-accent);fill-opacity:.08;stroke:var(--svg-fg);stroke-opacity:.4}
+    .h{font-weight:700}
+  </style>
+  <rect width="100%" height="100%" fill="var(--svg-bg)"/>
+  <text x="20" y="28" class="t h">Retrieval-Augmented Generation (RAG)</text>
+
+  <!-- Blocks -->
+  <g>
+    <rect x="30"  y="70" width="180" height="60" rx="10" class="b"/>
+    <text x="120" y="100" text-anchor="middle" class="t l">User Question</text>
+
+    <rect x="240" y="55" width="220" height="90" rx="10" class="b"/>
+    <text x="350" y="92" text-anchor="middle" class="t l">Embed / Search</text>
+    <text x="350" y="112" text-anchor="middle" class="t l">("What vectors are similar?")</text>
+
+    <rect x="490" y="40" width="200" height="120" rx="10" class="b"/>
+    <text x="590" y="85" text-anchor="middle" class="t l">Vector DB</text>
+    <text x="590" y="105" text-anchor="middle" class="t l">Top-k Chunks</text>
+
+    <rect x="720" y="55" width="160" height="90" rx="10" class="b"/>
+    <text x="800" y="92" text-anchor="middle" class="t l">Prompt Assembly</text>
+    <text x="800" y="112" text-anchor="middle" class="t l">(+ retrieved text)</text>
+
+    <rect x="910" y="70" width="140" height="60" rx="10" class="b"/>
+    <text x="980" y="100" text-anchor="middle" class="t l">LLM Answer</text>
+  </g>
+
+  <!-- DB Drawers -->
+  <g class="s" stroke-opacity=".5">
+    <rect x="505" y="60" width="170" height="18" rx="4"/>
+    <rect x="505" y="82" width="170" height="18" rx="4"/>
+    <rect x="505" y="104" width="170" height="18" rx="4"/>
+  </g>
+
+  <!-- Arrows -->
+  <g class="s" stroke-linecap="round">
+    <line x1="210" y1="100" x2="240" y2="100"/>
+    <polyline points="240,100 234,96 234,104"/>
+
+    <line x1="460" y1="100" x2="490" y2="100"/>
+    <polyline points="490,100 484,96 484,104"/>
+
+    <line x1="690" y1="100" x2="720" y2="100"/>
+    <polyline points="720,100 714,96 714,104"/>
+
+    <line x1="880" y1="100" x2="910" y2="100"/>
+    <polyline points="910,100 904,96 904,104"/>
+  </g>
+
+  <!-- Notes -->
+  <text x="30" y="170" class="t l">Benefits: grounded answers, fresher knowledge, citations.</text>
+  <text x="30" y="190" class="t l">Where you customize: chunking, embeddings, top-k, prompt, post-processing.</text>
+</svg>

@@ -1,0 +1,116 @@
+<svg viewBox="0 0 1080 540" width="100%" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    :root {
+      --svg-fg: #222;
+      --svg-bg: #fff;
+      --svg-accent: #4B843A;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --svg-fg: #fff;
+        --svg-bg: #181A1B;
+        --svg-accent: #F4B731;
+      }
+    }
+    .t{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;fill:var(--svg-fg)}
+    .l{font-size:14px}
+    .s{stroke:var(--svg-fg);fill:none;stroke-width:2}
+    .b{fill:var(--svg-accent);fill-opacity:.08;stroke:var(--svg-fg);stroke-opacity:.4}
+    .h{font-weight:700}
+    .t{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;fill:currentColor}
+    .s{stroke:currentColor;fill:none;stroke-width:2}
+    .b{fill:currentColor;fill-opacity:.08;stroke:currentColor;stroke-opacity:.45}
+    .m{fill:currentColor;fill-opacity:.12;stroke:currentColor;stroke-opacity:.55}
+    .l{font-size:14px}
+    .h{font-weight:700;font-size:16px}
+    .muted{fill-opacity:.75}
+  </style>
+
+  <!-- Title -->
+  <rect width="100%" height="100%" fill="#f4f4f4"/>
+  <text x="20" y="30" class="t h">How a single request is built</text>
+
+  <!-- Left column: Inputs -->
+  <g>
+    <rect x="20" y="60" width="300" height="420" rx="12" class="b"/>
+    <text x="40" y="88" class="t h">Inputs you assemble</text>
+
+    <!-- System prompt -->
+    <rect x="40" y="110" width="260" height="56" rx="8" class="m"/>
+    <text x="55" y="140" class="t l">System / instructions</text>
+
+    <!-- Chat history -->
+    <rect x="40" y="176" width="260" height="90" rx="8" class="m"/>
+    <text x="55" y="202" class="t l">Chat history (truncated)</text>
+    <text x="55" y="222" class="t l muted">Oldest messages may be dropped</text>
+
+    <!-- Current user message -->
+    <rect x="40" y="278" width="260" height="56" rx="8" class="m"/>
+    <text x="55" y="308" class="t l">Current user message</text>
+
+    <!-- Retrieved docs -->
+    <rect x="40" y="344" width="260" height="116" rx="8" class="m"/>
+    <text x="55" y="370" class="t l">Retrieved context (RAG)</text>
+    <text x="55" y="390" class="t l muted">Top-k chunks • citations • metadata</text>
+  </g>
+
+  <!-- Prompt assembly arrow -->
+  <g class="s" stroke-linecap="round">
+    <line x1="340" y1="270" x2="420" y2="270"/>
+    <polyline points="420,270 414,266 414,274"/>
+  </g>
+
+  <!-- Middle: Prompt Assembly -->
+  <g>
+    <rect x="410" y="190" width="260" height="160" rx="12" class="b"/>
+    <text x="540" y="220" text-anchor="middle" class="t h">Prompt Assembly</text>
+    <text x="540" y="244" text-anchor="middle" class="t l">[system] + [history] + [user] + [docs]</text>
+    <text x="540" y="266" text-anchor="middle" class="t l muted">Tokenize → validate size</text>
+  </g>
+
+  <!-- Arrow to Context Window -->
+  <g class="s" stroke-linecap="round">
+    <line x1="660" y1="270" x2="740" y2="270"/>
+    <polyline points="740,270 734,266 734,274"/>
+  </g>
+
+  <!-- Context Window -->
+  <g>
+    <rect x="740" y="110" width="330" height="320" rx="12" class="b"/>
+    <text x="760" y="138" class="t h">Context Window</text>
+    <text x="760" y="160" class="t l muted">Max tokens (prompt + output)</text>
+
+    <!-- Meter -->
+    <rect x="760" y="182" width="280" height="18" rx="9" class="s" />
+    <rect x="760" y="182" width="210" height="18" rx="9" class="m" />
+    <text x="760" y="216" class="t l muted">Used by prompt</text>
+
+    <!-- Bullets -->
+    <text x="760" y="244" class="t l">• If too large → truncate history first</text>
+    <text x="760" y="264" class="t l">• Larger windows hold longer docs/chats</text>
+    <text x="760" y="284" class="t l">• You choose what to include each call</text>
+
+    <!-- Temperature box -->
+    <rect x="760" y="314" width="150" height="86" rx="10" class="m"/>
+    <text x="835" y="338" text-anchor="middle" class="t h">Temperature</text>
+    <text x="835" y="358" text-anchor="middle" class="t l">0.0 → deterministic</text>
+    <text x="835" y="376" text-anchor="middle" class="t l">1.0 → creative/varied</text>
+
+    <!-- Hallucination note -->
+    <rect x="920" y="314" width="144" height="86" rx="10" class="m"/>
+    <text x="991" y="338" text-anchor="middle" class="t h">Hallucinations</text>
+    <text x="991" y="358" text-anchor="middle" class="t l">↓ with RAG</text>
+    <text x="991" y="376" text-anchor="middle" class="t l">↑ with vague prompts</text>
+  </g>
+
+  <!-- Final arrow & output -->
+  <g class="s" stroke-linecap="round">
+    <line x1="900" y1="430" x2="900" y2="468"/>
+    <polyline points="900,468 896,462 904,462"/>
+  </g>
+  <rect x="720" y="468" width="350" height="42" rx="8" class="b"/>
+  <text x="900" y="494" class="t l" text-anchor="middle">Model Output (tokens come from the same budget)</text>
+
+  <!-- Footer notes -->
+  <text x="20" y="508" class="t l muted">Each request is stateless — you resend the selected history + context every time.</text>
+</svg>
