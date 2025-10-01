@@ -62,7 +62,7 @@ results = store.search(
 
 * Filters to comments inside the bounding box
 
-* Returns most similar comments in meaning-space using a *top-k cosine* search
+* Returns most similar comments in meaning-space using a *tcosine similarity* search
 
 ---
 

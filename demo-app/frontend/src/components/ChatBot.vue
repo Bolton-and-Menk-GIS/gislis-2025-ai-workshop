@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { useChatFeatures, type UseChatFeaturesOptions } from '@/composables';
 import type { ChatMessage } from '@/typings';
+import { api } from '@/api';
 
-interface Props extends Pick<UseChatFeaturesOptions, 'url' | 'storageKey' | 'clearHistory'> {
+interface Props extends Pick<UseChatFeaturesOptions, | 'storageKey' | 'clearHistory'> {
   title?: string;
+  extent?: __esri.ExtentProperties | null;
 }
 
 const emit = defineEmits<{
@@ -13,10 +15,10 @@ const emit = defineEmits<{
 }>();
 
 const { 
-  url, 
   title='AI Assistant', 
   storageKey='chat-messages', 
   clearHistory=false, 
+  extent
 } = defineProps<Props>();
 
 const {
@@ -24,30 +26,64 @@ const {
   userInput,
   messages,
   clearMessages,
+  lastAssistantMessage
  } = useChatFeatures({
-  url,
   storageKey,
   clearHistory,
   onMessageReceived: (msg: ChatMessage)=> {
     console.log('Message received in ChatBot component:', msg);
     emit('message-received', msg);
-  },
-  onConnected: (ws: WebSocket)=> {
-    emit('connected', ws);
-    console.log('WebSocket connected in ChatBot component:', ws);
-    messages.value.push({
-      role: 'assistant',
-      content: "Hello! I'm your AI assistant. How can I help you today?"
-    });
   }
 });
 
-messages.value.push({
-  role: 'assistant',
-  content: "Hello! I'm your AI assistant. How can I help you today?"
-});
+if (!lastAssistantMessage.value?.isWelcomeMessage){
+  messages.value.push({
+    role: 'assistant',
+    isWelcomeMessage: true,
+    content: "Hello! I'm your AI assistant and I'm here to help answer any questions you have about Public Comments. How can I help you?"
+  });
+}
 
-isBusy.value = true
+const onSubmit = async () => {
+  if (!userInput.value.trim() || isBusy.value) return;
+
+  const userMessage: ChatMessage = {
+    role: 'user',
+    content: userInput.value.trim(),
+  };
+
+  messages.value.push(userMessage);
+  userInput.value = '';
+
+  try {
+    isBusy.value = true;
+    const response = await api.askQuestionRAG({
+      question: userMessage.content,
+      // @ts-expect-error // type mismatch
+      extent: extent, 
+    })
+    if (response && response.data) {
+      const msg = {
+        content: response.data.answer,
+        role: 'assistant',
+        result: response.data.features || [],
+      } as ChatMessage<typeof response.data.features>;
+      messages.value.push(msg);
+      emit('message-received', msg);
+    }
+  } catch (error) {
+    console.error('Error sending message:', error);
+    messages.value.push({
+      role: 'assistant',
+      content: 'Sorry, there was an error processing your message. Please try again later.',
+    });
+  } finally {
+    isBusy.value = false;
+  }
+};
+
+// dev test
+// isBusy.value = true
 
 </script>
 
@@ -102,7 +138,7 @@ isBusy.value = true
     </div>
     
     <footer class="chatbot--user-form mt-sm">
-      <form class="pico" @submit.prevent.stop>
+      <form class="pico" @submit.prevent.stop="onSubmit">
         <fieldset role="group">
           <textarea 
             name="userInput"
@@ -150,7 +186,8 @@ isBusy.value = true
     flex-direction: column;
     height: 700px;
     max-height: 80vh;
-    min-width: 400px;
+    min-width: 300px;
+    max-width: 40vw;
     border: 1px solid var(--pico-secondary-border);
   }
 }
