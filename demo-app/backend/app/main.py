@@ -10,8 +10,8 @@ from app.routers.survey import survey_api
 from app.routers.rag import rag_api
 
 app = FastAPI(
-    title="RAG Demo API",
-    description="FastAPI + SQLAlchemy + pgvector demo backend",
+    title="Workshop Demo API",
+    description="API for demos",
     version="1.0.0",
 )
 

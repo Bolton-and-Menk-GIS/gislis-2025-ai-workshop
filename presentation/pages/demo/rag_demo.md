@@ -66,9 +66,9 @@ results = store.search(
 
 ---
 
-### Top-K Cosine Search
+### Cosine Similarity Search
 
-RAG top-k cosine search is a technique for finding the most relevant documents to answer a user's query by converting the query and document chunks into numerical embeddings, calculating the cosine similarity between them, and retrieving the k chunks with the highest similarity scores. 
+The RAG *Cosine Similarity* search is a technique for finding the most relevant documents to answer a user's query by converting the query and document chunks into numerical embeddings, calculating the cosine similarity between them, and retrieving the chunks with the highest similarity scores. 
 
 This process forms the retrieval step of a RAG pipeline, which then feeds these retrieved documents, along with the original query, to an LLM to generate a context-aware answer. 
 

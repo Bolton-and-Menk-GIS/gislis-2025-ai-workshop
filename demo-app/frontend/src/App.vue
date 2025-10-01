@@ -13,7 +13,11 @@ appState.loadInitialTheme()
     <app-nav-bar />
   </header>
   <main class="main-view">
-    <RouterView />
+    <router-view v-slot="{ Component }">
+      <keep-alive>
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
   </main>
 </template>
 
