@@ -1,5 +1,3 @@
-# Local AI Setup Guide 🚀
-
 ---
 
 ## 📥 Downloading Models
@@ -22,6 +20,7 @@
   - OpenAI API compatibility ("OpenAPI" standard)
     - OpenAI
     - Google
+
 
 
 ---
@@ -51,6 +50,9 @@ open-webui serve
 2. Paste exact model name in search box
 3. Select "Pull from ollama.com"
 
+![openui-pull](/images/openui-pull.png){class="w-40vw"}
+
+
 ---
 
 ## 💻 VS Code Integration
@@ -59,6 +61,9 @@ open-webui serve
   - Supports: chat, autocomplete, edit, agent workflows
   - Available for VS Code and JetBrains
   - [Install from Marketplace](https://marketplace.visualstudio.com/items?itemName=Continue.continue)
+
+![continue-code-marketplace](/images/continue.png){class="w-40vw"}
+
 
 ---
 
@@ -71,10 +76,6 @@ open-webui serve
 | Autocomplete | starcoder2:3b |
 
 ---
-layout: image-right
-image: /images/continue-configure-local.png
-backgroundSize: 70%
----
 
 ## ⚙️ Configuration
 
@@ -82,6 +83,8 @@ backgroundSize: 70%
 2. Choose Local -> Skip and configure manually\
 -- or --
 3. Access settings via Local Agent dropdown (cog wheel)
+
+![continue-local-config](/images/continue-configure-local.png)
 
 ---
 layout: two-cols
@@ -101,29 +104,15 @@ layout: two-cols
 
 <<< @/../Samples/Continue/config.yaml  {monaco}{height:'60vh'}
 
----
-layout: image-right
-image: /images/continue-chat-selection.png
-backgroundSize: 90%
----
 
-### Usage Tips
-- Multiple models per role possible
-- Chat/Agent: Select from dropdown in chat box
-
----
-layout: image-left
-image: /images/continue-autocomplete-selection.png
-backgroundSize: 90%
 ---
 
 ### Usage Tips
 - Multiple models per role possible
 - Autocomplete: Click "Continue" in VS Code status bar
 
----
-layout: center
-class: text-center
+![continue-autocomplete-selection](/images/continue-autocomplete-selection.png){class="w-70vh"}
+
 ---
 
 # 🛠️ Creating a Python Toolbox Tool
