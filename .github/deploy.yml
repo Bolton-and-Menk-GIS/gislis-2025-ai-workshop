@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: 'lts/*'
 
-      - name: Go to presentation directory
+      - name: Go to presentation dir
         run: cd presentation
 
       - name: Setup @antfu/ni
