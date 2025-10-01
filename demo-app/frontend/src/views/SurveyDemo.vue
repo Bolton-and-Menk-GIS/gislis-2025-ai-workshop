@@ -11,6 +11,7 @@ const MeasureWidget = defineAsyncComponent(() => import('@/components/MeasureWid
 const PDFUploader = defineAsyncComponent(() => import('@/components/PDFUploader.vue'))
 
 const appStore = useAppState()
+const showLegalDescriptionError = ref(false);
 
 
 const pdfExpand = useTemplateRef<HTMLArcgisExpandElement>('pdfExpand');
@@ -36,6 +37,10 @@ const onUploadPDF = async (file: File) => {
     log('PDF Upload and Extract Result:', result)
     surveyInfos.value.push(...result.surveyInfoResults)
     legalDescriptions.value = result.legalDescriptions?.map(ld => ld.text) || []
+
+    if (!legalDescriptions.value.length) {
+      
+    }
     
   } catch (error) {
     console.error('Error uploading and extracting PDF:', error)
@@ -71,73 +76,80 @@ const clearPDF = () => {
 </script>
 
 <template>
-  <Suspense>
-    <MapViewer
-      id="survey-map"
-      basemap="hybrid"
-      :item-id="demoConfig.map?.webmapId || ''"
-      @map-ready="onMapReady"
-    >
-      <arcgis-expand 
-        ref="pdfExpand"
-        position="top-right" 
-        expand-icon="file-pdf-plus" 
-        expand-tooltip="Upload Survey PDF"
+  <div class="survey-demo">
+    <Suspense>
+      <MapViewer
+        id="survey-map"
+        basemap="hybrid"
+        :item-id="demoConfig.map?.webmapId || ''"
+        @map-ready="onMapReady"
       >
-        <arcgis-placement>
-          <div class="survey-pdf--container">
-            <PDFUploader @upload="onUploadPDF" @reset="clearPDF" ref="pdfUploader" />
-            <div class="survey-pdf--actions">
-              <div class="pico survey-pdf--busy mx-auto" v-if="pdf.file.value && pdf.busy.value">
-                <!-- <article  
-                  class="pico survey-pdf--progress pa-lg" 
-                  :aria-busy="pdf.busy.value" 
-                ></article> -->
-                <calcite-loader active v-if="pdf.busy.value" scale="s"></calcite-loader>
-                <div class="pb-md progress-message">
-                  <i class="pico">{{ pdf.progressMessage }}...</i>
+        <arcgis-expand 
+          ref="pdfExpand"
+          position="top-right" 
+          expand-icon="file-pdf-plus" 
+          expand-tooltip="Upload Survey PDF"
+        >
+          <arcgis-placement>
+            <div class="survey-pdf--container">
+              <PDFUploader @upload="onUploadPDF" @reset="clearPDF" ref="pdfUploader" />
+              <div class="survey-pdf--actions">
+                <div class="pico survey-pdf--busy mx-auto" v-if="pdf.file.value && pdf.busy.value">
+                  <!-- <article  
+                    class="pico survey-pdf--progress pa-lg" 
+                    :aria-busy="pdf.busy.value" 
+                  ></article> -->
+                  <calcite-loader active v-if="pdf.busy.value" scale="s"></calcite-loader>
+                  <div class="pb-md progress-message">
+                    <i class="pico">{{ pdf.progressMessage }}...</i>
+                  </div>
                 </div>
               </div>
+  
+              <div class="survey-pdf--legal">
+                <calcite-accordion class="pa-md">
+  
+                  <calcite-accordion-item 
+                    v-for="(legal, idx) in legalDescriptions"
+                    :key="`legal-${idx}`"
+                    icon-start="file-text"
+                    :heading="`Legal Description ${idx + 1}`"
+                  >
+                    <calcite-notice open>
+                      <div slot="message" class="legal-description">{{ legal }}</div>
+                    </calcite-notice>
+                  </calcite-accordion-item>
+                </calcite-accordion>
+              </div>
             </div>
+          </arcgis-placement>
+        </arcgis-expand>
+  
+        <arcgis-expand 
+          position="bottom-right" 
+          expand-icon="measure" 
+          expand-tooltip="Measurement Tool"
+        >
+          <arcgis-placement>
+           <MeasureWidget 
+            reference-element="measure-widget"
+           />
+           </arcgis-placement>
+        </arcgis-expand>
+  
+      </MapViewer>
+  
+      <template #fallback>
+        <calcite-loader active></calcite-loader>
+      </template>
+  
+    </Suspense>
 
-            <div class="survey-pdf--legal">
-              <calcite-accordion class="pa-md">
-
-                <calcite-accordion-item 
-                  v-for="(legal, idx) in legalDescriptions"
-                  :key="`legal-${idx}`"
-                  icon-start="file-text"
-                  :heading="`Legal Description ${idx + 1}`"
-                >
-                  <calcite-notice open>
-                    <div slot="message" class="legal-description">{{ legal }}</div>
-                  </calcite-notice>
-                </calcite-accordion-item>
-              </calcite-accordion>
-            </div>
-          </div>
-        </arcgis-placement>
-      </arcgis-expand>
-
-      <arcgis-expand 
-        position="bottom-right" 
-        expand-icon="measure" 
-        expand-tooltip="Measurement Tool"
-      >
-        <arcgis-placement>
-         <MeasureWidget 
-          reference-element="measure-widget"
-         />
-         </arcgis-placement>
-      </arcgis-expand>
-
-    </MapViewer>
-
-    <template #fallback>
-      <calcite-loader active></calcite-loader>
-    </template>
-
-  </Suspense>
+    <calcite-alert :open="showLegalDescriptionError" kind="warning" auto-dismiss="none" class="m-md">
+      <div slot="title">Warning </div>
+      <div slot="message">Could not extract any Legal Descriptions from the provided document</div>
+    </calcite-alert>
+  </div>
 
 </template>
 
