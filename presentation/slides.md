@@ -36,8 +36,16 @@ Caleb Mackey & Phil Nagel
 [Phil.Nagel@bolton-menk.com](mailto:phil.nagel@bolton-menk.com)
 <div>
 <QRCode />
+
 </div>
 
+---
+
+# Slides and Demos available on Github
+
+
+<QRCode url="https://github.com/Bolton-and-Menk-GIS/gislis-2025-ai-workshop" />
+---
 
 ---
 src: ./pages/lecture/agenda_and_intro.md

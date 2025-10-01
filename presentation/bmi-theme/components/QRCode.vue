@@ -2,11 +2,8 @@
 import { ref, onMounted, computed } from "vue";
 import { QRCodeSVG } from "@cheprasov/qrcode";
 
-const url = window.location.href.endsWith("/1")
-  ? window.location.href.slice(0, -2)
-  : window.location.href;
-
 interface Props {
+  url?: string;
   /**
    * the qr code width in pixels
    * @default 128
@@ -38,8 +35,13 @@ interface Props {
   imageProperties?: any;
 }
 
+const foundUrl = window.location.href.endsWith("/1")
+  ? window.location.href.slice(0, -2)
+  : window.location.href;
+
+
 const {
-  // url,
+  url,
   level = "Q",
   width = "20%",
   height = "20%",
@@ -47,6 +49,8 @@ const {
   bgColor = "#ffffff",
   imageProperties,
 } = defineProps<Props>();
+
+const linkUrl = url ? url : foundUrl
 
 const qrId = `qrcode-${new Date().getTime()}`;
 
@@ -65,7 +69,7 @@ const imageProps = computed(() => ({
 const qrCodeElm = ref<null | SVGElement>(null);
 
 const qrCode = ref<string>(
-  new QRCodeSVG(url, {
+  new QRCodeSVG(linkUrl, {
     level,
     fgColor,
     bgColor,
@@ -83,5 +87,8 @@ onMounted(() => {
   <div :id="qrId" style="display: flex; justify-content: center">
     <svg :path="qrCode" alt="" ref="qrCodeElm"></svg>
   </div>
-  <a :href="url">{{ url }}</a>
+  <div :id="qrId" style="display: flex; justify-content: center">
+    <a :href="linkUrl">{{ linkUrl }}</a>
+  </div>
+  
 </template>
