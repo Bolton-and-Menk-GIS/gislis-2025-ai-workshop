@@ -12,7 +12,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   tagline: false,
 });
-const logoUrl = computed(()=> new URL(`/images/bmi_white${props.tagline ? '_tagline': ''}.png`, import.meta.url).href);
+const logoUrl = computed(()=> new URL(`../images/bmi_white${props.tagline ? '_tagline': ''}.png`, import.meta.url).href);
 
 const width = computed(()=> props.tagline ? 120 : 96);
 </script>
