@@ -1,7 +1,3 @@
----
-theme: default
-layout: cover
----
 
 # Agenda
 
