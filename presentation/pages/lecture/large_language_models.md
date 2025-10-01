@@ -185,6 +185,10 @@ backgroundColor: white -->
   - Long conversations where early details drop off  
 
 💡 **Solution:** retrieval-augmented generation (RAG) or explicit references. More on this later!
+---
+
+![image](/public/images/AI_Smoking.webp)
+
 
 ---
 
