@@ -74,6 +74,10 @@ src: ./pages/lecture/rag.md
 ---
 
 ---
+src: ./pages/demo/rag_demo.md
+---
+
+---
 src: ./pages/demo/natural_language_query.md
 ---
 

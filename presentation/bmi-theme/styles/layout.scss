@@ -115,9 +115,10 @@ html.light {
 }
 
 .slidev-code-wrapper {
+  padding: 1rem 0;
   margin: var(--slidev-code-margin) !important;
   scroll-padding: var(--slidev-code-padding);
-  height: 700px;
+  // max-height: 42vh;
   max-height: 42vh;
   width: 700px;
   max-width: 68vw;
