@@ -12,10 +12,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { isDark } = useDarkMode();
 // Import the necessary images for the BottomRight component
-const whiteTripod = new URL('/images/white-tripod-opacity.svg', import.meta.url).href;
-const yellowBar = new URL('/images/yellow-bar.svg', import.meta.url).href;
-const grayBar = new URL('/images/gray-bar.svg', import.meta.url).href;
-const triangle = computed(()=> new URL(`/images/${props.triangleColor ?? 'gray'}-triangle${props.triangleColor !== 'gray' ? isDark.value ? '-dark':'-light': ''}.svg`, import.meta.url).href);
+const whiteTripod = new URL('../images/white-tripod-opacity.svg', import.meta.url).href;
+const yellowBar = new URL('../images/yellow-bar.svg', import.meta.url).href;
+const grayBar = new URL('../images/gray-bar.svg', import.meta.url).href;
+const triangle = computed(()=> new URL(`../images/${props.triangleColor ?? 'gray'}-triangle${props.triangleColor !== 'gray' ? isDark.value ? '-dark':'-light': ''}.svg`, import.meta.url).href);
 </script>
 
 <template>
