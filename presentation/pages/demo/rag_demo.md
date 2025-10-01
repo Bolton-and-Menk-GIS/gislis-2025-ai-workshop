@@ -73,6 +73,13 @@ The RAG *Cosine Similarity* search is a technique for finding the most relevant 
 This process forms the retrieval step of a RAG pipeline, which then feeds these retrieved documents, along with the original query, to an LLM to generate a context-aware answer. 
 
 ---
+layout: image
+image: /images/cosine-similarity.png
+backgroundSize: 80%
+---
+
+
+---
 
 ## From Search -> Summarization
 
