@@ -1,0 +1,52 @@
+name: Build and deploy presentation to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    name: Build and (optionally) deploy
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: presentation/package-lock.json
+
+      - name: Install dependencies
+        working-directory: presentation
+        run: npm ci
+
+      - name: Build
+        working-directory: presentation
+        run: npm run build
+
+      - name: Ensure index.html exists (redirect fallback)
+        run: |
+          if [ ! -f presentation/dist/index.html ]; then
+            mkdir -p presentation/dist
+            echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=./index.html"></head><body>Redirecting...</body></html>' > presentation/dist/index.html
+          fi
+
+      - name: Deploy to gh-pages (only on push to main)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: presentation/dist
+          publish_branch: gh-pages
+          keep_files: false
