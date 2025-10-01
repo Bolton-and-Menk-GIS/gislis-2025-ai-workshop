@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@cheprasov/qrcode':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@slidev/cli':
         specifier: ^51.8.0
         version: 51.8.2(@babel/parser@7.28.4)(@nuxt/kit@3.19.1)(@types/markdown-it@14.1.2)(@types/node@22.18.1)(@vue/compiler-sfc@3.5.21)(markdown-it-async@2.2.0)(postcss@8.5.6)(sass-embedded@1.93.2)(sass@1.93.2)
@@ -174,6 +177,9 @@ packages:
 
   '@bufbuild/protobuf@2.9.0':
     resolution: {integrity: sha512-rnJenoStJ8nvmt9Gzye8nkYd6V22xUAnu4086ER7h1zJ508vStko4pMvDeQ446ilDTFpV5wnoc5YS7XvMwwMqA==}
+
+  '@cheprasov/qrcode@0.1.0':
+    resolution: {integrity: sha512-26//xIE/Vt+v9WBiSIEhdvbGJkrkVWFu6IAYRgB4zlg2h6wRVnfQLBsrakJJQhSVUhSSIDQ09Imhy0Jw5reVgQ==}
 
   '@chevrotain/cst-dts-gen@11.0.3':
     resolution: {integrity: sha512-BvIKpRLeS/8UbfxXxgC33xOumsacaeCKAjAeLyOn7Pcp95HiRbrpl14S+9vaZLolnbssPIUuiUd8IvgkRyt6NQ==}
@@ -2285,6 +2291,9 @@ packages:
     resolution: {integrity: sha512-uxFIHU0YlHYhDQtV4R9J6a52SLx28BCjT+4ieh7IGbgwVJWO+km431c4yRlREUAsAmt/uMjQUyQHNEPf0M39CA==}
     engines: {node: '>=6'}
 
+  qr.js@0.0.0:
+    resolution: {integrity: sha512-c4iYnWb+k2E+vYpRimHqSu575b1/wKl4XFeJGpFmrJQz5I88v9aY2czh7s0w36srfCM1sXgC/xpoJz5dJfq+OQ==}
+
   quansync@0.2.11:
     resolution: {integrity: sha512-AifT7QEbW9Nri4tAwR5M/uzpBuqfZf+zwaEM/QkzEjj7NBuFD2rBuy0K3dE+8wltbezDV7JMA0WfnCPYRSYbXA==}
 
@@ -3171,6 +3180,10 @@ snapshots:
   '@braintree/sanitize-url@7.1.1': {}
 
   '@bufbuild/protobuf@2.9.0': {}
+
+  '@cheprasov/qrcode@0.1.0':
+    dependencies:
+      qr.js: 0.0.0
 
   '@chevrotain/cst-dts-gen@11.0.3':
     dependencies:
@@ -5721,6 +5734,8 @@ snapshots:
       is-ip: 5.0.1
 
   punycode.js@2.3.1: {}
+
+  qr.js@0.0.0: {}
 
   quansync@0.2.11: {}
 

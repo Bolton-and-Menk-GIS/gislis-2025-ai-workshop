@@ -34,8 +34,9 @@ Caleb Mackey & Phil Nagel
 [Caleb.Mackey@bolton-menk.com](mailto:caleb.mackey@bolton-menk.com)
 
 [Phil.Nagel@bolton-menk.com](mailto:phil.nagel@bolton-menk.com)
-
-
+<div>
+<QRCode />
+</div>
 ---
 src: ./pages/lecture/agenda_and_intro.md
 ---
