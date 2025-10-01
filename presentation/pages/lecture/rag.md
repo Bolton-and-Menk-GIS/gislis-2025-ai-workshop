@@ -13,7 +13,7 @@ layout: cover
 - Keeps responses accurate & grounded in your data  
   - reduces hallucinations 
 
-![rag-flow](/images/rag_workflow.svg)
+<img style="height: 200px;" src="/images/rag_workflow.svg">
 
 ---
 
@@ -65,7 +65,7 @@ layout: section
 - Similarity operators:  
   - `<->` cosine distance  
   - `<#>` inner product  
-- Indexes for fast search (IVFFlat, HNSW)
+- Indexes for fast search ([IVFFlat, HNSW](https://www.tigerdata.com/blog/nearest-neighbor-indexes-what-are-ivfflat-indexes-in-pgvector-and-how-do-they-work))
 
 ```sql
 CREATE TABLE pois (
@@ -92,3 +92,9 @@ CREATE INDEX ON pois
 * RAG = inject ground truth into the model
 
 * In geospatial apps → combine PostGIS filters + vector search + LLM summaries
+
+---
+
+# RAG Demo
+
+[Columbia Heights INPUTiD](https://gis.bolton-menk.com/inputid/?app=ColumbiaHeightsSS4A)

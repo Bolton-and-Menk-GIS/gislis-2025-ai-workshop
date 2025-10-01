@@ -43,7 +43,8 @@ LLMs will often hallucinate and can only give information based on what they wer
 
 
 ---
-
+text-align: center
+---
 # ✍️ Prompt Engineering
 
 ---
@@ -188,7 +189,413 @@ Answer in 2–3 bullet points.
 layout: cover
 ---
 
-# Natural Language Query Demo
+# Survey Drawing Demo
+
+---
+class: center
+---
+## Survey Drawing Flow
+
+```mermaid {scale: 0.55}
+flowchart TD
+  subgraph Backend
+        B[Parse PDF]
+        C[LLM finds legal description]
+        D[LLM Extracts survey info]
+    end
+
+    subgraph Client
+        A[Upload PDF]
+        E[Query PLSS data]
+        F[Draw traverse on map]
+    end
+
+    A --> B
+    B --> C
+    C -->|Found| D
+    C -->|Not found| X[Stop or notify user]
+    D --> E --> F
+
+```
+
+---
+
+###  Prompt: Extract Legal description
+
+````md magic-move
+```md
+You are a cadastral document assistant. 
+Your task is to find the legal land description(s) in a document. 
+The text has been split into numbered paragraphs.
+```
+
+```md
+You are a cadastral document assistant. 
+Your task is to find the legal land description(s) in a document. 
+The text has been split into numbered paragraphs.
+
+This text often begins with phrases like:
+- "That part of the ..."
+- "Commencing at ..."
+- "Beginning at ..."
+- "Legal Description:"
+- or includes references to a Section, Township, and Range.
+- or is under a "PROPOSED DESCRIPTION" header
+```
+
+```md
+You are a cadastral document assistant. 
+Your task is to find the legal land description(s) in a document. 
+The text has been split into numbered paragraphs.
+
+This text often begins with phrases like:
+- "That part of the ..."
+- "Commencing at ..."
+- "Beginning at ..."
+- "Legal Description:"
+- or includes references to a Section, Township, and Range.
+- or is under a "PROPOSED DESCRIPTION" header
+
+### Rules
+- Return JSON only.
+- If a clear legal description is found, set `"legalDescription"` to the exact text and provide a confidence score between 0.0 and 1.0.
+- If the model is not confident or no legal description exists, set `"legalDescription": null` and `"confidence": 0.0`.
+- If you find one or more paragraphs that are legal land descriptions, 
+  include their indices and the extracted text.
+- Exclude unrelated content such as owner names, parcel IDs, surveyor notes, or easements unless they are explicitly included within the legal description block.
+```
+
+```md
+You are a cadastral document assistant. 
+Your task is to find the legal land description(s) in a document. 
+The text has been split into numbered paragraphs.
+
+This text often begins with phrases like:
+- "That part of the ..."
+- "Commencing at ..."
+- "Beginning at ..."
+- "Legal Description:"
+- or includes references to a Section, Township, and Range.
+- or is under a "PROPOSED DESCRIPTION" header
+
+### Rules
+- Return JSON only.
+- If a clear legal description is found, set `"legalDescription"` to the exact text and provide a confidence score between 0.0 and 1.0.
+- If the model is not confident or no legal description exists, set `"legalDescription": null` and `"confidence": 0.0`.
+- If you find one or more paragraphs that are legal land descriptions, 
+  include their indices and the extracted text.
+- Exclude unrelated content such as owner names, parcel IDs, surveyor notes, or easements unless they are explicitly included within the legal description block.
+
+### Output Schema
+{{
+  "legalDescriptions": [
+    {{ 
+      index: <int>,
+      text: "<string>",
+      "confidence": <float between 0.0 and 1.0>
+    }}
+}}
+
+{paragraphs}
+```
+````
+
+---
+
+## Send to LLM with Context
+
+````md magic-move
+```py
+async def extract_legal_description(paragraphs: str, model="gpt-4o-mini"):
+    """Extract the legal description from the text."""
+    prompt = load_prompt_template('extractLegalDescription')
+    messages = [
+        {"role": "system", "content": prompt},
+    ]
+    result = await run_chat_completion(messages, model=model, temperature=0)
+    return LegalDescriptionInfo(**result.response)
+```
+
+```py
+async def extract_legal_description(paragraphs: str, model="gpt-4o-mini"):
+    """Extract the legal description from the text."""
+    prompt = load_prompt_template('extractLegalDescription', paragraphs=paragraphs)
+    messages = [
+        {"role": "system", "content": prompt},
+    ]
+    result = await run_chat_completion(messages, model=model, temperature=0)
+    return LegalDescriptionInfo(**result.response)
+```
+````
+
+---
+
+### Prompt: Parse Legal Description into SurveyInfo
+
+````md magic-move
+```md
+You are a cadastral/GIS assistant. 
+Extract survey information from a legal description
+```
+
+```md
+You are a cadastral/GIS assistant. 
+Extract survey information from a legal description and return JSON only, following this schema:
+
+{{
+    "section": <int>,
+    "township": <int>,
+    "townshipDirection": "N"|"S"|null,
+    "range": <int>,
+    "rangeDirection": "E"|"W"|null,
+    "quarterQuarter": "<two-letter code or null>",
+    "referencePoint": {{
+        "corner": "<string phrase from description>",
+        "divisionLevel": "section"|"quarter"|"forty",
+        "tieLine": {{
+            "bearing": "<Ndd-mm-ssE|...>",
+            "distance": <float>
+        }},
+        "referenceWhere": "<SQL WHERE clause to query anchor polygons>"
+    }},
+    "traverse": [{{"bearing": "<...>", "distance": <float>}}, ...],
+    "area": "<string or null>",
+    "whereClause": "<SQL WHERE clause to query the containing polygon>"
+}}
+```
+
+```md
+You are a cadastral/GIS assistant. 
+Extract survey information from a legal description and return JSON only, following this schema:
+
+{{
+    "section": <int>,
+    "township": <int>,
+    "townshipDirection": "N"|"S"|null,
+    "range": <int>,
+    "rangeDirection": "E"|"W"|null,
+    "quarterQuarter": "<two-letter code or null>",
+    "referencePoint": {{
+        "corner": "<string phrase from description>",
+        "divisionLevel": "section"|"quarter"|"forty",
+        "tieLine": {{
+            "bearing": "<Ndd-mm-ssE|...>",
+            "distance": <float>
+        }},
+        "referenceWhere": "<SQL WHERE clause to query anchor polygons>"
+    }},
+    "traverse": [{{"bearing": "<...>", "distance": <float>}}, ...],
+    "area": "<string or null>",
+    "whereClause": "<SQL WHERE clause to query the containing polygon>"
+}}
+
+### PLSS Field Mapping
+- Section → `FRSTDIVNO`  
+- Township → `TWNSHPNO`  
+- Range → `RANGENO` (zero-padded to 3 digits, e.g. `'023'`)  
+- Quarter → `QSEC`  
+- Forty (quarter–quarter) → `QQSEC` 
+```
+
+```md
+You are a cadastral/GIS assistant. 
+Extract survey information from a legal description and return JSON only, following this schema:
+
+{{
+    "section": <int>,
+    "township": <int>,
+    "townshipDirection": "N"|"S"|null,
+    "range": <int>,
+    "rangeDirection": "E"|"W"|null,
+    "quarterQuarter": "<two-letter code or null>",
+    "referencePoint": {{
+        "corner": "<string phrase from description>",
+        "divisionLevel": "section"|"quarter"|"forty",
+        "tieLine": {{
+            "bearing": "<Ndd-mm-ssE|...>",
+            "distance": <float>
+        }},
+        "referenceWhere": "<SQL WHERE clause to query anchor polygons>"
+    }},
+    "traverse": [{{"bearing": "<...>", "distance": <float>}}, ...],
+    "area": "<string or null>",
+    "whereClause": "<SQL WHERE clause to query the containing polygon>"
+}}
+
+### PLSS Field Mapping
+- Section → `FRSTDIVNO`  
+- Township → `TWNSHPNO`  
+- Range → `RANGENO` (zero-padded to 3 digits, e.g. `'023'`)  
+- Quarter → `QSEC`  
+- Forty (quarter–quarter) → `QQSEC`  
+
+### Lookup Rules for `referenceWhere`
+- **Section corner**: one polygon (the section).  
+- **Quarter corner**: two polygons. Examples:  
+  - *East Quarter Corner* → `QSEC IN ('NE','SE')`  
+  - *West Quarter Corner* → `QSEC IN ('NW','SW')`  
+  - *North Quarter Corner* → `QSEC IN ('NE','NW')`  
+  - *South Quarter Corner* → `QSEC IN ('SE','SW')`  
+- **Center of Section**: all four polygons (NE, NW, SE, SW).  
+- **Quarter–quarter corner**: one polygon (e.g., `QQSEC = 'NESE'`).  
+
+### Rules
+- Use `parcelWhere` for the polygon that contains the final parcel.  
+- Use `referenceWhere` for the polygon(s) needed to locate the anchor point, only create query for "QSEC" or "QQSEC" fields.  
+- Bearings must be quadrant format (e.g. `Ndd-mm-ssE`).  
+- If a course references "on said [line]" (e.g., "on said West line", "on said East line"):
+  - Use the exact bearing that was previously defined for that line earlier in the description.
+  - If only the cardinal direction is given (e.g., "southerly on said West line"), resolve it to the full bearing of the referenced line, not just "S".
+  - Example: If the West line was earlier defined as "S00-15-47W", then "southerly on said West line" must also be "S00-15-47W".
+- Distances are feet.  
+- Always output valid JSON only.  
+
+---
+
+## Legal Description
+{legalDescription}
+
+```
+````
+
+---
+
+### Send to LLM for Survey Info Extraction
+
+````md magic-move
+```py
+async def get_survey_info(legalDescription: str, model="gpt-4o") -> SurveyInfo:
+    """Get structured survey information from a legal description using an LLM."""
+    prompt = load_prompt_template('parseLegalDescription')
+    messages = [
+        {"role": "system", "content": prompt},
+    ]
+    result = await run_chat_completion(messages, model=model, temperature=0)
+
+    # print(json.dumps(result.response, indent=2)) # type: ignore
+    return SurveyInfo(**result.response) 
+```
+
+```py
+async def get_survey_info(legalDescription: str, model="gpt-4o") -> SurveyInfo:
+    """Get structured survey information from a legal description using an LLM."""
+    prompt = load_prompt_template('parseLegalDescription', legalDescription=legalDescription)
+    messages = [
+        {"role": "system", "content": prompt},
+    ]
+    result = await run_chat_completion(messages, model=model, temperature=0)
+
+    # print(json.dumps(result.response, indent=2)) # type: ignore
+    return SurveyInfo(**result.response) 
+```
+````
+
+---
+
+### Example of Extracted Survey Info
+
+```json
+{
+    "section": 22,
+    "township": 108,
+    "townshipDirection": "N",
+    "range": 23,
+    "rangeDirection": "W",
+    "quarterQuarter": null,
+    "referencePoint": {
+        "corner": "West Quarter corner of Section 22",
+        "tieLine": {
+            "bearing": "S00-15-47W",
+            "distance": 29.43
+        },
+        "divisionLevel": "quarter",
+        "referenceWhere": "QSEC IN ('NW','SW')"
+    },
+    "traverse": [
+        {
+            "bearing": "S00-15-47W",
+            "distance": 29.43
+        },
+        {
+            "bearing": "S88-38-36E",
+            "distance": 576.09
+        },
+        {
+            "bearing": "N90-00-00E",
+            "distance": 376.38
+        },
+        {
+            "bearing": "N01-44-28E",
+            "distance": 315.94
+        },
+        {
+            "bearing": "N88-12-36W",
+            "distance": 373.72
+        },
+        {
+            "bearing": "S02-08-17W",
+            "distance": 262.05
+        },
+        {
+            "bearing": "S89-07-52W",
+            "distance": 578.0
+        },
+        {
+            "bearing": "S00-15-47W",
+            "distance": 13.76
+        }
+    ],
+    "area": "3.49 acres",
+    "whereClause": "FRSTDIVNO = 22 AND TWNSHPNO = 108 AND RANGENO = '023' AND QQSEC IS NULL"
+}
+```
+
+---
+
+### Client Side - Draw Survey Info
+
+```ts
+// pseudo code (actual code is much longer and available in git repo)
+async function drawSurveyFeatures(survey: SurveyInfo) {
+  // first query plss to find reference/starting point
+  const pt = await getSectionCornerPoint(survey)
+
+  // now that we have start point, build from traverse info
+  let [ x, y ] = pt
+
+  // polygon coordinates
+  const coords: [number, number][] = [[ x, y]]
+  for (const traverse of survey.traverse){
+    offset = offsetPoint(x, y, traverse.bearing, traverse.distance)
+    x = offset[0]
+    y = offset[1]
+    // add to list of polygon coordinates
+    coords.push([x, y])
+  }
+
+  // build polygon
+  const polygon = new Polygon({ rings: coords })
+
+  // zoom to polygon
+  view.goTo(polygon)
+}
+
+```
+
+---
+
+![survey-plat](/images/survey_plat_screenshot.png)
+
+---
+
+![drawn-survey](/images/drawn_survey_lines.png)
+
+---
+layout: image
+image: /images/noah_heel_click.gif
+backgroundSize: contain
+---
+
 
 ---
 layout: cover

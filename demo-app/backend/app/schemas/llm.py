@@ -10,10 +10,6 @@ class Extent(BaseModel):
     lon: float
     radius: float
 
-class RagRequest(BaseModel):
-    prompt: str
-    extent: Extent
-
 class ModelDetails(BaseModel):
     parent_model: Optional[str] = ""
     format: Optional[str] = None

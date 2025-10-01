@@ -6,12 +6,7 @@ from app.utils.models import validate_model
 from app.utils.logging import logger
 from app.schemas.llm import ClientType, ChatResponse
 from typing import Optional
-import json
-try:
-    import orjson
-except ImportError:  # pragma: nocover
-    import json
-    orjson = json  # type: ignore
+import json # type: ignore
 
 def get_llm_client(client_type: ClientType='openai', base_url: Optional[str]=None, api_key: Optional[str]=None) -> AsyncOpenAI:
     """Get an instance of the LLM client based on the specified type.
@@ -86,7 +81,7 @@ async def run_chat_completion(messages: list, model: str='gpt-3.5-turbo', stream
         # print('after stripping: ', result)
     if result.startswith('{') and result.endswith('}'):
         try:
-            result = orjson.loads(result)
+            result = json.loads(result)
             # result = json.loads(result)
         except Exception as e:
             print('Error parsing JSON:', e)

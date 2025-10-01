@@ -13,4 +13,13 @@ This repo contains the [presentation](./presentation/) and [demo materials](./de
 
 The [demo-app](./demo-app/) features a Full Stack example complete with an API for working with Large Language Models (LLM) to enhance your web applications. 
 
-## Docker Container
+## RAG Prep
+
+```sh
+cd demo-app/backend
+python -m app.data.preload
+```
+
+```sh
+uvicorn app.main:app --port 8000 --reload
+```

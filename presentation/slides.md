@@ -37,9 +37,6 @@ Caleb Mackey & Phil Nagel
 <div>
 <QRCode />
 </div>
----
-src: ./pages/lecture/agenda_and_intro.md
----
 
 
 ---
@@ -55,13 +52,6 @@ src: ./pages/lecture/large_language_models.md
 src: ./pages/lecture/gis_dev_and_takeaways.md
 ---
 
----
-src: ./pages/lecture/ai_assistants.md
----
-
----
-src: ./pages/lecture/rag.md
----
 
 ---
 src: ./pages/lecture/gis_dev_and_takeaways.md
@@ -84,7 +74,19 @@ src: ./pages/lecture/rag.md
 ---
 
 ---
+src: ./pages/demo/rag_demo.md
+---
+
+---
 src: ./pages/demo/natural_language_query.md
+---
+
+---
+src: ./pages/sources.md
+---
+
+---
+src: ./pages/questions.md
 ---
 
 <Toc text-sm minDepth="1" maxDepth="2" />

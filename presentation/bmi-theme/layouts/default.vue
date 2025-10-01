@@ -24,7 +24,7 @@ onSlideLeave(() => {
     <div class="bmi-default--overlay absolute"></div>
     <BottomRight triangle-color="secondary" v-if="showBottomRight" />
     <BrandLogo />
-    <div class="my-auto z-12 relative">
+    <div class="my-auto bmi-default--content z-12 relative" style="flex: 1 0 auto;">
       <slot></slot>
     </div>
   </div>
@@ -36,7 +36,11 @@ html.dark {
 }
 .bmi-default {
   background: url('../images/intro_bkg_flip.jpg') center/cover no-repeat;
-  padding: 1rem 2rem;
+  // padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   &--overlay {
     background-color: var(--slidev-theme-background);
     top: 0;

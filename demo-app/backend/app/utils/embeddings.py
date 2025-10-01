@@ -1,52 +1,84 @@
+import json
 from typing import List, Optional, Literal
-import re
+from app.utils.openai import get_llm_client
+from shapely.geometry import Point, Polygon
+import numpy as np
 
-def normalize_newlines(text: str) -> str:
-    # Replace multiple newlines with a single newline
-    return re.sub(r'\n+', '\n', text).strip()
+async def embed_text(text: str, model: str = "text-embedding-3-small") -> np.ndarray:
+    client = get_llm_client()
+    if client is None:
+        raise ValueError("No AI client configured")
+    resp = await client.embeddings.create(
+        model=model,
+        input=text
+    )
+    return np.array(resp.data[0].embedding) 
+class InMemoryVectorStore:
+    def __init__(self):
+        self.embeddings = []
+        self.metadatas = []
 
-ModelType = Literal["openai", "llama", "huggingface"]
+    def add_vector(self, embedding: list[float], metadata: dict):
+        self.embeddings.append(embedding)
+        self.metadatas.append(metadata)
 
-defaultModels = dict(
-    openai="cl100k_base",
-    llama="meta-llama/Llama-2-7b-hf",
-    huggingface="distilbert-base-uncased",
-)
+    def search(
+        self,
+        query_embedding: list[float],
+        top_k: int = 5,
+        extent: dict | None = None
+    ) -> list[dict]:
+        """
+        Search for top_k items similar to query_embedding, optionally filtered by spatial extent.
 
-def get_tokenizer(model_type: ModelType = 'openai', model_name: Optional[str] = None):
-    """
-    Returns the appropriate tokenizer for the given model type.
-    model_type: "openai", "llama", or "huggingface"
-    model_name: For HuggingFace/Llama, the model repo name (e.g., "meta-llama/Llama-2-7b-hf")
-    """
-    if model_type == "openai":
-        import tiktoken
-        # You can adjust encoding name as needed for your OpenAI model
-        return tiktoken.get_encoding(model_name or defaultModels.get('openai') or 'cl100k_base')
-    else:
-        from transformers import AutoTokenizer
-        if not model_name:
-            model_name = defaultModels.get(model_type or 'llama')
-        return AutoTokenizer.from_pretrained(model_name)
-   
+        extent: {"xmin": float, "ymin": float, "xmax": float, "ymax": float}
+        """
+        if not self.embeddings:
+            print('No embeddings in store')
+            return []
 
-def chunk_by_tokens(
-    text: str,
-    tokenizer,
-    chunk_size: int = 512,
-    overlap: int = 50,
-) -> List[str]:
-    """
-    Chunks text by tokens using the provided tokenizer.
-    """
-    # HuggingFace tokenizers use return_tensors and return_attention_mask, tiktoken does not
-    chunks = []
-    tokens = tokenizer.encode(normalize_newlines(text)) if hasattr(tokenizer, "decode") else tokenizer.encode(text)
-    for i in range(0, len(tokens), chunk_size - overlap):
-        chunk = tokens[i:i + chunk_size]
-        # tiktoken and HF both have decode, but tiktoken's decode expects a list, HF expects ids
-        chunk_text = tokenizer.decode(chunk)
-        chunks.append(chunk_text)
-        if i + chunk_size >= len(tokens):
-            break
-    return chunks
+        # filter candidates by extent
+        candidate_idxs = list(range(len(self.metadatas)))
+        if extent:
+            bbox = Polygon([
+                (extent["xmin"], extent["ymin"]),
+                (extent["xmin"], extent["ymax"]),
+                (extent["xmax"], extent["ymax"]),
+                (extent["xmax"], extent["ymin"])
+            ])
+            candidate_idxs = [
+                i for i, meta in enumerate(self.metadatas)
+                if meta.get("geometry") and
+                   Point(meta["geometry"]["coordinates"]).within(bbox)
+            ]
+
+        if not candidate_idxs:
+            return []
+
+        # restrict embeddings + metadata to candidates
+        matrix = np.array([self.embeddings[i] for i in candidate_idxs])
+        q = np.array(query_embedding)
+
+        # cosine similarity
+        sims = matrix.dot(q) / (np.linalg.norm(matrix, axis=1) * np.linalg.norm(q))
+        top_idx = np.argsort(sims)[::-1][:top_k]
+
+        return [self.metadatas[candidate_idxs[i]] for i in top_idx]
+    
+    def save(self, path: str):
+        data = [
+            {"embedding": emb, "metadata": meta}
+            for emb, meta in zip(self.embeddings, self.metadatas)
+        ]
+        with open(path, "w") as f:
+            json.dump(data, f)
+
+    def load(self, path: str):
+        with open(path, "r") as f:
+            data = json.load(f)
+        self.embeddings = [d["embedding"] for d in data]
+        self.metadatas = [d["metadata"] for d in data]
+
+embeddingStore = InMemoryVectorStore()
+
+

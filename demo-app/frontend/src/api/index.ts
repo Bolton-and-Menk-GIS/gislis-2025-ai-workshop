@@ -67,4 +67,9 @@ export const api = {
    * get survey info from a given legal description
    */
   getSurveyInfo: fetcher.path('/api/survey/get-survey-info').method('post').create(),
+
+  /**
+   * RAG comments query
+   */
+  askQuestionRAG: fetcher.path('/api/rag/query').method('post').create()
 }
