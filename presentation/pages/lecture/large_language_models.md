@@ -187,7 +187,7 @@ backgroundColor: white -->
 💡 **Solution:** retrieval-augmented generation (RAG) or explicit references. More on this later!
 ---
 
-![image](/public/images/AI_Smoking.webp)
+![image](/images/AI_Smoking.webp)
 
 
 ---
