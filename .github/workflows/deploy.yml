@@ -24,25 +24,26 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-
-      - name: Go to presentation dir
-        run: cd presentation
+          cache: 'npm'
+          cache-dependency-path: presentation/package-lock.json
 
       - name: Setup @antfu/ni
         run: npm i -g @antfu/ni
 
       - name: Install dependencies
+        working-directory: presentation
         run: nci
 
       - name: Build
+        working-directory: presentation
         run: nr build --base /${{github.event.repository.name}}/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v2
         with:
-          path: dist
+          path: presentation/dist
 
   deploy:
     environment:
