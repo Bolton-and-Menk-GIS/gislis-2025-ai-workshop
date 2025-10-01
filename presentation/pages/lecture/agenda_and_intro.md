@@ -3,21 +3,19 @@ theme: default
 layout: cover
 ---
 
-# Agenda
-
+## Agenda
 1. What is AI? (context & history)  
 2. Current State of AI  
 3. Generative AI and LLMs 
 4. AI and Supercharging Development
    1. Use cases and examples
    2. Ollama and Local Models 
-   3. Demos
 5. Creating AI-Driven Solutions
    1. Getting better outputs from LLMs
    2. Data-focused AI   
    3. Retrieval-Augmented Generation (RAG) 
    4. Demos 
-    
+ 
 
 ---
 
