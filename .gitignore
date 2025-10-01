@@ -30,3 +30,5 @@ __pycache__
 
 # environment files
 .env
+
+demo-app/backend/static

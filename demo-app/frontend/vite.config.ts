@@ -7,6 +7,9 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 // https://vite.dev/config/
 export default defineConfig({
   base: '/app',
+  build: {
+    outDir: '../backend/static'
+  },
   server: {
     port: 5184,
     proxy: {
