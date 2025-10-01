@@ -21,7 +21,6 @@ async def get_legal_description_from_survey_file(file: Annotated[UploadFile, Fil
         print(f'Using cached survey info for "{file.filename}"')
         legal = survey_cache[file.filename].get('legalDescription')
         if legal:
-            
             return legal
     
     contents = await file.read()

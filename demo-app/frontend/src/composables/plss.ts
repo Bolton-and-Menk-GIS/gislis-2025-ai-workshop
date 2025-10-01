@@ -199,6 +199,8 @@ export const usePLSSLayers = (options: usePLSSLayersOptions) => {
 
       log(`[plss]: found ${fortyFeatures.length} features matching "${survey.referencePoint.divisionLevel}" within section "${survey.section}" using where: ${fortyWhere}: `, fortyFeatures)
 
+      let pt: __esri.Point | undefined = undefined
+
       if (survey.referencePoint.divisionLevel === 'quarter'){
         // group features by QSEC attribute
         const quartersLookup: Record<string, __esri.Graphic[]> = fortyFeatures.reduce((groups, ft) => {
@@ -216,40 +218,37 @@ export const usePLSSLayers = (options: usePLSSLayersOptions) => {
           .filter(f => !!f) as __esri.Polygon[]
 
         // get intersection of quarters to find starting point
-        const pt = getSectionCornerPoint(quarters, survey.referencePoint.corner)
-        
+        pt = getSectionCornerPoint(quarters, survey.referencePoint.corner)
+      } else if (survey.referencePoint.divisionLevel === 'section'){
+        // TODO: SECTION LOGIC
+      }
+      
+      if (pt){
+
         log(`[plss]: intersected section quarters with to get tie point: `, pt)
         const {
           lines,
           tiePoint,
           boundaryPolygon
         } = buildSurveyFeatures(pt.longitude!, pt.latitude!, survey)
-
+  
         log(`[plss]: built survey polygon: `, boundaryPolygon)
         log(`[plss]: cogo lines: `, lines)
         log(`[plss]: tie point: `, tiePoint)
         await boundaryLayer.applyEdits({ addFeatures: [ boundaryPolygon ] })
         await cogoLayer.applyEdits({ addFeatures: lines })
         await tiePointLayer.applyEdits({ addFeatures: [ tiePoint ] })
-
+  
         view.goTo(boundaryPolygon)
       }
+      else {
+        // just zoom to section if no point could be found
+        view.goTo(sectionFeature).then(()=> {
+          const lv = getLayerView(view, sectionsLayer.value)
+          highlight(lv, sectionFeature)
+        })
+      }
 
-
-      // zoom
-      // view.goTo(fortyFeatures).then(()=> {
-        const fortyLv = getLayerView(view, fortysLayer.value)
-        // highlight(lv, fortyFeatures)
-        fortyLv?.highlight(fortyFeatures)
-      // })
-      const lv = getLayerView(view, sectionsLayer.value)
-      highlight(lv, sectionFeature)
-
-    } else {
-      view.goTo(sectionFeature).then(()=> {
-        const lv = getLayerView(view, sectionsLayer.value)
-        highlight(lv, sectionFeature)
-      })
     }
 
   }

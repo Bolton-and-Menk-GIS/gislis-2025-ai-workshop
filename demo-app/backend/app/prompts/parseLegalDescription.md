@@ -48,6 +48,7 @@ Extract survey information from a legal description and return JSON only, follow
   - Use the exact bearing that was previously defined for that line earlier in the description.
   - If only the cardinal direction is given (e.g., "southerly on said West line"), resolve it to the full bearing of the referenced line, not just "S".
   - Example: If the West line was earlier defined as "S00-15-47W", then "southerly on said West line" must also be "S00-15-47W".
+  - Do not include "tieLine" distance and bearing in "traverse" paths
 - Distances are feet.  
 - Always output valid JSON only.  
 
