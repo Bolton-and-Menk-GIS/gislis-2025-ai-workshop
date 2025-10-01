@@ -36,11 +36,13 @@ const {
   }
 });
 
+const welcomeMessage = "Hello! I'm your AI assistant and I'm here to help answer any questions you have about Public Comments. How can I help you?"
+
 if (!lastAssistantMessage.value?.isWelcomeMessage){
   messages.value.push({
     role: 'assistant',
     isWelcomeMessage: true,
-    content: "Hello! I'm your AI assistant and I'm here to help answer any questions you have about Public Comments. How can I help you?"
+    content: welcomeMessage
   });
 }
 
@@ -146,6 +148,7 @@ const onSubmit = async () => {
             class="chatbot--input"
             v-model="userInput"
             placeholder="Type your message..." 
+            @keydown.enter="onSubmit"
           />
           <input class="pico-btn-sm" type="submit" value="Send" :disabled="isBusy" />
         </fieldset>
