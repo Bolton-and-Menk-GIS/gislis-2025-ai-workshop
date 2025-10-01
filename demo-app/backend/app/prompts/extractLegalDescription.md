@@ -12,11 +12,14 @@ This text often begins with phrases like:
 
 ### Rules
 - Return JSON only.
-- If a clear legal description is found, set `"legalDescription"` to the exact text and provide a confidence score between 0.0 and 1.0.
-- If the model is not confident or no legal description exists, set `"legalDescription": null` and `"confidence": 0.0`.
-- If you find one or more paragraphs that are legal land descriptions, 
+- If a clear legal description is found, set `"legalDescription"` to the exact text and provide
+  a confidence score between 0.0 and 1.0.
+- If the model is not confident or no legal description exists, set `"legalDescription": null`
+  and `"confidence": 0.0`.
+- If you find one or more paragraphs that are legal land descriptions,
   include their indices and the extracted text.
-- Exclude unrelated content such as owner names, parcel IDs, surveyor notes, or easements unless they are explicitly included within the legal description block.
+- Exclude unrelated content such as owner names, parcel IDs, surveyor notes, or easements unless
+  they are explicitly included within the legal description block.
 
 ### Output Schema
 {{
