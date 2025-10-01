@@ -1,48 +1,46 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-from sqlalchemy import text
-from app.db import get_db
-from app.schemas.llm import RagRequest, RagResponse
+
+from app.schemas.rag import RagRequest, RagResponse
+from app.utils.embeddings import embeddingStore, embed_text
+from app.utils.openai import get_llm_client
+from pathlib import Path
+
+def check_for_embeddings():
+    if not embeddingStore.embeddings:
+
+        cache_file = Path(__file__).resolve().parent.parent / "data" / "comments_embeddings.json"
+
+        if cache_file.exists():
+            embeddingStore.load(cache_file.as_posix())
+            print(f"✅ Loaded {len(embeddingStore.embeddings)} cached embeddings")
+        else:
+            print("⚠️ No embeddings cache found. Run preprocessing first.")
+
 
 rag_api = APIRouter(prefix="/rag", tags=["rag"])
 
-@rag_api.post("/", response_model=RagResponse)
-def run_rag(request: RagRequest, db: Session = Depends(get_db)):
-    # TODO: generate embedding for request.prompt
-    # For now, use a dummy embedding vector
-    dummy_vec = [0.0] * 1536
+@rag_api.post("/query", response_model=RagResponse)
+async def query(req: RagRequest):
+    check_for_embeddings()
+    query_vec = await embed_text(req.question)
+    results = embeddingStore.search(
+        query_embedding=query_vec.tolist(),
+        top_k=5,
+        extent=req.extent.dict() if req.extent else None
+    )
 
-    sql = text("""
-        SELECT id, name, amenity,
-               ST_AsGeoJSON(geom) as geometry
-        FROM pois
-        WHERE ST_DWithin(
-            geom::geography,
-            ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography,
-            :radius
-        )
-        ORDER BY embedding <-> :vec
-        LIMIT 5
-    """)
+    if not results:
+        return {"answer": "No matching comments in this area.", "features": []}
 
-    rows = db.execute(sql, {
-        "lon": request.extent.lon,
-        "lat": request.extent.lat,
-        "radius": request.extent.radius,
-        "vec": dummy_vec
-    }).fetchall()
+    context = "\n".join([f"- {r['comment']}" for r in results])
+    client = get_llm_client()
+    completion = await client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant summarizing public comments."},
+            {"role": "user", "content": f"Question: {req.question}\n\nRelevant comments:\n{context}"}
+        ]
+    )
+    summary = completion.choices[0].message.content or "No answer generated."
 
-    features = [
-        {
-            "id": r.id,
-            "name": r.name,
-            "amenity": r.amenity,
-            "geometry": r.geometry
-        }
-        for r in rows
-    ]
-
-    return {
-        "summary": f"Top {len(features)} results near you.",
-        "features": features
-    }
+    return RagResponse(answer=summary, features=results)

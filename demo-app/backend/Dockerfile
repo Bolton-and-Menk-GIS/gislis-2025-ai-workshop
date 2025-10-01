@@ -9,12 +9,28 @@ RUN apt-get update && apt-get install -y \
     postgresql-client \
     tesseract-ocr \
     poppler-utils \
+    git \
     && rm -rf /var/lib/apt/lists/*
     
+# manual install of pgvector since it has no wheels and fails to build sometimes
+WORKDIR /tmp
+RUN git clone --branch v0.6.0 https://github.com/pgvector/pgvector.git
+
+# build and install pgvector
+WORKDIR /tmp/pgvector
+RUN make && make install
+
+# remove pgvector source
+WORKDIR /
+RUN rm -rf /tmp/pgvector
 
 COPY requirements.txt .
+COPY migrations/versions ./migrations/versions
+copy alembic.ini .
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install watchfiles
+
+RUN alembic upgrade head
 
 # Copy entrypoint files (but app code will be mounted)
 COPY ./app ./app

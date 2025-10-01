@@ -2,13 +2,13 @@ version: "3.9"
 
 services:
   db:
-    image: postgres:16
+    image: postgis/postgis:15-3.4-alpine
     container_name: demo-db
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: demo
+      POSTGRES_DB: rag_demo
     ports:
       - "5433:5432"
     volumes:
@@ -23,7 +23,7 @@ services:
       - db
     environment:
       PYTHONUNBUFFERED: 1
-      DATABASE_URL: postgresql+psycopg2://postgres:postgres@db:5432/demo
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@db:5432/rag_demo
     ports:
       - "8000:8000"
     volumes:

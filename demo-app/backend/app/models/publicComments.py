@@ -1,9 +1,8 @@
 from sqlalchemy import Column, Integer, String, Float, BigInteger
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
+from pgvector.sqlalchemy import Vector
 from geoalchemy2 import Geometry
-
-class Base(DeclarativeBase):
-    pass
+from app.db import Base
 
 class PublicComment(Base):
     __tablename__ = "public_comments"
@@ -30,4 +29,5 @@ class PublicComment(Base):
     global_id: Mapped[str] = mapped_column(String, nullable=True)
     map_id: Mapped[int] = mapped_column(Integer, nullable=True)
     # Point geometry in WGS84 (SRID 4326)
-    geometry: Mapped[str] = mapped_column(Geometry(geometry_type="POINT", srid=4326), nullable=False)
+    geometry: Mapped[str] = mapped_column(Geometry(geometry_type="POINT", srid=4326, spatial_index=True), nullable=False)
+    embedding = Column(Vector(1536)) # Specify the dimension of your vectors
