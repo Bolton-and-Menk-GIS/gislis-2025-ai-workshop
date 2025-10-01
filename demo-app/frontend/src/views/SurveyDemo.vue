@@ -6,25 +6,19 @@ import { updateHook, log } from '@/utils';
 import type { SurveyInfo } from '@/typings';
 import type { ArcgisMapCustomEvent } from '@arcgis/map-components';
 const MapViewer = defineAsyncComponent(() => import('./MapViewer.vue'));
-const ChatBot = defineAsyncComponent(() => import('@/components/ChatBot.vue'));
+
 const MeasureWidget = defineAsyncComponent(() => import('@/components/MeasureWidget.vue'));
 const PDFUploader = defineAsyncComponent(() => import('@/components/PDFUploader.vue'))
 
 const appStore = useAppState()
 
-const chatExpand = useTemplateRef<HTMLArcgisExpandElement>('chatExpand');
+
 const pdfExpand = useTemplateRef<HTMLArcgisExpandElement>('pdfExpand');
 const pdfUploader = useTemplateRef<InstanceType<typeof PDFUploader>>('pdfUploader');
 const surveyInfos = ref<SurveyInfo[]>([]);
 const legalDescriptions = ref<string[]>([]);
 
 const demoConfig = appStore.config.demos.survey
-
-const onCloseChat = () => {
-  if (chatExpand.value) {
-    chatExpand.value.collapse();
-  }
-}
 
 const onClosePDF = () => {
   if (pdfExpand.value) {
@@ -47,7 +41,6 @@ const onUploadPDF = async (file: File) => {
     console.error('Error uploading and extracting PDF:', error)
   }
 }
-
 
 const onMapReady = (e: ArcgisMapCustomEvent<void>) => {
   console.log('Map is ready!', e);
@@ -123,21 +116,6 @@ const clearPDF = () => {
               </calcite-accordion>
             </div>
           </div>
-        </arcgis-placement>
-      </arcgis-expand>
-
-      <arcgis-expand 
-        ref="chatExpand"
-        position="top-right" 
-        expand-icon="effects" 
-        expand-tooltip="Chat with the map"
-      >
-        <arcgis-placement>
-          <ChatBot 
-            url="http://localhost:8000/api/chat"
-            storage-key="map-chat-messages"
-            @close="onCloseChat"
-          />
         </arcgis-placement>
       </arcgis-expand>
 

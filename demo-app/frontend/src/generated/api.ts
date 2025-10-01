@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/api/rag/": {
+    "/api/rag/query": {
         parameters: {
             query?: never;
             header?: never;
@@ -13,8 +13,8 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Run Rag */
-        post: operations["run_rag_api_rag__post"];
+        /** Query */
+        post: operations["query_api_rag_query_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -286,12 +286,14 @@ export interface components {
         };
         /** Extent */
         Extent: {
-            /** Lat */
-            lat: number;
-            /** Lon */
-            lon: number;
-            /** Radius */
-            radius: number;
+            /** Xmin */
+            xmin: number;
+            /** Ymin */
+            ymin: number;
+            /** Xmax */
+            xmax: number;
+            /** Ymax */
+            ymax: number;
         };
         /** GetSurveyRequest */
         GetSurveyRequest: {
@@ -409,6 +411,16 @@ export interface components {
              */
             content: string[];
         };
+        /** PointGeometry */
+        PointGeometry: {
+            /**
+             * Type
+             * @default Point
+             */
+            type: string;
+            /** Coordinates */
+            coordinates: number[];
+        };
         /** PromptTokensDetails */
         PromptTokensDetails: {
             /** Audio Tokens */
@@ -418,18 +430,28 @@ export interface components {
         } & {
             [key: string]: unknown;
         };
+        /** RagFeature */
+        RagFeature: {
+            /** Objectid */
+            objectid: number;
+            /** Map Id */
+            map_id?: number | null;
+            geometry: components["schemas"]["PointGeometry"];
+            /** Comment */
+            comment: string;
+        };
         /** RagRequest */
         RagRequest: {
-            /** Prompt */
-            prompt: string;
-            extent: components["schemas"]["Extent"];
+            /** Question */
+            question: string;
+            extent?: components["schemas"]["Extent"] | null;
         };
         /** RagResponse */
         RagResponse: {
-            /** Summary */
-            summary: string;
+            /** Answer */
+            answer: string;
             /** Features */
-            features?: Record<string, never>[];
+            features?: components["schemas"]["RagFeature"][];
         };
         /** ReferencePoint */
         ReferencePoint: {
@@ -457,7 +479,7 @@ export interface components {
             /** Rangedirection */
             rangeDirection: string;
             /** Quarterquarter */
-            quarterQuarter: string;
+            quarterQuarter: string | null;
             referencePoint: components["schemas"]["ReferencePoint"];
             /** Traverse */
             traverse: components["schemas"]["TraverseSegment"][];
@@ -498,7 +520,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    run_rag_api_rag__post: {
+    query_api_rag_query_post: {
         parameters: {
             query?: never;
             header?: never;

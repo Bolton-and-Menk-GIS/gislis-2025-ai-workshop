@@ -62,3 +62,23 @@ export class Deferred<T = unknown> {
     this._reject(value);
   }
 }
+
+/**
+ * debounce a function
+ * 
+ * @see https://blog.webdevsimplified.com/2022-03/debounce-vs-throttle/
+ *  
+ * @param cb - the callback function
+ * @param delay - the time to delay in milliseconds
+ * @returns 
+ */
+export function debounce<F extends (...args: unknown[])=> void>(cb: F, delay = 250) {
+  let timeout: ReturnType<typeof setTimeout>
+
+  return (...args: Parameters<F>) => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      cb(...args) 
+    }, delay)
+  }
+}

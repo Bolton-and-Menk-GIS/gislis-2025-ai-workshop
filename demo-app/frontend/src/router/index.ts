@@ -19,6 +19,11 @@ const router = createRouter({
       path: '/survey',
       name: 'Survey',
       component: ()=> import('@/views/SurveyDemo.vue')
+    },
+    {
+      path: '/rag',
+      name: 'RAG',
+      component: ()=> import('@/views/RAGDemo.vue')
     }
   ],
 })
