@@ -24,6 +24,7 @@ mdc: true
 # open graph
 # seoMeta:
 #  ogImage: https://cover.sli.dev
+favicon: /images/favicon.ico
 ---
 
 # Resistance is Futile: Embracing AI in GIS Web Development
