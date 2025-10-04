@@ -590,6 +590,11 @@ async function drawSurveyFeatures(survey: SurveyInfo) {
 
 ---
 
+![legal description](/images/legalDesc.png)
+
+
+---
+
 ![survey-plat](/images/survey_plat_screenshot.png)
 
 ---

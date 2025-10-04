@@ -98,3 +98,7 @@ CREATE INDEX ON pois
 # RAG Demo
 
 [Columbia Heights INPUTiD](https://gis.bolton-menk.com/inputid/?app=ColumbiaHeightsSS4A)
+
+---
+
+![rag-results](/images/rag-results.png)
