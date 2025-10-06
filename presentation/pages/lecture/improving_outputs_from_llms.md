@@ -595,6 +595,14 @@ async function drawSurveyFeatures(survey: SurveyInfo) {
 
 ---
 
+<center>
+  <img src="/images/quarter_corners_side.png" width='52%' />
+</center>
+
+<!-- ![section-point](/images/quarter_corners_side.png) -->
+
+---
+
 ![survey-plat](/images/survey_plat_screenshot.png)
 
 ---

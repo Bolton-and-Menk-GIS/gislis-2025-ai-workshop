@@ -1,11 +1,11 @@
-## Natural Language Query Demo
+## Natural Language Query Demo (Context Enrichment)
 
 *Goal - create a reusable chat interface where users can use natural language to query features in the map.:* 
 
 - determine user intent (i.e. does user want to query a map layer?)
-- determine target layer
-- create a `WHERE` clause matching the user request
-- select and zoom to features
+- determine target layer, enrich context with schema and sample records
+- create a `WHERE` clause matching the user request and return to client
+- client side - receive *where* clause and target layer, select and zoom to features
 
 ---
 layout: image
