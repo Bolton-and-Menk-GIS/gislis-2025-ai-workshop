@@ -1,9 +1,13 @@
 from pydantic import BaseModel, Field, ConfigDict
-from typing import List, Optional, Literal, Any
+from typing import List, Optional, Literal, Any, TypeVar, Generic
 from app.schemas.prompts import AskPromptType
 from openai.types.completion_usage import CompletionUsage
 
 ClientType = Literal['openai', 'ollama', 'huggingface']
+
+T = TypeVar('T')
+Context = TypeVar('Context')
+Response = TypeVar('Response')
 
 class Extent(BaseModel):
     lat: float
@@ -42,12 +46,12 @@ class RagResponse(BaseModel):
     summary: str
     features: list[dict] = Field(default_factory=list)
 
-class ChatPayloadBase(BaseModel):
+class ChatPayloadBase(BaseModel, Generic[T]):
     model: str = Field(default='gpt-3.5-turbo')
     temperature: Optional[float] = Field(default=0.7, ge=0, le=2)
     max_tokens: Optional[int] = 4096
     timeout: Optional[int] = 180
-    context: Optional[dict] = None
+    context: Optional[T] = None
 
     class Config:
         model_config = ConfigDict(extra="allow")
@@ -60,9 +64,9 @@ class ChatPayload(ChatPayloadBase):
     stream: bool = Field(default=True)
     messages: List[dict] = Field(default_factory=list)
 
-class ChatResponse(BaseModel):
-    response: Any
-    context: Optional[dict] = None
+class ChatResponse(BaseModel, Generic[Response, Context]):
+    response: Response
+    context: Optional[Context] = None
     model: str
     usage: Optional[CompletionUsage] = None
 

@@ -13,6 +13,7 @@ async def embed_text(text: str, model: str = "text-embedding-3-small") -> np.nda
         input=text
     )
     return np.array(resp.data[0].embedding) 
+
 class InMemoryVectorStore:
     def __init__(self):
         self.embeddings = []

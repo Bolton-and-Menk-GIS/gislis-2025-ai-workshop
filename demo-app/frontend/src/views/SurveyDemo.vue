@@ -154,6 +154,10 @@ const clearPDF = () => {
 </template>
 
 <style lang="scss">
+#survey-map {
+  height: calc(100vh - 60px);
+  width: 100%;
+}
 .survey-pdf--legal {
   max-width: 380px;
 }

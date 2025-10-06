@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends
 
 from app.schemas.rag import RagRequest, RagResponse
 from app.utils.embeddings import embeddingStore, embed_text
-from app.utils.openai import get_llm_client
+from app.utils.openai import run_chat_completion
+from app.utils.prompts import load_prompt_template
 from pathlib import Path
 
 def check_for_embeddings():
@@ -32,15 +33,14 @@ async def query(req: RagRequest):
     if not results:
         return {"answer": "No matching comments in this area.", "features": []}
 
-    context = "\n".join([f"- {r['comment']}" for r in results])
-    client = get_llm_client()
-    completion = await client.chat.completions.create(
+    comments = "\n".join([f"- {r['comment']}" for r in results])
+
+    prompt = load_prompt_template("publicComments", question=req.question, comments=comments)
+    print('prompt', prompt )
+    response = await run_chat_completion(
+        messages=[{"role": "user", "content": prompt}],
         model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant summarizing public comments."},
-            {"role": "user", "content": f"Question: {req.question}\n\nRelevant comments:\n{context}"}
-        ]
     )
-    summary = completion.choices[0].message.content or "No answer generated."
+    summary = response.response or "No answer generated."
 
     return RagResponse(answer=summary, features=results)

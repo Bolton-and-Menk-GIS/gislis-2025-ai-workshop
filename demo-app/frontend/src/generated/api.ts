@@ -176,7 +176,7 @@ export interface components {
              */
             timeout: number | null;
             /** Context */
-            context?: Record<string, never> | null;
+            context?: unknown | null;
             /** Text */
             text: string;
             /**
@@ -253,7 +253,7 @@ export interface components {
             /** Response */
             response: unknown;
             /** Context */
-            context?: Record<string, never> | null;
+            context?: unknown | null;
             /** Model */
             model: string;
             usage?: components["schemas"]["CompletionUsage"] | null;

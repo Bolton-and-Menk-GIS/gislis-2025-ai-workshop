@@ -15,7 +15,7 @@ const mapRef = useTemplateRef<HTMLArcgisMapElement>('mapRef');
 // });
 // type Props = Pick<HTMLArcgisMapElement, 'itemId' | 'basemap' | 'center' | 'zoom' /* vue-ignore */ > & {
 type Props = {
-  zoom?: number;
+  zoom?: number | string;
   center?: __esri.Point | number[] | string;
   itemId?: string;
   basemap?: string | __esri.Basemap;

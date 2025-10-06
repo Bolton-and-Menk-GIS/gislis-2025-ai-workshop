@@ -200,7 +200,7 @@ export const usePLSSLayers = (options: usePLSSLayersOptions) => {
       log(`[plss]: found ${fortyFeatures.length} features matching "${survey.referencePoint.divisionLevel}" within section "${survey.section}" using where: ${fortyWhere}: `, fortyFeatures)
 
       let pt: __esri.Point | undefined = undefined
-
+      debugger
       if (survey.referencePoint.divisionLevel === 'quarter'){
         // group features by QSEC attribute
         const quartersLookup: Record<string, __esri.Graphic[]> = fortyFeatures.reduce((groups, ft) => {

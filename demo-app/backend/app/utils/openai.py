@@ -8,6 +8,7 @@ from app.schemas.llm import ClientType, ChatResponse
 from typing import Optional
 import json # type: ignore
 
+
 def get_llm_client(client_type: ClientType='openai', base_url: Optional[str]=None, api_key: Optional[str]=None) -> AsyncOpenAI:
     """Get an instance of the LLM client based on the specified type.
 
@@ -31,7 +32,15 @@ def get_llm_client(client_type: ClientType='openai', base_url: Optional[str]=Non
         api_key=api_key
     )
 
-async def run_chat_completion(messages: list, model: str='gpt-3.5-turbo', stream=True, websocket: Optional[WebSocket]=None, max_tokens: Optional[int]=4096, timeout: Optional[int]=180, temperature: Optional[float]=0.7, **kwargs) -> ChatResponse:
+async def run_chat_completion(
+        messages: list, 
+        model: str='gpt-3.5-turbo', 
+        stream=True, 
+        websocket: Optional[WebSocket]=None, 
+        max_tokens: Optional[int]=4096, 
+        timeout: Optional[int]=180, 
+        temperature: Optional[float]=0.7, **kwargs
+    ) -> ChatResponse:
     """Run chat completion using the OpenAI API.
 
     Args:
@@ -75,7 +84,7 @@ async def run_chat_completion(messages: list, model: str='gpt-3.5-turbo', stream
     )
 
     result = response.choices[0].message.content.strip()
-    if result.startswith('```json') and result.endswith('```'):
+    if result.startswith('```') and result.rstrip().endswith('```'):
         # print('Stripping code block markers from JSON response: ', result)
         result = '\n'.join(result.split('\n')[1:-1]).strip()
         # print('after stripping: ', result)

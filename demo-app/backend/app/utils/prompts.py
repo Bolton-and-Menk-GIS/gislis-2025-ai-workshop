@@ -4,7 +4,7 @@ from typing import Optional
 
 default_prompt_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'prompts'))
 
-def load_prompt_template(name: str='ask', template_path: Optional[str]=default_prompt_path, ext: Optional[str]='md', context: Optional[dict]=None, skip_formatting: bool=False, **kwargs) -> str:
+def load_prompt_template(name: str='ask', template_path: Optional[str]=default_prompt_path, ext: Optional[str]='md', context: Optional[dict | str]=None, skip_formatting: bool=False, **kwargs) -> str:
     """Load a prompt template from a file.
 
     Args:

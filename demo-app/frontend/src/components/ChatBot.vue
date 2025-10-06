@@ -1,6 +1,8 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { useChatFeatures, type UseChatFeaturesOptions } from '@/composables';
-import type { ChatMessage } from '@/typings';
+import type { ChatMessage, RagResponse } from '@/typings';
+import { nextTick, watch } from 'vue';
 import { api } from '@/api';
 
 interface Props extends Pick<UseChatFeaturesOptions, | 'storageKey' | 'clearHistory'> {
@@ -10,7 +12,9 @@ interface Props extends Pick<UseChatFeaturesOptions, | 'storageKey' | 'clearHist
 
 const emit = defineEmits<{
   (e: 'message-received', msg: ChatMessage): void;
+  (e: 'rag-response', response: RagResponse): void;
   (e: 'connected', ws: WebSocket): void;
+  (e: 'clear-history'): void;
   (e: 'close'): void;
 }>();
 
@@ -36,6 +40,8 @@ const {
   }
 });
 
+const honorExtent = ref(true)
+
 const welcomeMessage = "Hello! I'm your AI assistant and I'm here to help answer any questions you have about Public Comments. How can I help you?"
 
 if (!lastAssistantMessage.value?.isWelcomeMessage){
@@ -44,6 +50,11 @@ if (!lastAssistantMessage.value?.isWelcomeMessage){
     isWelcomeMessage: true,
     content: welcomeMessage
   });
+}
+
+const formatResponseMessage = (msg: string) => {
+  // Add any formatting needed for the response message here
+  return msg;
 }
 
 const onSubmit = async () => {
@@ -62,7 +73,7 @@ const onSubmit = async () => {
     const response = await api.askQuestionRAG({
       question: userMessage.content,
       // @ts-expect-error // type mismatch
-      extent: extent, 
+      extent: honorExtent.value ?  extent: undefined, 
     })
     if (response && response.data) {
       const msg = {
@@ -72,6 +83,7 @@ const onSubmit = async () => {
       } as ChatMessage<typeof response.data.features>;
       messages.value.push(msg);
       emit('message-received', msg);
+      emit('rag-response', response.data);
     }
   } catch (error) {
     console.error('Error sending message:', error);
@@ -84,9 +96,28 @@ const onSubmit = async () => {
   }
 };
 
-// dev test
-// isBusy.value = true
+watch(()=> lastAssistantMessage.value, 
+  (newMsg) => { 
+    if (newMsg && !newMsg.isWelcomeMessage) {
+      console.log('New assistant message:', newMsg);
+      // scroll to top of last message after next tick
+      nextTick(() => {
+        const container = document.querySelector('.chatbot--scroll');
+        const messages = container?.getElementsByClassName('chatbot-message');
+        if (messages && messages.length) {
+          const lastMessage = messages[messages.length - 1] as HTMLElement;
+          lastMessage?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+      }
+    },
+  { immediate: true }
+)
 
+const clear = ()=> {
+  clearMessages();
+  emit('clear-history');
+}
 </script>
 
 <template>
@@ -102,7 +133,7 @@ const onSubmit = async () => {
               class="icon-btn--flat pr-sm"
               data-tooltip="Clear Chat History" 
               data-placement="bottom" 
-              @click="clearMessages" 
+              @click="clear" 
             >
               <span class="material-symbols-outlined">
                 clear_all
@@ -128,7 +159,7 @@ const onSubmit = async () => {
       <div v-for="(msg, index) in messages" :key="index">
         <div :class="`chatbot-message chatbot-message--${msg.role.toLowerCase()}`">
           <div class="bubble">
-            <strong>{{ msg.role === 'user' ? 'You' : 'Bot' }}:</strong> {{ msg.content }} 
+            <strong>{{ msg.role === 'user' ? 'You' : 'Bot' }}:</strong> <span class="msg-content" v-html="msg.content"></span>
           </div>
         </div>
       </div>
@@ -141,6 +172,13 @@ const onSubmit = async () => {
     
     <footer class="chatbot--user-form mt-sm">
       <form class="pico" @submit.prevent.stop="onSubmit">
+        <fieldset class="text-center px-sm pt-md">
+          <label for="honorExtent">
+            <input type="checkbox" role="switch" id="honorExtent" name="honorExtent" v-model="honorExtent" />
+            Only search within the current map extent
+          </label>
+        </fieldset>
+
         <fieldset role="group">
           <textarea 
             name="userInput"
@@ -150,7 +188,13 @@ const onSubmit = async () => {
             placeholder="Type your message..." 
             @keydown.enter="onSubmit"
           />
-          <input class="pico-btn-sm" type="submit" value="Send" :disabled="isBusy" />
+          <button 
+            class="pico pico-btn-sm" 
+            type="submit" 
+            style="min-width: 50px;"
+            :disabled="isBusy" 
+            :aria-busy="isBusy"
+          >Send</button>
         </fieldset>
       </form>
     </footer>
@@ -162,6 +206,10 @@ const onSubmit = async () => {
 .pico input, .pico optgroup, .pico select, .pico textarea {
   line-height: var(--pico-line-height);
   font-size: 0.75rem;
+}
+
+.msg-content, .msg-content * {
+  color: white !important;
 }
 
 .chatbot {
@@ -189,7 +237,7 @@ const onSubmit = async () => {
     flex-direction: column;
     height: 700px;
     max-height: 80vh;
-    min-width: 300px;
+    width: 400px;
     max-width: 40vw;
     border: 1px solid var(--pico-secondary-border);
   }
