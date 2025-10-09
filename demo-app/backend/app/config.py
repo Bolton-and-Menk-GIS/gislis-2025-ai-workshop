@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 DEFAULT_OPENAI_URL = 'https://api.openai.com/v1'
-DEFAULT_OLLAMA_URL = 'http://host.docker.internal:11434'
+DEFAULT_OLLAMA_URL = 'http://localhost:11434'
 DEFAULT_CONNECTION_STRING = 'postgresql+asyncpg://postgres:postgres@postgres:5432/rag_demo'
 
 class Settings(BaseSettings):
