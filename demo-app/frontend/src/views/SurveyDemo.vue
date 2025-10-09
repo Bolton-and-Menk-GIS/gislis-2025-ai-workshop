@@ -21,12 +21,6 @@ const legalDescriptions = ref<string[]>([]);
 
 const demoConfig = appStore.config.demos.survey
 
-const onClosePDF = () => {
-  if (pdfExpand.value) {
-    pdfExpand.value.collapse();
-  }
-}
-
 const pdf = usePDF()
 
 const onUploadPDF = async (file: File) => {

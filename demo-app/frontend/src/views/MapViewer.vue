@@ -10,11 +10,7 @@ const emit = defineEmits<{
 }>();
 
 const mapRef = useTemplateRef<HTMLArcgisMapElement>('mapRef');
-// mapRef.value?.addEventListener('arcgisViewReadyChange', (e) => {
-//   e.target.view
-//   emit('map-ready', e as CustomEvent);
-// });
-// type Props = Pick<HTMLArcgisMapElement, 'itemId' | 'basemap' | 'center' | 'zoom' /* vue-ignore */ > & {
+
 type Props = {
   zoom?: number | string;
   center?: __esri.Point | number[] | string;

@@ -18,13 +18,7 @@ const layerView = shallowRef<__esri.FeatureLayerView>();
 
 const clearLayerFilter = () => {
   selectedOIDs.value = [];
-  // if (layerView.value) {
-  //   layerView.value.featureEffect = null;
-  // }
 }
-
-selectedOIDs.value = [179]
-
 
 const onMapReady = (e: ArcgisMapCustomEvent<void>)  => {
   log('[RAG Demo]: Map is ready!', e);
