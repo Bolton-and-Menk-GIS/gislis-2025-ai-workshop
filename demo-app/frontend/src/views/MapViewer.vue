@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { onMounted, watch, useTemplateRef } from 'vue';
-import { log } from '@/utils';
+import { onMounted, watch, useTemplateRef, onUnmounted } from 'vue';
 import { useAppState } from '@/stores/app';
 import type { ArcgisMapCustomEvent } from '@arcgis/map-components';
+import { log } from '@/utils';
 
 const emit = defineEmits<{
   (e: 'map-ready', event: ArcgisMapCustomEvent<void>): void;
+  (e: 'destroyed'): void;
 }>();
 
 const mapRef = useTemplateRef<HTMLArcgisMapElement>('mapRef');
@@ -69,10 +70,20 @@ const onMapLoaded = (e: ArcgisMapCustomEvent<void>) => {
   emit('map-ready', e);
 };
 
+onUnmounted(() => {
+  if (mapRef.value) {
+    // Remove the element from the DOM
+    mapRef.value.remove()
+    emit('destroyed');
+    log('MapViewer: map element removed from DOM on unmount');
+  }
+})
+
 </script>
 
 <template>
   <arcgis-map 
+    :key="$route.fullPath"
     v-bind="(bindableProps as any)" 
     ref="mapRef"
     @arcgis-view-ready-change="onMapLoaded" 
