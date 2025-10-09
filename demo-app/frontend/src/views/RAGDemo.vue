@@ -5,6 +5,7 @@ import { watch as esriWatch } from '@arcgis/core/core/reactiveUtils';
 import { webMercatorToGeographic } from '@arcgis/core/geometry/support/webMercatorUtils';
 import { debounce, log, updateHook } from '@/utils';
 import { useStorage } from '@vueuse/core';
+import { useAppState } from '@/stores';
 import FeatureEffect from '@arcgis/core/layers/support/FeatureEffect';
 import type { RagResponse } from '@/typings';
 
@@ -16,6 +17,9 @@ const extent = ref<__esri.ExtentProperties>();
 const selectedOIDs = useStorage<number[]>('rag-selected-oids', [], localStorage, { mergeDefaults: true });
 const layerView = shallowRef<__esri.FeatureLayerView>();
 
+const appStore = useAppState()
+const demoConfig = appStore.config.demos.rag
+
 const clearLayerFilter = () => {
   selectedOIDs.value = [];
 }
@@ -26,7 +30,9 @@ const onMapReady = (e: ArcgisMapCustomEvent<void>)  => {
 
   const layer = view.map?.layers.find(l => l.title === 'Public Comments') as __esri.FeatureLayer;
 
-  view.whenLayerView(layer).then((lv) => {
+  view.whenLayerView(layer).then(async (lv) => {  
+    // hide empty comments
+    layer.definitionExpression = "Comment <> '-' AND Comment IS NOT NULL"; 
     log('[RAG Demo]: found "Public Comments" layer...');
     layerView.value = lv;
     updateHook({ layerView: lv });
