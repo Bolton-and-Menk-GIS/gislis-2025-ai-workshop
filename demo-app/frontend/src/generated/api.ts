@@ -457,6 +457,8 @@ export interface components {
         ReferencePoint: {
             /** Corner */
             corner: string;
+            /** Cornerdir */
+            cornerDir?: ("NE" | "NW" | "SE" | "SW" | "N" | "S" | "E" | "W" | "C") | null;
             tieLine: components["schemas"]["TieLine"];
             /**
              * Divisionlevel
