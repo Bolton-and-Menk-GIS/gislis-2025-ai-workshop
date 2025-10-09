@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, shallowRef } from 'vue'
+import { ref, shallowRef, computed } from 'vue'
 import * as pdfjsLib from 'pdfjs-dist'
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker?url'
 
@@ -14,6 +14,7 @@ const busy = ref(false)
 const pdfFile = shallowRef<File | null>(null)
 const thumbnailUrl = ref<string | null>(null)
 const error = ref<string | null>(null)
+const pdfPreviewUrl = computed(()=> pdfFile.value ? URL.createObjectURL(pdfFile.value): '')
 
 const processFile = async (files: File[]) => {
   busy.value = true
@@ -32,6 +33,12 @@ const processFile = async (files: File[]) => {
     busy.value = false
   }
 } 
+
+const openPDFPreview = () => {
+  if (pdfFile.value) {
+    window.open(pdfPreviewUrl.value, '_blank')
+  }
+}
 
 function handleDrop(e: DragEvent) {
   e.preventDefault()
@@ -87,7 +94,12 @@ const reset = ()=> {
     <div class="pdf-preview-container pa-md" v-if="thumbnailUrl">
       <div class="thumbnail-preview">
         
-        <img :src="thumbnailUrl" alt="PDF thumbnail" />
+        <img 
+          :src="thumbnailUrl" 
+          alt="PDF thumbnail" 
+          class="cursor-pointer"
+          @click="openPDFPreview"
+        />
         <calcite-button 
           class="thumbnail-clear float-right" 
           kind="danger" 
@@ -121,6 +133,22 @@ const reset = ()=> {
         
       </label>
     </div>
+
+    <!-- <calcite-dialog
+      v-show="showPDFPreview && pdfFile"
+      open modal
+      :heading="pdfFile?.name ?? 'PDF Preview'"
+      id="pdf-preview-dialog"
+    >
+      <div class="pdf-preview pa-md">
+        <iframe 
+          v-if="pdfFile" 
+          :src="pdfPreviewUrl" 
+          width="100%" 
+          height="500px"
+        ></iframe>
+      </div>
+    </calcite-dialog> -->
   </article>
 </template>
 
