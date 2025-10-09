@@ -29,11 +29,12 @@ const onUploadPDF = async (file: File) => {
   try {
     const result = await pdf.uploadFileAndExtractSurveyInfo()
     log('PDF Upload and Extract Result:', result)
-    surveyInfos.value.push(...result.surveyInfoResults)
+    surveyInfos.value = result.surveyInfoResults ?? []
     legalDescriptions.value = result.legalDescriptions?.map(ld => ld.text) || []
 
     if (!legalDescriptions.value.length) {
-      
+      // TODO: show error message
+      showLegalDescriptionError.value = true;
     }
     
   } catch (error) {
@@ -42,14 +43,14 @@ const onUploadPDF = async (file: File) => {
 }
 
 const onMapReady = (e: ArcgisMapCustomEvent<void>) => {
-  console.log('Map is ready!', e);
+  console.log('[SurveyDemo]: Map is ready!', e);
   const view = e.target!.view;
 
   const plss = usePLSSLayers({ view });
   updateHook({ view, map: view.map, plss })
 
-  // Watch for both to be ready
-  watch([surveyInfos.value], async ([surveys]) => {
+  // draw survey boundaries when survey infos change
+  watch(()=> surveyInfos.value, async (surveys) => {
     log('Survey Infos changed:', surveys)
     if (surveys.length) {
       // when new survey infos are added, create boundaries
