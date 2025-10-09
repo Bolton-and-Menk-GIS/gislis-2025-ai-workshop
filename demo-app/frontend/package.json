@@ -12,14 +12,13 @@
     "preview": "vite preview",
     "test:unit": "vitest",
     "test:e2e": "playwright test",
-    "build": "vite build",
+    "build": "vite build --emptyOutDir",
     "type-check": "vue-tsc --build",
     "lint:oxlint": "oxlint . --fix -D correctness --ignore-path .gitignore",
     "lint:eslint": "eslint . --fix",
     "lint": "run-s lint:*",
     "format": "prettier --write src/",
-    "build:openapi": "openapi-typescript http://localhost:8000/openapi.json -o src/generated/api.ts",
-    "prebuild": "npm run build:openapi"
+    "build:openapi": "openapi-typescript http://localhost:8000/openapi.json -o src/generated/api.ts"
   },
   "dependencies": {
     "@arcgis/core": "^4.33.14",

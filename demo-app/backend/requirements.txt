@@ -10,5 +10,6 @@ pdfplumber
 python-multipart
 pytesseract
 Pillow
+pytest
 tiktoken
 transformers

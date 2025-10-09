@@ -21,7 +21,7 @@ async def main():
     for feature in features:
         props = feature.get("properties", {})
         text = props.get("Comment")
-        if not text or not text.strip():
+        if not text or len(text.strip() or '') < 10:
             continue  # skip blank comments
 
         # Create embedding

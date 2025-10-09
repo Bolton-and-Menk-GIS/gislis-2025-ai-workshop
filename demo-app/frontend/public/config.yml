@@ -13,3 +13,5 @@ demos:
   rag:
     title: RAG
     description: Retrieve and generate content using AI.
+    map:
+      webmapId: 751d520b5f384283aab7f6ff09bcd78e
