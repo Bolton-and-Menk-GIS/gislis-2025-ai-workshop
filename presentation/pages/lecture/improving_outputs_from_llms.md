@@ -609,12 +609,6 @@ async function drawSurveyFeatures(survey: SurveyInfo) {
 
 ![drawn-survey](/images/drawn_survey_lines.png)
 
----
-layout: image
-image: /images/noah_heel_click.gif
-backgroundSize: contain
----
-
 
 ---
 layout: cover
