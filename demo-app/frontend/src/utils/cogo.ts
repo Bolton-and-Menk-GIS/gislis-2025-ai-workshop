@@ -1,7 +1,7 @@
 import Point from '@arcgis/core/geometry/Point'
 import Polygon from '@arcgis/core/geometry/Polygon'
 import Polyline from '@arcgis/core/geometry/Polyline'
-import type { SurveyInfo } from '@/typings';
+import type { SurveyInfo, CornerDirection } from '@/typings';
 import { log } from './logger'
 import { v4 as uuidv4 } from 'uuid'
 import { destination, point, toWgs84, toMercator } from '@turf/turf'
@@ -67,33 +67,89 @@ export function offsetPoint(
 /**
  * will get the section corner point by intersecting section/quarter/quarter-quarter polygons
  * @param polygons 
- * @param cornerDescription 
+ * @param cornerDirection 
  * @returns 
  */
-export function getSectionCornerPoint(polygons: __esri.Polygon[], cornerDescription: string) {
-  // get the shared boundary (line intersect)
-  const polyline = intersectionOperator.execute(...polygons.map(ft => new Polyline({ 
-      paths: (ft as __esri.Polygon).rings,
-      spatialReference: ft.spatialReference
-    })) as [__esri.Polyline, __esri.Polyline]
-  ) as __esri.Polyline
-
-  // Flatten all coordinates
-  const coords = polyline.paths.flat() as [number, number][]
-  const desc = cornerDescription.toLowerCase()
-
-  let candidate = coords[0];
-
-  for (const pt of coords) {
-    const [x, y] = pt;
-
-    if (desc.includes("east") && x > candidate[0]) candidate = pt;
-    if (desc.includes("west") && x < candidate[0]) candidate = pt;
-    if (desc.includes("north") && y > candidate[1]) candidate = pt;
-    if (desc.includes("south") && y < candidate[1]) candidate = pt;
+export function getSectionCornerPoint(polygons: __esri.Polygon[], cornerDirection: CornerDirection='NE') {
+  if (!polygons.length){
+    throw new Error('no polygons provided')
   }
 
-  return new Point({ x: candidate[0], y: candidate[1], spatialReference: polyline.spatialReference });
+  // get SR
+  const spatialReference = polygons[0]?.spatialReference ?? {
+    wkid: 4326
+  }
+
+  let coords: [number, number][] = []
+  if (polygons.length === 1){
+    coords = polygons[0].rings.flat() as [number, number][]
+  } else {
+    // get the shared boundary (line intersect)
+    const polyline = intersectionOperator.execute(...polygons.map(ft => new Polyline({ 
+        paths: (ft as __esri.Polygon).rings,
+        spatialReference: ft.spatialReference ?? spatialReference
+      })) as [__esri.Polyline, __esri.Polyline]
+    ) as __esri.Polyline
+  
+    // Flatten all coordinates
+    coords = polyline.paths.flat() as [number, number][]
+
+    if (!coords.length){
+      throw new Error('no valid coordinates found for PLSS boundaries')
+    }
+
+    /**
+     * if using a line boundary, we need to find the appropriate point 
+     * based on a single direction (N,S,E,W) to find point on that side
+     * of the line
+     */
+    if (cornerDirection?.length === 1) {
+      // Single direction - find point on appropriate side of line
+      const direction = cornerDirection as 'N' | 'S' | 'E' | 'W'
+      let ptCoords: [number, number] | undefined = undefined
+      if (direction === 'N' || direction === 'S') {
+        // Find northernmost or southernmost point
+        const targetY = direction === 'N' ? Math.max(...coords.map(([_, y]) => y)) : Math.min(...coords.map(([_, y]) => y))
+        ptCoords = coords.filter(([_, y]) => y === targetY).flat() as [number, number]
+      } else {
+        // Find easternmost or westernmost point  
+        const targetX = direction === 'E' ? Math.max(...coords.map(([x, _]) => x)) : Math.min(...coords.map(([x, _]) => x))
+        ptCoords = coords.filter(([x, _]) => x === targetX).flat() as [number, number]
+      }
+      const [x, y] = ptCoords ?? []
+      if (!isNaN(x) && !isNaN(y)){
+
+        // return point based on side of line
+        return new Point({ 
+          x, 
+          y, 
+          spatialReference 
+        });
+      }
+    }
+  }
+
+  if (!coords.length){
+    throw new Error('no valid coordinates found for PLSS boundaries')
+  }
+
+  const northings = coords.map(([_, y])=> y)
+  const eastings = coords.map(([x, _])=> x)
+  const xmin = Math.min(...eastings)
+  const xmax = Math.max(...eastings)
+  const ymin = Math.min(...northings)
+  const ymax = Math.max(...northings)
+
+  // determine corner direction in each axis for (x|y)(min|max)
+  const northerly = (cornerDirection ?? 'NE')[0]
+  const easterly = (cornerDirection ?? 'NE')[1] ?? 'E' 
+  log(`[cogo]: Corner direction will be: ${northerly} and ${easterly} for the "Northing" and "Easting" respectively, in numerical terms.`)
+
+  return new Point({ 
+    x: easterly === 'W' ? xmin: xmax, 
+    y: northerly === 'N' ? ymax: ymin, 
+    spatialReference
+  });
 }
 
 /**
@@ -161,7 +217,6 @@ export function buildSurveyFeatures(
     coords.push([x, y]);
 
     // create polyline graphic with label
-    console.log('line paths: ',  [ [ start, [ x, y] ] ])
     lines.push(
       new Graphic({
         geometry: {

@@ -181,11 +181,15 @@ export const usePLSSLayers = (options: usePLSSLayersOptions) => {
       throw new Error(`could not find section matching: "${sectionWhere}" within township`)
     }
 
+    // starting point placeholder
+    let pt: __esri.Point | undefined = undefined
+
+    // handle QSec or QQSec
     if (['forty', 'quarter'].includes(survey.referencePoint.divisionLevel)){
 
       /**
        * for performance reasons just use geometry to query for PLSS Intersects 
-       * within section (way too slow and unstable with only attribute queries)
+       * within section (service is way too slow and unstable with only attribute queries)
        */
       const fortyWhere = [survey.referencePoint.referenceWhere, sectionWhere].join(' AND ') 
       log(`[plss]: finding "${survey.referencePoint.divisionLevel}" within section ${survey.section} using where: ${fortyWhere}`)
@@ -199,8 +203,7 @@ export const usePLSSLayers = (options: usePLSSLayersOptions) => {
 
       log(`[plss]: found ${fortyFeatures.length} features matching "${survey.referencePoint.divisionLevel}" within section "${survey.section}" using where: ${fortyWhere}: `, fortyFeatures)
 
-      let pt: __esri.Point | undefined = undefined
-      debugger
+      // handle quarter section
       if (survey.referencePoint.divisionLevel === 'quarter'){
         // group features by QSEC attribute
         const quartersLookup: Record<string, __esri.Graphic[]> = fortyFeatures.reduce((groups, ft) => {
@@ -218,37 +221,41 @@ export const usePLSSLayers = (options: usePLSSLayersOptions) => {
           .filter(f => !!f) as __esri.Polygon[]
 
         // get intersection of quarters to find starting point
-        pt = getSectionCornerPoint(quarters, survey.referencePoint.corner)
-      } else if (survey.referencePoint.divisionLevel === 'section'){
-        // TODO: SECTION LOGIC
-      }
-      
-      if (pt){
-
-        log(`[plss]: intersected section quarters with to get tie point: `, pt)
-        const {
-          lines,
-          tiePoint,
-          boundaryPolygon
-        } = buildSurveyFeatures(pt.longitude!, pt.latitude!, survey)
-  
-        log(`[plss]: built survey polygon: `, boundaryPolygon)
-        log(`[plss]: cogo lines: `, lines)
-        log(`[plss]: tie point: `, tiePoint)
-        await boundaryLayer.applyEdits({ addFeatures: [ boundaryPolygon ] })
-        await cogoLayer.applyEdits({ addFeatures: lines })
-        await tiePointLayer.applyEdits({ addFeatures: [ tiePoint ] })
-  
-        view.goTo(boundaryPolygon)
-      }
-      else {
-        // just zoom to section if no point could be found
-        view.goTo(sectionFeature).then(()=> {
-          const lv = getLayerView(view, sectionsLayer.value)
-          highlight(lv, sectionFeature)
-        })
+        pt = getSectionCornerPoint(quarters, survey.referencePoint.cornerDir)
+      } else if (survey.referencePoint.divisionLevel === 'forty'){
+         pt = getSectionCornerPoint(fortyFeatures.map(ft => ft.geometry) as __esri.Polygon[], survey.referencePoint.cornerDir)
       }
 
+    } else if (survey.referencePoint.divisionLevel === 'section'){
+      // TODO: SECTION LOGIC
+      console.log('section logic for PLSS layers unimplemented...')
+      debugger
+    }
+
+    // check for valid point
+    if (pt){
+      log(`[plss]: intersected section quarters with to get tie point: `, pt)
+      const {
+        lines,
+        tiePoint,
+        boundaryPolygon
+      } = buildSurveyFeatures(pt.longitude!, pt.latitude!, survey)
+
+      log(`[plss]: built survey polygon: `, boundaryPolygon)
+      log(`[plss]: cogo lines: `, lines)
+      log(`[plss]: tie point: `, tiePoint)
+      await boundaryLayer.applyEdits({ addFeatures: [ boundaryPolygon ] })
+      await cogoLayer.applyEdits({ addFeatures: lines })
+      await tiePointLayer.applyEdits({ addFeatures: [ tiePoint ] })
+
+      view.goTo(boundaryPolygon)
+    }
+    else {
+      // just zoom to section if no point could be found
+      view.goTo(sectionFeature).then(()=> {
+        const lv = getLayerView(view, sectionsLayer.value)
+        highlight(lv, sectionFeature)
+      })
     }
 
   }
