@@ -85,7 +85,7 @@ const onClearHistory = () => {
         zoom="13"
         center="-93.249915, 45.0409531548259"
         basemap="gray-vector"
-        item-id="751d520b5f384283aab7f6ff09bcd78e"
+        :item-id="demoConfig.map?.webmapId || ''"
         :switch-basemap-on-theme-change="false"
         @map-ready="onMapReady"
       >
