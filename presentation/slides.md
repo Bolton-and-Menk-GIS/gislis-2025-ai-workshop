@@ -44,9 +44,7 @@ Caleb Mackey & Phil Nagel
 
 # Slides and Demos available on Github
 
-
 <QRCode url="https://github.com/Bolton-and-Menk-GIS/gislis-2025-ai-workshop" />
----
 
 ---
 src: ./pages/lecture/agenda_and_intro.md
